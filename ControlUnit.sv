@@ -11,19 +11,13 @@ module ControlUnit  #(
     output logic                    PCsrc
 );
 
-always_ff @(posedge clk) begin
-        if(opcode == 7'd19)         // addi instruction                 
-            RegWrite <= 1'b1;
-        else 
-            RegWrite <= 1'b0;
-end
-
 always_comb begin
     if((opcode == 7'd99) && (EQ == 0))begin      // bne instruction
         PCsrc = 1;
         ImmSrc = 0;
         ALUctrl =1;
         ALUsrc = 1;
+        RegWrite <= 1'b0;
     end
 
     else if (opcode == 7'd19)begin // addi instruction
@@ -31,6 +25,7 @@ always_comb begin
         ImmSrc = 1;
         ALUctrl = 0;       // add is zero
         ALUsrc = 1;        // want the immediate
+        RegWrite <= 1'b1;
     end
 
 end
