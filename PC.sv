@@ -7,9 +7,11 @@ module PC #(
     output  logic [WIDTH-1:0]  PC
 );
 
-    always_ff @ (posedge clk)
+    always_ff @ (posedge clk) begin
         if (rst)
             PC <= 32'b0;
         else
-            PC <= PCNext;      
+            PC <= PCNext;
+    end
+          
 endmodule
