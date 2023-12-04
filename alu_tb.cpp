@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 
     // Display results
     std::cout << "ALUResult: " << top->ALUResult << std::endl;
-    std::cout << "Zero: " << top->Zero << std::endl;
+    std::cout << "Zero: " << static_cast<int>(top->Zero) << std::endl;
 
     // Cleanup
     delete top;
