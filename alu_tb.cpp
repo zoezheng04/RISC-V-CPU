@@ -1,5 +1,5 @@
 #include <verilated.h>
-#include "Valu.h"  // Replace "Valu" with the actual name of your Verilated module
+#include "Valu.h"
 #include <iostream>
 
 int main(int argc, char** argv) {
@@ -10,20 +10,20 @@ int main(int argc, char** argv) {
 
     int num_cycles = 20;
 
-    // Apply inputs for a few cycles
-    for (int i = 0; i < num_cycles; i++) {
-        // Apply inputs
-        // Modify inputs as needed for your test cases
+    for (int control = 0; control < 8; control++) {
+        // Apply inputs for each instruction
         top->SrcA = 10;
         top->SrcB = 5;
-        top->ALUControl = 0;  // Example: "ADDI" operation
+        top->ALUControl = control;
 
+        // Evaluate the module
         top->eval();
-    }
 
-    // Display results
-    std::cout << "ALUResult: " << top->ALUResult << std::endl;
-    std::cout << "Zero: " << static_cast<int>(top->Zero) << std::endl;
+        // Display results for each instruction
+        std::cout << "Instruction: " << control << std::endl;
+        std::cout << "ALUResult: " << top->ALUResult << std::endl;
+        std::cout << "Zero: " << static_cast<int>(top->Zero) << std::endl;
+    }
 
     // Cleanup
     delete top;
