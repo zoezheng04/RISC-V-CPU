@@ -10,21 +10,21 @@ module ControlUnit  (
     output logic [2:0]              ImmSrc,     // selects what type of extension it is
     output logic                    PCSrc,      // Sets PCNext to PCTarget or PCPlus4
     output logic                    MemWrite,   // memory write enable
-    output logic                    ResultSrc,   // Sets write data to Data Memory or ALUResult
+    output logic                    ResultSrc,  // Sets write data to Data Memory or ALUResult
     output logic                    JumpSrc,
     output logic                    JRetSrc
 );
 
 typedef enum logic [6:0] {
-    Type_R      = 7'b0110011, // 3 register instructions (ALU operations)
-    Type_I      = 7'b0000011, // Immediate Load Instructions
-    Type_I_ALU  = 7'b0010011, // Immediate ALU Instructions
-    Type_S      = 7'b0100011, // Immediate Store Instructions
-    Type_B      = 7'b1100011, // Branch Instructions
-    Type_U      = 7'b0010111, // Add upper immediate to PC
-    Type_U_LUI  = 7'b0110111, // Load upper immediate
-    Type_J_JALR = 7'b1100111, // Jump and Link register
-    Type_J_JAL  = 7'b1101111  // Jump and Link
+    Type_R      = 7'b0110011,   // 3 register instructions (ALU operations)
+    Type_I      = 7'b0000011,   // Immediate Load Instructions
+    Type_I_ALU  = 7'b0010011,   // Immediate ALU Instructions
+    Type_S      = 7'b0100011,   // Immediate Store Instructions
+    Type_B      = 7'b1100011,   // Branch Instructions
+    Type_U      = 7'b0010111,   // Add upper immediate to PC
+    Type_U_LUI  = 7'b0110111,   // Load upper immediate
+    Type_J_JALR = 7'b1100111,   // Jump and Link register
+    Type_J_JAL  = 7'b1101111    // Jump and Link
 } Type;
 //3'b000 = add, 3'b001 = BNE, 3'b010 = JAL, 3'b011 = JALR, 3'b100 = LUI, 3'b101 = LBU, 3'b110 = SB , 3'b111 = SLL
 
@@ -35,7 +35,7 @@ always_comb begin
     ALUsrc    = (Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_J_JALR || Type_O == Type_J_JAL || Type_O == Type_S || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
     MemWrite  = (Type_O == (Type_S)) ? 1'b1 : 1'b0; // Sets Memory write enable only for store instructions
     ResultSrc = (Type_O == (Type_I)) ? 1'b1 : 1'b0; // Sets source to Data Memory only for load instructions
-    PCSrc     = (Type_O == Type_B || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
+    PCSrc     = ((Type_O == Type_B && ~EQ) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
     JumpSrc   = (Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
     JRetSrc   = (Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
 

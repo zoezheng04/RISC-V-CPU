@@ -13,10 +13,9 @@ logic   [DATA_WIDTH-1:0]    PCout;
 logic   [DATA_WIDTH-1:0]    pc_wire;
 logic   [DATA_WIDTH-1:0]    next_pc;
 logic   [DATA_WIDTH-1:0]    pc_plus4;
-logic   [DATA_WIDTH-1:0]    JRet_wire;
 logic   [DATA_WIDTH-1:0]    PC_target;
 logic   [DATA_WIDTH-1:0]    pc_jump;
-//control unnit wire:
+//control unit wires:
 logic                       EQ_wire;
 logic                       RegWrite_wire;
 logic   [2:0]               ALUctrl_wire;
@@ -41,14 +40,14 @@ logic   [DATA_WIDTH-1:0]    ALUop2_wire;
 
 logic   [DATA_WIDTH-1:0]    Result_wire;
 
+assign PC_target = Imm_o_wire + PCout;                          // pc target adder
+assign Result_wire = ResultSrc_wire ? mem_out : ALUout_wire;    // Result mux
+assign pc_jump = JRetSrc_wire ? Result_wire : PC_target;        // pc jump mux
+assign next_pc = PCSrc_wire ? pc_jump : pc_plus4;               // pc next mux
 assign pc_wire = trigger ? next_pc : 32'b0;                     // trigger mux
 assign pc_plus4 = pc_wire + 4;                                  // pc increment
-assign next_pc = PCSrc_wire ? JRet_wire : pc_plus4;             // pc next mux
 assign write_to_reg = JumpSrc_wire ? pc_plus4 : Result_wire;    // register write mux
-assign PC_target = Imm_o_wire + PCout;                          // pc target adder
-assign pc_jump = JRetSrc_wire ? Result_wire : PC_target;           // pc jump mux
 assign ALUop2_wire = ALUSrc_wire ? Imm_o_wire : RD2_wire;       // ALU input2 mux
-assign Result_wire = ResultSrc_wire ? mem_out : ALUout_wire;    // Result mux
 
 rom instr_mem(
     .addr(PCout),
@@ -65,7 +64,7 @@ PC pc_reg(
 ControlUnit control(
     .opcode(instr_wire[6:0]),
     .funct3(instr_wire[14:12]),
-    .funct7(instr_wire[30]),
+    .funct7(instr_wire[30]),        // funct 7 isn't used in the control unit
     .EQ(EQ_wire),
     .RegWrite(RegWrite_wire),
     .ALUctrl(ALUctrl_wire),
@@ -83,6 +82,9 @@ regfile regfile_top(
     .instr(instr_wire),
     .WE3(RegWrite_wire),
     .WD3(write_to_reg),
+    .AD1(instr_wire[19:15]),
+    .AD2(instr_wire[24:20]),
+    .AD3(instr_wire[11:7]),
     .RD1(RD1_wire),
     .RD2(RD2_wire),
     .a0(a0)
@@ -98,15 +100,16 @@ DataMemory ram(
     .clk(clk),
     .WE(MemWrite_wire),
     .A(ALUout_wire),
-    .RD(mem_out)
+    .RD(mem_out),
+    .WD(RD2_wire)
 );
 
-ALU alu_top(
+alu alu_top(
     .SrcA(RD1_wire),
     .SrcB(ALUop2_wire),
     .ALUControl(ALUctrl_wire),
     .ALUResult(ALUout_wire),
-    .zero(EQ_wire)
+    .Zero(EQ_wire)
 );
 
 endmodule

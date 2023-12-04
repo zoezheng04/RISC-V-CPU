@@ -14,7 +14,8 @@ always_comb begin
             ALUResult = SrcA + SrcB;
         end
         3'b001: begin //"BNE" -> branch if not equal
-            ALUResult = (SrcA != SrcB);
+            ALUResult = {32{(SrcA != SrcB)}};
+            
         end
         3'b010: begin //"JAL" -> jump and link
             ALUResult = SrcA + SrcB;
@@ -23,16 +24,16 @@ always_comb begin
             ALUResult = SrcA + SrcB;
         end
         3'b100: begin //"LUI" ->
-            ALUResult = {SrcB[32:12], 12b'0};
+            ALUResult = {SrcB[31:12], 12'b0};
         end
         3'b101: begin //"LBU" ->
-            ALUResult = {24b'0, SrcB[7:0]}
+            ALUResult = {24'b0, SrcB[7:0]};
         end
         3'b110: begin //"SB" -> atomic swap word
-            ALUResult = SrcA + SrcB
+            ALUResult = SrcA + SrcB;
         end
         3'b111:begin //"SLL" 
-            ALUResult = SrcA << SrcB[4:0]
+            ALUResult = SrcA << SrcB[4:0];
         end
         default: begin
             ALUResult = 0;

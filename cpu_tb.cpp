@@ -24,11 +24,12 @@ int main(int argc, char **argv, char **env){
     
     top-> rst = 1;
     top-> rst = 0;
+    top->trigger = 1;
     
 
-    for (i=0; i<1000; i++){
+    for (i=0; i<300; i++){
         
-        top-> trigger = vbdFlag();
+        // top-> trigger = vbdFlag();
         
         for (clk = 0; clk < 2; clk++){
             tfp->dump (2*i+clk);
@@ -36,7 +37,7 @@ int main(int argc, char **argv, char **env){
             top->eval ();
         }
 
-        vbdBar(top->0 & 0xFF);
+        vbdBar(top->a0 & 0xFF);
 
         // f1 lights and display:
         vbdBar(top->a0 & 0xFF);
@@ -47,7 +48,7 @@ int main(int argc, char **argv, char **env){
         vbdCycle(i+1);
         
         // pdf plot:
-        vbdPlot(int(top->a0), 0, 255);
+        //vbdPlot(int(top->a0), 0, 255);
 
         if (Verilated::gotFinish()) exit(0);
         
