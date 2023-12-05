@@ -1,19 +1,19 @@
 module RegM (
     
     input logic             RegWriteM,
-    input logic             ResultSrcM,
-    input logic             ReadDataM,
-    input logic             RdM,
-    input logic             ALUResultM,
-    input logic             PCPlus4M,
+    input logic  [1:0]      ResultSrcM,
+    input logic  [31:0]     ReadDataM,
+    input logic  [4:0]      RdM,
+    input logic  [31:0]     ALUResultM,
+    input logic  [31:0]     PCPlus4M,
     input logic             clk,
 
     output logic            RegWriteW,
-    output logic            ResultSrcW,
-    output logic            ReadDataW,
-    output logic            RdW,
-    output logic            ALUResultW,
-    output logic            PCPlus4W
+    output logic  [1:0]     ResultSrcW,
+    output logic  [31:0]    ReadDataW,
+    output logic  [4:0]     RdW,
+    output logic  [31:0]    ALUResultW,
+    output logic  [31:0]    PCPlus4W
     
 );
 
@@ -25,7 +25,7 @@ always_ff @(negedge clk) begin
     RdW         <= RdM;
     ALUResultW  <= ALUResultM;
     PCPlus4W    <= PCPlus4M;
-
+    
 end
     
 endmodule

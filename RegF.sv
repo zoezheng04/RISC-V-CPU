@@ -1,20 +1,24 @@
 module RegF (
-    input logic             InstrF,
-    input logic             PCF,
-    input logic             PCPlus4F,
+    input logic [31:0]      InstrF,
+    input logic [31:0]      PCF,
+    input logic [31:0]      PCPlus4F,
     input logic             clk,
+    input logic             Stall,
 
-    output logic            InstrD,
-    output logic            PCD,
-    output logic            PCPlus4D
+    output logic [31:0]    InstrD,
+    output logic [31:0]    PCD,
+    output logic [31:0]    PCPlus4D
 );
     
-always_ff @( negedge clk ) begin
+    always_ff @( negedge clk or posedge Stall) begin
 
-    InstrD   <= InstrF;
-    PCD      <= PCF;
-    PCPlus4D <= PCPlus4F;
-    
-end
+        if(!Stall) begin
+            // Only passing through values if Stall is 0
+            InstrD   <= InstrF;
+            PCD      <= PCF;
+            PCPlus4D <= PCPlus4F;
+        end
+
+    end
 
 endmodule
