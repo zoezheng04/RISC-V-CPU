@@ -60,7 +60,7 @@ Provide a brief introduction to your project. Explain its purpose and what probl
 | top.sv (singlecycle) | | | |
 | top.sv (pipeline) | | | |
 | cpu_tb.cpp | | | |
-| F1Assembly.s | | | |
+| README.md | | | |
 
 LEGEND :       `x` = full responsibility;  `p` = partial contribution; 
 
