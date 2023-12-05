@@ -34,10 +34,10 @@ Provide a brief introduction to your project. Explain its purpose and what probl
 
 | Name           | CID      | GitHub   | Email                     | Link to Personal Statement|
 |----------------|----------|----------|---------------------------|--------------|
-| Arjan Hayre   | xxxxxxxx | **The-Asgardian**  | xxxx@imperial.ac.uk   &nbsp; &nbsp; &nbsp; &nbsp;   | [Arjan's Statement](#arjan.md)
-| Gurjan Samra  | xxxxxxxx | **Gurjan-Singh-Samra** | xxxx@imperial.ac.uk     | [Gurjan's Statement](#gurjan.md)
-| Natalie Lin | xxxxxxxx | **natalietklin** | xxxx@imperial.ac.uk | [Natalie's Statement](#natalie.md)
-| Zoe Zheng  | 02083556 | **zoezheng04**  | zz4221@imperial.ac.uk  | [Zoe's Statement](#zoe.md)
+| Arjan Hayre   | xxxxxxxx | **The-Asgardian**  | xxxx@imperial.ac.uk   &nbsp; &nbsp; &nbsp; &nbsp;   | [Arjan's Statement](statements/arjan.md)
+| Gurjan Samra  | xxxxxxxx | **Gurjan-Singh-Samra** | xxxx@imperial.ac.uk     | [Gurjan's Statement](statements/gurjan.md)
+| Natalie Lin | xxxxxxxx | **natalietklin** | xxxx@imperial.ac.uk | [Natalie's Statement](#statements/natalie.md)
+| Zoe Zheng  | 02083556 | **zoezheng04**  | zz4221@imperial.ac.uk  | [Zoe's Statement](statements/zoe.md)
 
 ---
 ## Member Responsibilities
