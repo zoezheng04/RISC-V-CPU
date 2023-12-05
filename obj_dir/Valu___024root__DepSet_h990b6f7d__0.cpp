@@ -12,52 +12,26 @@ VL_INLINE_OPT void Valu___024root___ico_sequent__TOP__0(Valu___024root* vlSelf) 
     Valu__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Valu___024root___ico_sequent__TOP__0\n"); );
     // Body
-    if ((4U & (IData)(vlSelf->ALUControl))) {
-        if ((2U & (IData)(vlSelf->ALUControl))) {
-            if ((1U & (IData)(vlSelf->ALUControl))) {
-                vlSelf->ALUResult = (vlSelf->SrcA << 
-                                     (0x1fU & vlSelf->SrcB));
-                vlSelf->Zero = (((0U == vlSelf->SrcB) 
-                                 | (0U == vlSelf->ALUResult))
-                                 ? 1U : 0U);
-            } else {
-                vlSelf->ALUResult = (vlSelf->SrcA + vlSelf->SrcB);
-                vlSelf->Zero = ((((0U == vlSelf->SrcA) 
-                                  & (0U == vlSelf->SrcB)) 
-                                 & (0U == vlSelf->ALUResult))
-                                 ? 1U : 0U);
-            }
-        } else if ((1U & (IData)(vlSelf->ALUControl))) {
-            vlSelf->ALUResult = (0xffU & vlSelf->SrcB);
-            vlSelf->Zero = ((0U == vlSelf->ALUResult)
-                             ? 1U : 0U);
-        } else {
-            vlSelf->ALUResult = (IData)((QData)((IData)(
-                                                        (0x1fffffU 
-                                                         & (vlSelf->SrcB 
-                                                            >> 0xcU)))));
-            vlSelf->Zero = ((0U == vlSelf->ALUResult)
-                             ? 1U : 0U);
-        }
-    } else if ((2U & (IData)(vlSelf->ALUControl))) {
-        if ((1U & (IData)(vlSelf->ALUControl))) {
-            vlSelf->ALUResult = (vlSelf->SrcA + vlSelf->SrcB);
-            vlSelf->Zero = ((0U == vlSelf->ALUResult)
-                             ? 1U : 0U);
-        } else {
-            vlSelf->ALUResult = (vlSelf->SrcA + vlSelf->SrcB);
-            vlSelf->Zero = ((0U == vlSelf->ALUResult)
-                             ? 1U : 0U);
-        }
-    } else if ((1U & (IData)(vlSelf->ALUControl))) {
-        vlSelf->ALUResult = (vlSelf->SrcA != vlSelf->SrcB);
-        vlSelf->Zero = ((0U == vlSelf->ALUResult) ? 1U
-                         : 0U);
-    } else {
-        vlSelf->ALUResult = (vlSelf->SrcA + vlSelf->SrcB);
-        vlSelf->Zero = ((0U == vlSelf->ALUResult) ? 1U
-                         : 0U);
-    }
+    vlSelf->ALUResult = ((4U & (IData)(vlSelf->ALUControl))
+                          ? ((2U & (IData)(vlSelf->ALUControl))
+                              ? ((1U & (IData)(vlSelf->ALUControl))
+                                  ? (vlSelf->SrcA << 
+                                     (0x1fU & vlSelf->SrcB))
+                                  : (vlSelf->SrcA + vlSelf->SrcB))
+                              : ((1U & (IData)(vlSelf->ALUControl))
+                                  ? (0xffU & vlSelf->SrcB)
+                                  : (IData)((QData)((IData)(
+                                                            (0x1fffffU 
+                                                             & (vlSelf->SrcB 
+                                                                >> 0xcU)))))))
+                          : ((2U & (IData)(vlSelf->ALUControl))
+                              ? ((1U & (IData)(vlSelf->ALUControl))
+                                  ? (vlSelf->SrcA + vlSelf->SrcB)
+                                  : (vlSelf->SrcA + vlSelf->SrcB))
+                              : ((1U & (IData)(vlSelf->ALUControl))
+                                  ? (vlSelf->SrcA != vlSelf->SrcB)
+                                  : (vlSelf->SrcA + vlSelf->SrcB))));
+    vlSelf->Zero = (0U == vlSelf->ALUResult);
 }
 
 void Valu___024root___eval_ico(Valu___024root* vlSelf) {
