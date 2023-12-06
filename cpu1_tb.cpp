@@ -40,15 +40,15 @@ int main(int argc, char **argv, char **env){
         vbdBar(top->a0 & 0xFF);
 
         // f1 lights and display:
-        vbdBar(top->a0 & 0xFF);
-        vbdHex(4, (int(top->a0) >> 16) & 0xF);
-        vbdHex(3, (int(top->a0) >> 8) & 0xF);
-        vbdHex(2, (int(top->a0) >> 4) & 0xF);
-        vbdHex(1, int(top->a0) & 0xF);
-        vbdCycle(i+1);
+        // vbdBar(top->a0 & 0xFF);
+        // vbdHex(4, (int(top->a0) >> 16) & 0xF);
+        // vbdHex(3, (int(top->a0) >> 8) & 0xF);
+        // vbdHex(2, (int(top->a0) >> 4) & 0xF);
+        // vbdHex(1, int(top->a0) & 0xF);
+        // vbdCycle(i+1);
         
         // pdf plot:
-        //vbdPlot(int(top->a0), 0, 255);
+        vbdPlot(int(top->a0), 0, 255);
 
         if (Verilated::gotFinish()) exit(0);
         
