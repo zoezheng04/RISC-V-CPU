@@ -5,20 +5,20 @@
 // The class here is then constructed to instantiate the design.
 // See the Verilator manual for examples.
 
-#ifndef VERILATED_VCPU_H_
-#define VERILATED_VCPU_H_  // guard
+#ifndef VERILATED_VCPU1_H_
+#define VERILATED_VCPU1_H_  // guard
 
 #include "verilated.h"
 
-class Vcpu__Syms;
-class Vcpu___024root;
+class Vcpu1__Syms;
+class Vcpu1___024root;
 class VerilatedVcdC;
 
 // This class is the main interface to the Verilated model
-class Vcpu VL_NOT_FINAL : public VerilatedModel {
+class Vcpu1 VL_NOT_FINAL : public VerilatedModel {
   private:
     // Symbol table holding complete model state (owned by this class)
-    Vcpu__Syms* const vlSymsp;
+    Vcpu1__Syms* const vlSymsp;
 
   public:
 
@@ -36,19 +36,19 @@ class Vcpu VL_NOT_FINAL : public VerilatedModel {
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.
-    Vcpu___024root* const rootp;
+    Vcpu1___024root* const rootp;
 
     // CONSTRUCTORS
     /// Construct the model; called by application code
     /// If contextp is null, then the model will use the default global context
     /// If name is "", then makes a wrapper with a
     /// single model invisible with respect to DPI scope names.
-    explicit Vcpu(VerilatedContext* contextp, const char* name = "TOP");
-    explicit Vcpu(const char* name = "TOP");
+    explicit Vcpu1(VerilatedContext* contextp, const char* name = "TOP");
+    explicit Vcpu1(const char* name = "TOP");
     /// Destroy the model; called (often implicitly) by application code
-    virtual ~Vcpu();
+    virtual ~Vcpu1();
   private:
-    VL_UNCOPYABLE(Vcpu);  ///< Copying not allowed
+    VL_UNCOPYABLE(Vcpu1);  ///< Copying not allowed
 
   public:
     // API METHODS

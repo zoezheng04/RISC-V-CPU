@@ -2,7 +2,7 @@
 # DESCRIPTION: Verilator output: Make include file with class lists
 #
 # This file lists generated Verilated files, for including in higher level makefiles.
-# See Vcpu.mk for the caller.
+# See Vcpu1.mk for the caller.
 
 ### Switches...
 # C11 constructs required?  0/1 (always on now)
@@ -23,22 +23,22 @@ VM_TRACE_FST = 0
 ### Object file lists...
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
-	Vcpu \
-	Vcpu___024root__DepSet_h2d56fd23__0 \
+	Vcpu1 \
+	Vcpu1___024root__DepSet_h7dc02a7d__0 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
-	Vcpu___024root__Slow \
-	Vcpu___024root__DepSet_h2d56fd23__0__Slow \
+	Vcpu1___024root__Slow \
+	Vcpu1___024root__DepSet_h7dc02a7d__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization
 VM_SUPPORT_FAST += \
-	Vcpu__Trace__0 \
+	Vcpu1__Trace__0 \
 
 # Generated support classes, non-fast-path, compile with low/medium optimization
 VM_SUPPORT_SLOW += \
-	Vcpu__Syms \
-	Vcpu__Trace__0__Slow \
+	Vcpu1__Syms \
+	Vcpu1__Trace__0__Slow \
 
 # Global classes, need linked once per executable, fast-path, compile with highest optimization
 VM_GLOBAL_FAST += \

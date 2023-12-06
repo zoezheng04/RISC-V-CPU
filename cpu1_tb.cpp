@@ -1,4 +1,4 @@
-#include "Vcpu.h"
+#include "Vcpu1.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "vbuddy.cpp"
@@ -9,12 +9,12 @@ int main(int argc, char **argv, char **env){
 
     Verilated::commandArgs(argc, argv);
 
-    Vcpu* top = new Vcpu;
+    Vcpu1* top = new Vcpu1;
 
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace (tfp,99);
-    tfp->open ("cpu.vcd");
+    tfp->open ("cpu1.vcd");
 
     //init Vbuddy
     if(vbdOpen()!=1) return(-1);
@@ -27,9 +27,9 @@ int main(int argc, char **argv, char **env){
     top->trigger = 1;
     
 
-    for (i=0; i<300; i++){
+    for (i=0; i<3000; i++){
         
-        // top-> trigger = vbdFlag();
+        top-> trigger = vbdFlag();
         
         for (clk = 0; clk < 2; clk++){
             tfp->dump (2*i+clk);
