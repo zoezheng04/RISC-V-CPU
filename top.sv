@@ -10,9 +10,9 @@ module top (
 logic [31:0]        InstrD_wire, ExtImmE_wire, ALUResultM_wire, ALUResultW_wire, ResultW_wire;
 logic [31:0]        PCD_wire, PCE_wire, PCTargetE_wire, ReadDataW_wire;
 logic [31:0]        PCPlus4D_wire, PCPlus4E_wire, PCPlus4M_wire, PCPlus4W_wire, WriteDataM_wire;
-
+logic [3:0]         ALUctrlE_wire;
 logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, Stall_wire;
-logic [1:0]         ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, ForwardAE_wire, ForwardBE_wire, ALUctrlE_wire;
+logic [1:0]         ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, ForwardAE_wire, ForwardBE_wire;
 logic               MemWriteE_wire, MemWriteM_wire, EQ_wire;
 logic               JumpSrcE_wire, JRetSrcE_wire, PCSrcE_wire, PCSrcE_o_wire, ALUsrcE_wire;
 logic [4:0]         RD1E_wire, RD2E_wire, Rs1E_wire, Rs2E_wire, RdE_wire, RdM_wire, RdW_wire;
