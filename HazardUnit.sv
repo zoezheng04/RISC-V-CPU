@@ -2,11 +2,16 @@ module HazardUnit (
     
     input logic             Rs1E,
     input logic             Rs2E,
+    input logic             Rs1D,
+    input logic             Rs2D,
     input logic             RdM,
+    input logic             BranchD,
+    input logic             RegWriteE,
     input logic             RegWriteM,
     input logic             RdW,
     input logic             RegWriteW,
-    input logic             IsLoadW,    // ResultSrc can be used here
+    input logic             ResultSrcE,
+    input logic             ResultSrcM, // ResultSrc can be used here
     input logic             clk,
 
     output logic  [1:0]     ForwardAE,  // Forward data to RD1E
@@ -45,8 +50,8 @@ always_comb begin
         if (RegWriteM && (RdM == Rs2E)) 
             ForwardBE = 2'b10; // Forward data from memory stage (M) to execute stage (E) for RD2E
         
-        if (IsLoadW && ((RdM == Rs1E) || (RdM == Rs2E)))
-            Stall = 1;         // Set Stall to 1 if it is a Load Instruction and the next Instruction needs the value
+        //if (IsLoadW && ((RdM == Rs1E) || (RdM == Rs2E)))
+            //Stall = 1;         // Set Stall to 1 if it is a Load Instruction and the next Instruction needs the value
     end
 
 endmodule
