@@ -8,6 +8,9 @@ module Decode (
     input logic [4:0]       RdW,
     input logic [31:0]      ResultW,
     input logic             EQ,
+    input logic [31:0]      ALUOutM,
+    input logic             ForwardAD,
+    input logic             ForwardBD,
 
     output logic            RegWriteE,
     output logic [1:0]      ResultSrcE,
@@ -25,6 +28,7 @@ module Decode (
     output logic  [4:0]     RdE,
     output logic  [31:0]    ExtImmE,
     output logic  [31:0]    PCPlus4E,
+    output logic  [31:0]    PCBranchD,
     output logic  [31:0]    a0
 );
 
