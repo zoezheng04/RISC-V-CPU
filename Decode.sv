@@ -1,6 +1,6 @@
 module Decode (
     input logic             clk,
-    input logic             Stall,
+    input logic             FlushE,
     input logic [31:0]      InstrD,
     input logic [31:0]      PCD,
     input logic [31:0]      PCPlus4D,
@@ -108,7 +108,7 @@ RegD Pipeline_RegisterD(
     .ExtImmD(ExtImmD),
     .PCPlus4D(PCPlus4D),
     .clk(clk),
-    .Stall(Stall),
+    .FlushE(FlushE),
     /////// Outputs ////////
     .RegWriteE(RegWriteE),
     .ResultSrcE(ResultSrcE),
