@@ -17,6 +17,7 @@ module RegD (
     input logic  [31:0]         PCPlus4D,
     input logic                 clk,
     input logic                 Stall,
+    input logic                 Flush,
 
     output logic                 RegWriteE,
     output logic  [1:0]          ResultSrcE,
@@ -39,8 +40,8 @@ module RegD (
     
     always_ff @( negedge clk) begin
         
-        if(!Stall) begin
-            // Only passing through values if Stall is 0
+        if((Stall == 0) && (Flush == 0)) begin
+            // Only passing through values if Stall and Flush is 0
             RegWriteE   <= RegWriteD;
             ResultSrcE  <= ResultSrcD;
             MemWriteE   <= MemWriteD;
@@ -57,6 +58,24 @@ module RegD (
             RdE         <= RdD;
             ExtImmE    <= ExtImmD;
             PCPlus4E    <= PCPlus4D;
+        end
+        if (Flush) begin 
+            RegWriteE   <= 0;
+            ResultSrcE  <= 0;
+            MemWriteE   <= 0;
+            JumpSrcE    <= 0;
+            PCSrcE      <= 0;
+            ALUctrlE    <= 0;
+            ALUsrcE     <= 0;
+            JRetSrcE    <= 0;
+            RD1E        <= 0;
+            RD2E        <= 0;
+            PCE         <= 0;
+            Rs1E        <= 0;
+            Rs2E        <= 0;
+            RdE         <= 0;
+            ExtImmE     <= 0;
+            PCPlus4E    <= 0;
         end
     end
 
