@@ -12,7 +12,7 @@ module RegF (
     
     always_ff @( negedge clk or posedge Stall) begin
 
-        if(!Stall) begin
+        if(~Stall) begin
             // Only passing through values if Stall is 0
             InstrD   <= InstrF;
             PCD      <= PCF;
