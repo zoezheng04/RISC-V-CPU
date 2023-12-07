@@ -4,8 +4,8 @@ module Fetch (
     input logic             trigger, // trigger not implemented!
     input logic             StallF,
     input logic             StallD,
-    input logic [31:0]      PCTargetE,
-    input logic             PCSrcE,
+    input logic [31:0]      PCBranchD,
+    input logic             PCSrcD,
 
     output logic [31:0]     InstrD,
     output logic [31:0]     PCD,
@@ -20,7 +20,7 @@ logic  [31:0]            InstrF_wire;
 
 //////////////// Assignments /////////////////
 assign PCPlus4F_wire = PC_wire + 4;
-assign PCNext_wire = PCSrcE ? PCTargetE : PCPlus4F_wire;
+assign PCNext_wire = PCSrcE ? PCBranchD : PCPlus4F_wire;
 
 //////////// Instantiating Modules ///////////
 PC ProgramCounter(
