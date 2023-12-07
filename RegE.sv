@@ -7,7 +7,7 @@ module RegE (
     input logic  [4:0]          RdE,
     input logic  [31:0]         PCPlus4E,
     input logic                 clk,
-    input logic                 Stall,
+    input logic                 FlushE,
     
     output logic                 RegWriteM,
     output logic  [1:0]          ResultSrcM,
@@ -21,7 +21,7 @@ module RegE (
 
 always_ff @(negedge clk) begin
 
-    if(!Stall) begin
+    if(~FlushE) begin
         // Only passing through values if Stall is 0
         RegWriteM   <= RegWriteE;
         ResultSrcM  <= ResultSrcE;
@@ -30,6 +30,14 @@ always_ff @(negedge clk) begin
         WriteDataM  <= WriteDataE;
         RdM         <= RdE;
         PCPlus4M    <= PCPlus4E;
+    end else begin
+        RegWriteM   <= 0;
+        ResultSrcM  <= 0;
+        MemWriteM   <= 0;
+        ALUResultM  <= 0;
+        WriteDataM  <= 0;
+        RdM         <= 0;
+        PCPlus4M    <= 0;
     end
 end
     
