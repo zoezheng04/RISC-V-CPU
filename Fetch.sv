@@ -2,7 +2,8 @@ module Fetch (
     input logic             clk,
     input logic             reset,
     input logic             trigger, // trigger not implemented!
-    input logic             Stall,
+    input logic             StallF,
+    input logic             StallD,
     input logic [31:0]      PCTargetE,
     input logic             PCSrcE,
 
@@ -25,6 +26,7 @@ assign PCNext_wire = PCSrcE ? PCTargetE : PCPlus4F_wire;
 PC ProgramCounter(
     .clk(clk),
     .rst(reset),
+    .Stall(StallF),
     .PCNext(PCNext_wire),
     .PC(PCF_wire)
 );
@@ -39,7 +41,7 @@ RegF Pipeline_RegisterF(
     .PCF(PCF_wire),
     .PCPlus4F(PCPlus4F_wire),
     .clk(clk),
-    .Stall(Stall),
+    .Stall(StallD),
     .InstrD(InstrD),
     .PCD(PCD),
     .PCPlus4D(PCPlus4D)
