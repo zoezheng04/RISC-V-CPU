@@ -26,8 +26,6 @@ typedef enum logic [6:0] {
     Type_J_JALR = 7'b1100111,   // Jump and Link register
     Type_J_JAL  = 7'b1101111    // Jump and Link
 } Type;
-//3'b000 = add, 3'b001 = BNE, 3'b010 = JAL, 3'b011 = JALR, 3'b100 = LUI, 3'b101 = LBU, 3'b110 = SB , 3'b111 = SLL
-
 
 always_comb begin
     Type Type_O = opcode;
@@ -44,7 +42,7 @@ always_comb begin
         Type_R, Type_I_ALU:
             case(funct3)
                 3'b000: begin
-                    if(funct7 == 5'b0100000) begin
+                    if(funct7 == 7'b0100000) begin
                         ImmSrc = 3'b000;
                         ALUctrl = 4'b1000; // SUB
                     end else  begin
