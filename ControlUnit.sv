@@ -5,7 +5,7 @@ module ControlUnit  (
     input logic                     EQ,         // zero flag
 
     output logic                    RegWrite,   // this needs to be synchronous
-    output logic [2:0]              ALUctrl,    // Sets type of arithmetic operation is done
+    output logic [3:0]              ALUctrl,    // Sets type of arithmetic operation is done
     output logic                    ALUsrc,     // select line for ALU - selects ImmOp or regOp2
     output logic [2:0]              ImmSrc,     // selects what type of extension it is
     output logic                    PCSrc,      // Sets PCNext to PCTarget or PCPlus4
@@ -26,8 +26,6 @@ typedef enum logic [6:0] {
     Type_J_JALR = 7'b1100111,   // Jump and Link register
     Type_J_JAL  = 7'b1101111    // Jump and Link
 } Type;
-//3'b000 = add, 3'b001 = BNE, 3'b010 = JAL, 3'b011 = JALR, 3'b100 = LUI, 3'b101 = LBU, 3'b110 = SB , 3'b111 = SLL
-
 
 always_comb begin
     Type Type_O = opcode;
@@ -35,7 +33,7 @@ always_comb begin
     ALUsrc    = (Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_J_JALR || Type_O == Type_J_JAL || Type_O == Type_S || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
     MemWrite  = (Type_O == (Type_S)) ? 1'b1 : 1'b0; // Sets Memory write enable only for store instructions
     ResultSrc = (Type_O == (Type_I)) ? 1'b1 : 1'b0; // Sets source to Data Memory only for load instructions
-    PCSrc     = ((Type_O == Type_B & ~EQ) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
+    PCSrc     = ((Type_O == Type_B && ~EQ) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
     JumpSrc   = (Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
     JRetSrc   = (Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
 
@@ -44,13 +42,35 @@ always_comb begin
         Type_R, Type_I_ALU:
             case(funct3)
                 3'b000: begin
-                    ALUctrl = 3'b000; // Add
-                    ImmSrc = 3'b000;
+                    if(funct7 == 7'b0100000) begin
+                        ImmSrc = 3'b000;
+                        ALUctrl = 4'b1000; // SUB
+                    end else  begin
+                        ALUctrl = 4'b0000; // Add
+                        ImmSrc = 3'b000;
+                    end
                 end
-                3'b001:begin
+                3'b001: begin
                     ImmSrc = 3'b000;
-                    ALUctrl = 3'b111; // Shift Left Logical 
+                    ALUctrl = 4'b0111; // Shift Left Logical 
                 end  
+                3'b100: begin
+                    ImmSrc = 3'b000;
+                    ALUctrl = 4'b1010; // XOR
+                end
+                
+                3'b101: begin
+                    ImmSrc = 3'b000;
+                    ALUctrl = 4'b1001; // Shift Right Logical
+                end
+                3'b110: begin
+                    ImmSrc = 3'b000;
+                    ALUctrl = 4'b1011; // OR
+                end
+                3'b111: begin
+                    ImmSrc = 3'b000;
+                    ALUctrl = 4'b1100; // AND
+                end
                 default: ;
             endcase
 
@@ -58,42 +78,53 @@ always_comb begin
             case(funct3)
                 3'b100:begin
                     ImmSrc = 3'b000;
-                    ALUctrl = 3'b101; // Load Byte Unsigned
+                    ALUctrl = 4'b0101; // Load Byte Unsigned
                 end
             endcase
         end
 
 
         Type_B: begin
-            ImmSrc = 3'b011;
-            ALUctrl = 3'b001; // BNE
+            case (funct3)
+                3'b000: begin
+                    ImmSrc = 3'b011;
+                    ALUctrl = 4'1101; // BEQ
+                end
+                3'b001: begin
+                    ImmSrc = 3'b011;
+                    ALUctrl = 4'b0001; // BNE
+                end
+            endcase
         end
 
         Type_S: begin
             ImmSrc = 3'b010;
-            ALUctrl = 3'b110; // Store Byte
+            ALUctrl = 4'b0110; // Store Byte
         end
 
         Type_U: begin
             ImmSrc = 3'b001;
-            ALUctrl = 3'b000; // Add
+            ALUctrl = 4'b0000; // Add
         end
         Type_U_LUI: begin
             ImmSrc = 3'b100;
-            ALUctrl = 3'b100; // Load Upper Immediate
+            ALUctrl = 4'b0100; // Load Upper Immediate
         end
 
         Type_J_JAL: begin
             ImmSrc = 3'b100;
-            ALUctrl = 3'b010; // Jump and Link
+            ALUctrl = 4'b0010; // Jump and Link
         end
 
         Type_J_JALR: begin
             ImmSrc = 3'b100;
-            ALUctrl = 3'b011; // Jump and link register
+            ALUctrl = 4'b0011; // Jump and link register
         end
 
-        default: ImmSrc = 3'b000;
+        default: begin
+            ImmSrc = 3'b000;
+            ALUctrl = 4'b0000;
+        end
     endcase
 end    
 
