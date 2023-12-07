@@ -20,13 +20,14 @@ logic [4:0]         RD1E_wire, RD2E_wire, Rs1E_wire, Rs2E_wire, RdE_wire, RdM_wi
 
 //////////////////// FETCH /////////////////////
 Fetch Fetch_Stage(
+    /////// INPUTS ////////
     .clk(clk),
     .reset(reset),
     .trigger(trigger), 
     .Stall(Stall_wire),
     .PCTargetE(PCTargetE_wire),
     .PCSrcE(PCSrcE_o_wire),
-
+    /////// OUTPUTS ///////
     .InstrD(InstrD_wire),
     .PCD(PCD_wire),
     .PCPlus4D(PCPlus4D_wire) 
@@ -34,6 +35,7 @@ Fetch Fetch_Stage(
 
 //////////////////// DECODE /////////////////////
 Decode Decode_Stage(
+    /////// INPUTS ////////
     .clk(clk),
     .Stall(Stall_wire),
     .InstrD(InstrD_wire),
@@ -43,7 +45,7 @@ Decode Decode_Stage(
     .RdW(RdW_wire),
     .ResultW(ResultW_wire),
     .EQ(EQ_wire),
-
+    /////// OUTPUTS ///////
     .RegWriteE(RegWriteE_wire),
     .ResultSrcE(ResultSrcE_wire),
     .MemWriteE(MemWriteE_wire),
@@ -65,6 +67,7 @@ Decode Decode_Stage(
 
 //////////////////// EXECUTE ////////////////////
 Execute Execute_Stage(
+    /////// INPUTS ////////
     .clk(clk),
     .Stall(Stall_wire),
     .RegWriteE(RegWriteE_wire),
@@ -84,7 +87,7 @@ Execute Execute_Stage(
     .ForwardAE(ForwardAE_wire),
     .ForwardBE(ForwardBE_wire),
     .ResultW(ResultW_wire),
-
+    /////// OUTPUTS ///////
     .RegWriteM(RegWriteM_wire),
     .ResultSrcM(ResultSrcM_wire),
     .MemWriteM(MemWriteM_wire),
@@ -99,6 +102,7 @@ Execute Execute_Stage(
 
 //////////////////// MEMORY /////////////////////
 Memory Memory_Stage(
+    /////// INPUTS ////////
     .clk(clk),
     .RegWriteM(RegWriteM_wire),
     .ResultSrcM(ResultSrcM_wire),
@@ -107,7 +111,7 @@ Memory Memory_Stage(
     .WriteDataM(WriteDataM_wire),
     .RdM(RdM_wire),
     .PCPlus4M(PCPlus4M_wire),
-
+    /////// OUTPUTS ///////
     .RegWriteW(RegWriteW_wire),
     .ResultSrcW(ResultSrcW_wire),
     .ALUResultW(ALUResultW_wire),
@@ -118,17 +122,19 @@ Memory Memory_Stage(
 
 //////////////////// WRITE BACK /////////////////
 WriteBack WriteBack_Stage(
+    /////// INPUTS ////////
     .RegWriteW(RegWriteW_wire),
     .ResultSrcW(ResultSrcW_wire),
     .ALUResultW(ALUResultW_wire),
     .ReadDataW(ReadDataW_wire),
     .PCPlus4W(PCPlus4W_wire),
-
+    /////// OUTPUTS ///////
     .ResultW(ResultW_wire)
 );
 
 //////////////////// HAZARD UNIT/////////////////
 HazardUnit HazardUnit(
+    /////// INPUTS ////////
     .Rs1E(Rs1E_wire),
     .Rs2E(Rs2E_wire),
     .RdM(RdM_wire),
@@ -137,7 +143,7 @@ HazardUnit HazardUnit(
     .RegWriteW(RegWriteW_wire),
     .IsLoadW(ResultSrcM_wire),    
     .clk(clk),
-
+    /////// OUTPUTS ///////
     .ForwardAE(ForwardAE_wire),  
     .ForwardBE(ForwardBE_wire),  
     .Stall(Stall_wire)
