@@ -14,7 +14,7 @@ module Decode (
     output logic            MemWriteE,
     output logic            JumpSrcE,
     output logic            PCSrcE,
-    output logic  [2:0]     ALUctrlE,
+    output logic  [3:0]     ALUctrlE,
     output logic            ALUsrcE,
     output logic            JRetSrcE,
     output logic  [4:0]     RD1E,
@@ -31,7 +31,7 @@ module Decode (
 ///////////////// Wires ///////////////////
 //////////// Control Unit Wires ///////////
 logic                       RegWrite_wire;
-logic   [2:0]               ALUctrl_wire;
+logic   [3:0]               ALUctrl_wire;
 logic                       ALUSrc_wire;
 logic   [2:0]               ImmSrc_wire;
 logic                       PCSrc_wire;
