@@ -135,7 +135,7 @@ HazardUnit HazardUnit(
     .RegWriteM(RegWriteM_wire),
     .RdW(RdW_wire),
     .RegWriteW(RegWriteW_wire),
-    .IsLoadW(ResultSrcW_wire),    
+    .IsLoadW(ResultSrcM_wire),    
     .clk(clk),
 
     .ForwardAE(ForwardAE_wire),  
