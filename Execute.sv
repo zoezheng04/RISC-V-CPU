@@ -6,7 +6,7 @@ module Execute (
     input logic            MemWriteE,
     input logic            JumpSrcE,
     input logic            PCSrcE,
-    input logic  [2:0]     ALUctrlE,
+    input logic  [3:0]     ALUctrlE,
     input logic            ALUsrcE,
     input logic            JRetSrcE,
     input logic  [4:0]     RD1E,
