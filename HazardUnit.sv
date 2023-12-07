@@ -11,7 +11,12 @@ module HazardUnit (
 
     output logic  [1:0]     ForwardAE,  // Forward data to RD1E
     output logic  [1:0]     ForwardBE,  // Forward data to RD2E
-    output logic            Stall       // Stall pipeline registers
+    output logic            ForwardAD,  // 
+    output logic            ForwardBD,  //
+    output logic            Stall,      // Stall pipeline registers
+    output logic            StallF,
+    output logic            StallD,      //
+    output logic            FlushE
 
 );
 
