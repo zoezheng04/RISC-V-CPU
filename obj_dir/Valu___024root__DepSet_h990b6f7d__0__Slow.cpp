@@ -131,7 +131,7 @@ VL_ATTR_COLD void Valu___024root___ctor_var_reset(Valu___024root* vlSelf) {
     // Body
     vlSelf->SrcA = VL_RAND_RESET_I(32);
     vlSelf->SrcB = VL_RAND_RESET_I(32);
-    vlSelf->ALUControl = VL_RAND_RESET_I(3);
+    vlSelf->ALUControl = VL_RAND_RESET_I(4);
     vlSelf->ALUResult = VL_RAND_RESET_I(32);
     vlSelf->Zero = VL_RAND_RESET_I(1);
 }

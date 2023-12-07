@@ -25,7 +25,7 @@ void Valu___024root__trace_chg_sub_0(Valu___024root* vlSelf, VerilatedVcd::Buffe
     // Body
     bufp->chgIData(oldp+0,(vlSelf->SrcA),32);
     bufp->chgIData(oldp+1,(vlSelf->SrcB),32);
-    bufp->chgCData(oldp+2,(vlSelf->ALUControl),3);
+    bufp->chgCData(oldp+2,(vlSelf->ALUControl),4);
     bufp->chgIData(oldp+3,(vlSelf->ALUResult),32);
     bufp->chgBit(oldp+4,(vlSelf->Zero));
 }

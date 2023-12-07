@@ -10,10 +10,10 @@ int main(int argc, char** argv) {
 
     int num_cycles = 20;
 
-    for (int control = 0; control < 8; control++) {
+    for (int control = 0; control < 14; control++) {
         // Apply inputs for each instruction
-        top->SrcA = 10;
-        top->SrcB = 5;
+        top->SrcA = 1;
+        top->SrcB = 1;
         top->ALUControl = control;
 
         // Evaluate the module

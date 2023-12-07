@@ -14,7 +14,7 @@ class alignas(VL_CACHE_LINE_BYTES) Valu___024root final : public VerilatedModule
   public:
 
     // DESIGN SPECIFIC STATE
-    VL_IN8(ALUControl,2,0);
+    VL_IN8(ALUControl,3,0);
     VL_OUT8(Zero,0,0);
     CData/*0:0*/ __VactContinue;
     VL_IN(SrcA,31,0);

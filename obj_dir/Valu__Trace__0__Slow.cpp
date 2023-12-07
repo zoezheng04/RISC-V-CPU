@@ -13,14 +13,14 @@ VL_ATTR_COLD void Valu___024root__trace_init_sub__TOP__0(Valu___024root* vlSelf,
     // Body
     tracep->declBus(c+1,"SrcA", false,-1, 31,0);
     tracep->declBus(c+2,"SrcB", false,-1, 31,0);
-    tracep->declBus(c+3,"ALUControl", false,-1, 2,0);
+    tracep->declBus(c+3,"ALUControl", false,-1, 3,0);
     tracep->declBus(c+4,"ALUResult", false,-1, 31,0);
     tracep->declBit(c+5,"Zero", false,-1);
     tracep->pushNamePrefix("alu ");
     tracep->declBus(c+6,"DATA_WIDTH", false,-1, 31,0);
     tracep->declBus(c+1,"SrcA", false,-1, 31,0);
     tracep->declBus(c+2,"SrcB", false,-1, 31,0);
-    tracep->declBus(c+3,"ALUControl", false,-1, 2,0);
+    tracep->declBus(c+3,"ALUControl", false,-1, 3,0);
     tracep->declBus(c+4,"ALUResult", false,-1, 31,0);
     tracep->declBit(c+5,"Zero", false,-1);
     tracep->popNamePrefix(1);
@@ -68,7 +68,7 @@ VL_ATTR_COLD void Valu___024root__trace_full_sub_0(Valu___024root* vlSelf, Veril
     // Body
     bufp->fullIData(oldp+1,(vlSelf->SrcA),32);
     bufp->fullIData(oldp+2,(vlSelf->SrcB),32);
-    bufp->fullCData(oldp+3,(vlSelf->ALUControl),3);
+    bufp->fullCData(oldp+3,(vlSelf->ALUControl),4);
     bufp->fullIData(oldp+4,(vlSelf->ALUResult),32);
     bufp->fullBit(oldp+5,(vlSelf->Zero));
     bufp->fullIData(oldp+6,(0x20U),32);

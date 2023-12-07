@@ -12,25 +12,51 @@ VL_INLINE_OPT void Valu___024root___ico_sequent__TOP__0(Valu___024root* vlSelf) 
     Valu__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Valu___024root___ico_sequent__TOP__0\n"); );
     // Body
-    vlSelf->ALUResult = ((4U & (IData)(vlSelf->ALUControl))
-                          ? ((2U & (IData)(vlSelf->ALUControl))
-                              ? ((1U & (IData)(vlSelf->ALUControl))
-                                  ? (vlSelf->SrcA << 
-                                     (0x1fU & vlSelf->SrcB))
-                                  : (vlSelf->SrcA + vlSelf->SrcB))
-                              : ((1U & (IData)(vlSelf->ALUControl))
-                                  ? (0xffU & vlSelf->SrcB)
-                                  : (IData)((QData)((IData)(
-                                                            (0x1fffffU 
-                                                             & (vlSelf->SrcB 
-                                                                >> 0xcU)))))))
-                          : ((2U & (IData)(vlSelf->ALUControl))
-                              ? ((1U & (IData)(vlSelf->ALUControl))
-                                  ? (vlSelf->SrcA + vlSelf->SrcB)
-                                  : (vlSelf->SrcA + vlSelf->SrcB))
-                              : ((1U & (IData)(vlSelf->ALUControl))
-                                  ? (vlSelf->SrcA != vlSelf->SrcB)
-                                  : (vlSelf->SrcA + vlSelf->SrcB))));
+    vlSelf->ALUResult = ((8U & (IData)(vlSelf->ALUControl))
+                          ? ((4U & (IData)(vlSelf->ALUControl))
+                              ? ((2U & (IData)(vlSelf->ALUControl))
+                                  ? 0U : ((1U & (IData)(vlSelf->ALUControl))
+                                           ? (vlSelf->SrcA 
+                                              == vlSelf->SrcB)
+                                           : (vlSelf->SrcA 
+                                              & vlSelf->SrcB)))
+                              : ((2U & (IData)(vlSelf->ALUControl))
+                                  ? ((1U & (IData)(vlSelf->ALUControl))
+                                      ? (vlSelf->SrcA 
+                                         | vlSelf->SrcB)
+                                      : (vlSelf->SrcA 
+                                         ^ vlSelf->SrcB))
+                                  : ((1U & (IData)(vlSelf->ALUControl))
+                                      ? (vlSelf->SrcA 
+                                         >> (0x1fU 
+                                             & vlSelf->SrcB))
+                                      : (vlSelf->SrcA 
+                                         - vlSelf->SrcB))))
+                          : ((4U & (IData)(vlSelf->ALUControl))
+                              ? ((2U & (IData)(vlSelf->ALUControl))
+                                  ? ((1U & (IData)(vlSelf->ALUControl))
+                                      ? (vlSelf->SrcA 
+                                         << (0x1fU 
+                                             & vlSelf->SrcB))
+                                      : (vlSelf->SrcA 
+                                         + vlSelf->SrcB))
+                                  : ((1U & (IData)(vlSelf->ALUControl))
+                                      ? (0xffU & vlSelf->SrcB)
+                                      : (IData)((QData)((IData)(
+                                                                (0x1fffffU 
+                                                                 & (vlSelf->SrcB 
+                                                                    >> 0xcU)))))))
+                              : ((2U & (IData)(vlSelf->ALUControl))
+                                  ? ((1U & (IData)(vlSelf->ALUControl))
+                                      ? (vlSelf->SrcA 
+                                         + vlSelf->SrcB)
+                                      : (vlSelf->SrcA 
+                                         + vlSelf->SrcB))
+                                  : ((1U & (IData)(vlSelf->ALUControl))
+                                      ? (vlSelf->SrcA 
+                                         != vlSelf->SrcB)
+                                      : (vlSelf->SrcA 
+                                         + vlSelf->SrcB)))));
     vlSelf->Zero = (0U == vlSelf->ALUResult);
 }
 
@@ -141,7 +167,7 @@ void Valu___024root___eval_debug_assertions(Valu___024root* vlSelf) {
     Valu__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Valu___024root___eval_debug_assertions\n"); );
     // Body
-    if (VL_UNLIKELY((vlSelf->ALUControl & 0xf8U))) {
+    if (VL_UNLIKELY((vlSelf->ALUControl & 0xf0U))) {
         Verilated::overWidthError("ALUControl");}
 }
 #endif  // VL_DEBUG
