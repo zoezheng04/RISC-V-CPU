@@ -40,6 +40,7 @@ RegF Pipeline_RegisterF(
     .PCPlus4F(PCPlus4F_wire),
     .clk(clk),
     .Stall(StallD),
+    .Flush(PCSrcD),
     .InstrD(InstrD),
     .PCPlus4D(PCPlus4D)
 );
