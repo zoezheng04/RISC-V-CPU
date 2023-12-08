@@ -1,4 +1,5 @@
 # Team 8: RISC-V CPU
+Google docs for team statement: https://docs.google.com/document/d/1l7sp5MAwc6VxAsa9gx5C7W7WRjY0C5XFlG5tcPZdECs/edit?usp=sharing \
 -Put files into corresponding branch, do not merge to main until everyone has checked each other's work\
 -Write your own test bench for each module in the corresponding branch\
 -When every module is verified, merge to main and add top level file and testbench to main
@@ -36,7 +37,7 @@ Provide a brief introduction to your project. Explain its purpose and what probl
 |----------------|----------|----------|---------------------------|--------------|
 | Arjan Hayre   | xxxxxxxx | **The-Asgardian**  | xxxx@imperial.ac.uk   &nbsp; &nbsp; &nbsp; &nbsp;   | [Arjan's Statement](statements/arjan.md)
 | Gurjan Samra  | xxxxxxxx | **Gurjan-Singh-Samra** | xxxx@imperial.ac.uk     | [Gurjan's Statement](statements/gurjan.md)
-| Natalie Lin | 02203331 | **natalietklin** | nkl22@imperial.ac.uk | [Natalie's Statement](#statements/natalie.md)
+| Natalie Lin | 02203331 | **natalietklin** | nkl22@imperial.ac.uk | [Natalie's Statement](statements/natalie.md)
 | Zoe Zheng  | 02083556 | **zoezheng04**  | zz4221@imperial.ac.uk  | [Zoe's Statement](statements/zoe.md)
 
 ---
