@@ -12,7 +12,8 @@ module ControlUnit  (
     output logic                    MemWrite,   // memory write enable
     output logic                    ResultSrc,  // Sets write data to Data Memory or ALUResult
     output logic                    JumpSrc,
-    output logic                    JRetSrc
+    output logic                    JRetSrc,
+    output logic                    BranchD
 );
 
 typedef enum logic [6:0] {
@@ -36,7 +37,8 @@ always_comb begin
     PCSrc     = ((Type_O == Type_B && ~EQ) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
     JumpSrc   = (Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
     JRetSrc   = (Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
-
+    BranchD   = (Type_O == Type_B) ? 1'b1 : 1'b0;
+    
     case (Type_O)
 
         Type_R, Type_I_ALU:
