@@ -16,6 +16,7 @@ module Decode (
     output logic [1:0]      ResultSrcE,
     output logic            MemWriteE,
     output logic            JumpSrcE,
+    output logic            PCSrcD,
     output logic            PCSrcE,
     output logic  [3:0]     ALUctrlE,
     output logic            ALUsrcE,
@@ -43,13 +44,21 @@ logic                       MemWrite_wire;
 logic   [1:0]               ResultSrc_wire;
 logic                       JumpSrc_wire;
 logic                       JRetSrc_wire;
+logic                       BranchD_wire;
 
 //////////// Register File Wires //////////
 logic   [31:0]              RD1D_wire;
 logic   [31:0]              RD2D_wire;
 
 //////////// SignExtend Wire //////////////
-logic   [31:0]              ExtImmD;
+logic   [31:0]              ExtImmD_wire;
+
+//////////// Branch MUXs /////////////////
+logic  [31:0]               ForwardAD_MUX, ForwardBD_MUX;
+assign ForwardAD_MUX = ForwardAD ? ALUOutM : RD1D_wire;
+assign ForwardBD_MUX = ForwardBD ? ALUOutM : RD2D_wire;
+assign PCSrcD = (BranchD_wire && (ForwardAD_MUX == ForwardBD_MUX));
+assign PCBranchD = ((ExtImmD_wire << 2)) + PCPlus4D);    
 
 /////////// Instantiate Modules ///////////
 ControlUnit ControlUnit(
@@ -90,7 +99,7 @@ SignExtend SignExtend(
     .Imm_i(InstrD[31:7]),
     .ImmSrc(ImmSrc_wire),
     /////// Output //////////
-    .Imm_o(ExtImmD)
+    .Imm_o(ExtImmD_wire)
 );
 
 RegD Pipeline_RegisterD(
@@ -109,7 +118,7 @@ RegD Pipeline_RegisterD(
     .Rs1D(InstrD[19:15]),
     .Rs2D(InstrD[24:20]),
     .RdD(InstrD[11:7]),
-    .ExtImmD(ExtImmD),
+    .ExtImmD(ExtImmD_wire),
     .PCPlus4D(PCPlus4D),
     .clk(clk),
     .FlushE(FlushE),
