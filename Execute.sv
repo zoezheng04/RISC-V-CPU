@@ -24,11 +24,7 @@ module Execute (
     output logic           MemWriteM,
     output logic [31:0]    ALUResultM,
     output logic [31:0]    WriteDataM,
-    output logic [4:0]     RdM,
-    output logic [31:0]    PCPlus4M,
-    output logic           PCSrcE_o,
-    output logic [31:0]    PCTargetE, 
-    output logic           EQ
+    output logic [4:0]     RdM
 );
 
 ///////////////// Wires ///////////////////
@@ -66,8 +62,7 @@ alu ALU(
     .SrcB(SrcBE_wire),
     .ALUControl(ALUctrlE),
     //////// Outputs ///////
-    .ALUResult(Result_wire),
-    .Zero(EQ)
+    .ALUResult(Result_wire)
 );
 
 RegE Pipeline_RegisterE(
@@ -87,8 +82,7 @@ RegE Pipeline_RegisterE(
     .MemWriteM(MemWriteM),
     .ALUResultM(ALUResultM),
     .WriteDataM(WriteDataM),
-    .RdM(RdM),
-    .PCPlus4M(PCPlus4M)
+    .RdM(RdM)
 );
 
 endmodule
