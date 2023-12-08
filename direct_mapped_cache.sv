@@ -24,7 +24,27 @@ logic [TAG_WIDTH-1:0] data_tag;
 
 assign data_set = address[4:2];
 assign data_tag = address[32:5];
-assign cache_hit = ((tag == data_tag) && V)
+assign cache_hit = ((tag == data_tag) && V);
+
+always_comb begin
+    if (cache_hit) cache_data = data[data_tag];
+end
+
+always_ff @(negedge clk) begin
+    if(data_tag != tag[data_set]) begin
+        tag[data_set] <= data_tag;
+        data[data_set] <= data;
+        V[data_set] <= 1'b1;
+    end
+    if(overwrite) begin
+        if(data_tag == tag[data_set]) begin
+            tag[data_set] <= data_tag;
+            data[data_set] <= data;
+        end
+    end
+end
+endmodule
+
 
 
 
