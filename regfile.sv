@@ -17,6 +17,7 @@ logic [DATA_WIDTH-1:0] registers [2**ADDRESS_WIDTH-1:0];
 
 //Write to register
 always_ff @(posedge clk) begin
+    registers[0] <= 32'b0;
     if(WE3)
         registers[AD3] <= WD3;
 end

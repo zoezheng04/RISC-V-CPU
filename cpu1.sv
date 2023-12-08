@@ -10,7 +10,7 @@ module cpu1 #(
 logic                   PCSrc_wire;
 logic                   ResultSrc_wire;
 logic                   MemWrite_wire;
-logic                   ALUctrl_wire;
+logic [3:0]             ALUctrl_wire;
 logic                   ALUSrc_wire;
 logic                   JumpSrc_wire;
 logic                   JRetSrc_wire;

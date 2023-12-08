@@ -1,6 +1,6 @@
 module Decoder #(
         parameter   DATA_WIDTH = 32,
-                         WIDTH = 3
+                        WIDTH = 3
 )(
     input logic                     clk,
     input logic  [DATA_WIDTH-1:0]   instr,
@@ -9,7 +9,7 @@ module Decoder #(
     output logic [DATA_WIDTH-1:0]   RD1,
     output logic [DATA_WIDTH-1:0]   RD2,
     output logic [DATA_WIDTH-1:0]   Imm_o,
-    output logic [WIDTH-1:0]        ALUctrl,
+    output logic [3:0]              ALUctrl,
     output logic                    PCSrc,
     output logic                    ResultSrc,
     output logic                    MemWrite,

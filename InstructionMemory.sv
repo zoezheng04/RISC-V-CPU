@@ -33,7 +33,7 @@ rom InstructionMem(
 always_comb begin
     inc_pc = pc_wire + 4;
     PC_next = PCSrc ? JRet_o : inc_pc;
-    next = trigger ? PC_next : 32'b0;
+    next = trigger ? PC_next : 32'hBFC00000;
     WD3 = JumpSrc ? inc_pc : result;
     PC_out = pc_wire;
 end

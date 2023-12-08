@@ -11,11 +11,11 @@ module DataMemory #(
 
 logic [DATA_WIDTH-1:0] DataMemory_array [32'h1ffff : 32'h0]; // according to memory map provided in brief
 
-/* initial begin
-    $display ("Loading DataMemory.");
-    $readmemh("sine.mem", DataMemory_array, 32'h10000);
-    $display ("DataMemory loaded");
-end; // for reference program */
+// initial begin
+//     $display ("Loading DataMemory.");
+//     $readmemh("sine.mem", DataMemory_array, 32'h10000);
+//     $display ("DataMemory loaded");
+// end;
 
 always_comb
     RD = {DataMemory_array[A + 3], DataMemory_array[A + 2], DataMemory_array[A + 1], DataMemory_array[A]};

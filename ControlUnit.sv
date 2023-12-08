@@ -33,7 +33,7 @@ always_comb begin
     ALUsrc    = (Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_J_JALR || Type_O == Type_J_JAL || Type_O == Type_S || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
     MemWrite  = (Type_O == (Type_S)) ? 1'b1 : 1'b0; // Sets Memory write enable only for store instructions
     ResultSrc = (Type_O == (Type_I)) ? 1'b1 : 1'b0; // Sets source to Data Memory only for load instructions
-    PCSrc     = ((Type_O == Type_B && ~EQ) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
+    PCSrc     = ((Type_O == Type_B && funct3 == 3'b000 && EQ) || (Type_O == Type_B && funct3 == 3'b001 && ~EQ) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
     JumpSrc   = (Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
     JRetSrc   = (Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
 
@@ -42,10 +42,11 @@ always_comb begin
         Type_R, Type_I_ALU:
             case(funct3)
                 3'b000: begin
-                    if(funct7 == 7'b0100000) begin
+                    if(funct7) begin
                         ImmSrc = 3'b000;
                         ALUctrl = 4'b1000; // SUB
-                    end else  begin
+                    end 
+                    else  begin
                         ALUctrl = 4'b0000; // Add
                         ImmSrc = 3'b000;
                     end
@@ -88,7 +89,7 @@ always_comb begin
             case (funct3)
                 3'b000: begin
                     ImmSrc = 3'b011;
-                    ALUctrl = 4'1101; // BEQ
+                    ALUctrl = 4'b1101; // BEQ
                 end
                 3'b001: begin
                     ImmSrc = 3'b011;
@@ -117,7 +118,7 @@ always_comb begin
         end
 
         Type_J_JALR: begin
-            ImmSrc = 3'b100;
+            ImmSrc = 3'b000;   // JALR is I-type not J-type 
             ALUctrl = 4'b0011; // Jump and link register
         end
 
