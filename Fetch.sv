@@ -8,7 +8,6 @@ module Fetch (
     input logic             PCSrcD,
 
     output logic [31:0]     InstrD,
-    output logic [31:0]     PCD,
     output logic [31:0]     PCPlus4D         
 );
 
@@ -19,8 +18,8 @@ logic  [31:0]            PCPlus4F_wire;
 logic  [31:0]            InstrF_wire;
 
 //////////////// Assignments /////////////////
-assign PCPlus4F_wire = PC_wire + 4;
-assign PCNext_wire = PCSrcE ? PCBranchD : PCPlus4F_wire;
+assign PCPlus4F_wire = PCF_wire + 4;
+assign PCNext_wire = PCSrcD ? PCBranchD : PCPlus4F_wire;
 
 //////////// Instantiating Modules ///////////
 PC ProgramCounter(
@@ -38,12 +37,10 @@ rom Instruction_Memory(
 
 RegF Pipeline_RegisterF(
     .InstrF(InstrF_wire),
-    .PCF(PCF_wire),
     .PCPlus4F(PCPlus4F_wire),
     .clk(clk),
     .Stall(StallD),
     .InstrD(InstrD),
-    .PCD(PCD),
     .PCPlus4D(PCPlus4D)
 );
     
