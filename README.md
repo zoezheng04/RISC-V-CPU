@@ -6,14 +6,14 @@ Google docs for team statement: https://docs.google.com/document/d/1l7sp5MAwc6Vx
 
 | Task                               | Team Member Responsible   |
 |------------------------------------|---------------------------|
-| Assembly Program                   | All                       |
+| Assembly Program                   | Natalie, Gurjan                       |
 | Control Unit, Sign Extend, Instruction Memory | Arjan, Gurjan          |
 | PC                                 | Natalie                   |
 | ALU, Register, Mux                 | Zoe                       |
 | Data Memory                        | Natalie                   |
 | Testbench, Assemble                | Gurjan                    |
-| Pipelining                         | All                       |
-| Data Memory Cache                  | All                       |
+| Pipelining                         | Arjan, Gurjan                      |
+| Data Memory Cache                  | Zoe, Natalie                      |
 
 
 ## Table of Contents
