@@ -49,7 +49,7 @@ module RegD (
             Rs1E        <= Rs1D;
             Rs2E        <= Rs2D;
             RdE         <= RdD;
-            ExtImmE    <= ExtImmD;
+            ExtImmE     <= ExtImmD;
         end
         if (Flush) begin 
             RegWriteE   <= 0;
