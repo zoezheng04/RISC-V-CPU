@@ -21,6 +21,8 @@ module Decode (
     output logic  [4:0]     RD2E,
     output logic  [4:0]     Rs1E,
     output logic  [4:0]     Rs2E,
+    output logic  [4:0]     Rs1D,
+    output logic  [4:0]     Rs2D,
     output logic  [4:0]     RdE,
     output logic  [31:0]    ExtImmE,
     output logic  [31:0]    PCBranchD,
@@ -53,6 +55,8 @@ assign ForwardBD_MUX = ForwardBD ? ALUOutM : RD2D_wire;
 assign PCSrcD = (BranchD_wire && (ForwardAD_MUX == ForwardBD_MUX));
 assign PCBranchD = ((ExtImmD_wire << 2)) + PCPlus4D);    
 assign BranchD = BranchD_wire;
+assign Rs1D = InstrD[19:15];
+assign Rs2D = InstrD[24:20];
 /////////// Instantiate Modules ///////////
 ControlUnit ControlUnit(
     //////// Inputs ///////////
