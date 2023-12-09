@@ -36,8 +36,6 @@ logic   [2:0]               ImmSrc_wire;
 logic                       PCSrc_wire;
 logic                       MemWrite_wire;
 logic   [1:0]               ResultSrc_wire;
-logic                       JumpSrc_wire;
-logic                       JRetSrc_wire;
 logic                       BranchD_wire;
 
 //////////// Register File Wires //////////
@@ -70,7 +68,8 @@ ControlUnit ControlUnit(
     .MemWrite(MemWrite_wire),
     .ResultSrc(ResultSrc_wire),
     .JumpSrc(JumpSrc_wire),
-    .JRetSrc(JRetSrc_wire)
+    .JRetSrc(JRetSrc_wire),
+    .BranchD(BranchD_wire)
 );
 
 regfile RegisterFile( 
@@ -101,11 +100,9 @@ RegD Pipeline_RegisterD(
     .RegWriteD(RegWrite_wire),
     .ResultSrcD(ResultSrc_wire),
     .MemWriteD(MemWrite_wire),
-    .JumpSrcD(JumpSrc_wire),
     .PCSrcD(PCSrc_wire),
     .ALUctrlD(ALUctrl_wire),
     .ALUsrcD(ALUSrc_wire),
-    .JRetSrcD(JRetSrc_wire),
     .RD1D(RD1_wire),
     .RD2D(RD2_wire),
     .PCD(PCD),
@@ -113,26 +110,22 @@ RegD Pipeline_RegisterD(
     .Rs2D(InstrD[24:20]),
     .RdD(InstrD[11:7]),
     .ExtImmD(ExtImmD_wire),
-    .PCPlus4D(PCPlus4D),
     .clk(clk),
     .FlushE(FlushE),
     /////// Outputs ////////
     .RegWriteE(RegWriteE),
     .ResultSrcE(ResultSrcE),
     .MemWriteE(MemWriteE),
-    .JumpSrcE(JumpSrcE),
     .PCSrcE(PCSrcE),
     .ALUctrlE(ALUctrlE),
     .ALUsrcE(ALUsrcE),
-    .JRetSrcE(JRetSrcE),
     .RD1E(RD1E),
     .RD2E(RD2E),
     .PCE(PCE),
     .Rs1E(Rs1E),
     .Rs2E(Rs2E),
     .RdE(RdE),
-    .ExtImmE(ExtImmE),
-    .PCPlus4E(PCPlus4E)
+    .ExtImmE(ExtImmE)
 );
 
 endmodule
