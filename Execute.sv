@@ -50,9 +50,6 @@ case (ForwardBE)
 endcase
 
 assign SrcBE_wire = ALUSrcE ? ExtImmE : SrcBE_Forwarding_wire;
-assign PCTargetE = PCE + ExtImmE;
-assign PCJump_wire = JRetSrcE ? ResultW : PCTargetE;
-assign PCSrcE_o = PCSrcE ? PCJump_wire : PCPlus4E;
 
 /////////// Instantiate Modules ///////////
 
@@ -73,7 +70,6 @@ RegE Pipeline_RegisterE(
     .ALUResultE(Result_wire),
     .WriteDataE(SrcBE_Forwarding_wire),
     .RdE(RdE),
-    .PCPlus4E(PCPlus4E),
     .clk(clk),
     .Stall(Stall),
     //////// Outputs //////
