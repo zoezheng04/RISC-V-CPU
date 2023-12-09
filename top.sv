@@ -8,15 +8,15 @@ module top (
 
 //////////////////// WIRES /////////////////////
 logic [31:0]        InstrD_wire, ExtImmE_wire, ALUResultM_wire, ALUResultW_wire, ResultW_wire;
-logic [31:0]        PCD_wire, PCE_wire, PCTargetE_wire, ReadDataW_wire;
+logic [31:0]        PCD_wire, PCE_wire, PCBranchD_wire, ReadDataW_wire;
 logic [31:0]        PCPlus4D_wire, PCPlus4E_wire, PCPlus4M_wire, PCPlus4W_wire, WriteDataM_wire;
 logic [3:0]         ALUctrlE_wire;
-logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, Stall_wire;
-logic [1:0]         ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, ForwardAE_wire, ForwardBE_wire;
-logic               MemWriteE_wire, MemWriteM_wire, EQ_wire;
+logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, Stall_wire, FlushE_wire;
+logic [1:0]         ForwardAE_wire, ForwardBE_wire;
+logic               MemWriteE_wire, MemWriteM_wire, EQ_wire, ForwardAD_wire, ForwardBD_wire;
 logic               JumpSrcE_wire, JRetSrcE_wire, PCSrcE_wire, PCSrcE_o_wire, ALUsrcE_wire;
 logic [4:0]         RD1E_wire, RD2E_wire, Rs1E_wire, Rs2E_wire, RdE_wire, RdM_wire, RdW_wire;
-
+logic               ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, BranchD_wire;
 
 //////////////////// FETCH /////////////////////
 Fetch Fetch_Stage(
@@ -24,12 +24,13 @@ Fetch Fetch_Stage(
     .clk(clk),
     .reset(reset),
     .trigger(trigger), 
-    .Stall(Stall_wire),
-    .PCTargetE(PCTargetE_wire),
-    .PCSrcE(PCSrcE_o_wire),
+    .StallF(Stall_wire),
+    .StallD(Stall_wire),
+    .FlushD(PCSrcD_wire),
+    .PCBranchD(PCBranchD_wire),
+    .PCSrcD(PCSrcD_wire),
     /////// OUTPUTS ///////
     .InstrD(InstrD_wire),
-    .PCD(PCD_wire),
     .PCPlus4D(PCPlus4D_wire) 
 );
 
@@ -37,31 +38,32 @@ Fetch Fetch_Stage(
 Decode Decode_Stage(
     /////// INPUTS ////////
     .clk(clk),
-    .Stall(Stall_wire),
+    .FlushE(FlushE_wire),
     .InstrD(InstrD_wire),
-    .PCD(PCD_wire),
     .PCPlus4D(PCPlus4D_wire),
     .RegWriteW(RegWriteW_wire),
     .RdW(RdW_wire),
     .ResultW(ResultW_wire),
-    .EQ(EQ_wire),
+    .ALUOutM(ALUResultM_wire),
+    .ForwardAD(ForwardAD_wire),
+    .ForwardBD(ForwardBD_wire),
     /////// OUTPUTS ///////
     .RegWriteE(RegWriteE_wire),
     .ResultSrcE(ResultSrcE_wire),
     .MemWriteE(MemWriteE_wire),
-    .JumpSrcE(JumpSrcE_wire),
-    .PCSrcE(PCSrcE_wire),
+    .PCSrcD(PCSrcE_wire),
     .ALUctrlE(ALUctrlE_wire),
     .ALUsrcE(ALUsrcE_wire),
-    .JRetSrcE(JRetSrcE_wire),
     .RD1E(RD1E_wire),
     .RD2E(RD2E_wire),
-    .PCE(PCE_wire),
     .Rs1E(Rs1E_wire),
     .Rs2E(Rs2E_wire),
+    .Rs1D(Rs1D_wire),
+    .Rs2D(Rs2D_wire),
     .RdE(RdE_wire),
     .ExtImmE(ExtImmE_wire),
-    .PCPlus4E(PCPlus4E_wire),
+    .PCBranchD(PCBranchD_wire),
+    .BranchD(BranchD_wire),
     .a0(a0)
 );
 
@@ -73,17 +75,12 @@ Execute Execute_Stage(
     .RegWriteE(RegWriteE_wire),
     .ResultSrcE(ResultSrcE_wire),
     .MemWriteE(MemWriteE_wire),
-    .JumpSrcE(JumpSrcE_wire),
-    .PCSrcE(PCSrcE_wire),
     .ALUctrlE(ALUctrlE_wire),
     .ALUsrcE(ALUsrcE_wire),
-    .JRetSrcE(JRetSrcE_wire),
     .RD1E(RD1E_wire),
     .RD2E(RD2E_wire),
-    .PCE(PCE_wire),
     .RdE(RdE_wire),
     .ExtImmE(ExtImmE_wire),
-    .PCPlus4E(PCPlus4E_wire),
     .ForwardAE(ForwardAE_wire),
     .ForwardBE(ForwardBE_wire),
     .ResultW(ResultW_wire),
@@ -94,10 +91,6 @@ Execute Execute_Stage(
     .ALUResultM(ALUResultM_wire),
     .WriteDataM(WriteDataM_wire),
     .RdM(RdM_wire)
-    .PCPlus4M(PCPlus4M_wire),
-    .PCSrcE_o(PCSrcE_o_wire),
-    .PCTargetE(PCTargetE_wire),
-    .EQ(EQ_wire)
 );
 
 //////////////////// MEMORY /////////////////////
@@ -110,14 +103,12 @@ Memory Memory_Stage(
     .ALUResultM(ALUResultM_wire),
     .WriteDataM(WriteDataM_wire),
     .RdM(RdM_wire),
-    .PCPlus4M(PCPlus4M_wire),
     /////// OUTPUTS ///////
     .RegWriteW(RegWriteW_wire),
     .ResultSrcW(ResultSrcW_wire),
     .ALUResultW(ALUResultW_wire),
     .ReadDataW(ReadDataW_wire),
     .RdW(RdW_wire),
-    .PCPlus4W(PCPlus4W_wire)
 );
 
 //////////////////// WRITE BACK /////////////////
@@ -127,7 +118,6 @@ WriteBack WriteBack_Stage(
     .ResultSrcW(ResultSrcW_wire),
     .ALUResultW(ALUResultW_wire),
     .ReadDataW(ReadDataW_wire),
-    .PCPlus4W(PCPlus4W_wire),
     /////// OUTPUTS ///////
     .ResultW(ResultW_wire)
 );
@@ -137,15 +127,23 @@ HazardUnit HazardUnit(
     /////// INPUTS ////////
     .Rs1E(Rs1E_wire),
     .Rs2E(Rs2E_wire),
+    .Rs1D(Rs1D_wire),
+    .Rs2D(Rs2D_wire),
+    .BranchD(BranchD_wire),
+    .RegWriteE(RegWriteE_wire),
+    .WriteRegE(), //RdE
     .RdM(RdM_wire),
     .RegWriteM(RegWriteM_wire),
     .RdW(RdW_wire),
     .RegWriteW(RegWriteW_wire),
-    .IsLoadW(ResultSrcM_wire),    
+    .ResultSrcM(ResultSrcM_wire),    
     .clk(clk),
     /////// OUTPUTS ///////
     .ForwardAE(ForwardAE_wire),  
     .ForwardBE(ForwardBE_wire),  
+    .ForwardAD(ForwardAD_wire),
+    .ForwardBD(ForwardBD_wire),
+    .FlushE(FlushE_wire),
     .Stall(Stall_wire)
 );
 
