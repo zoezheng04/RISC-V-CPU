@@ -8,6 +8,7 @@ module HazardUnit (
     input logic             BranchD,
     input logic             RegWriteE,
     input logic             RegWriteM,
+    input logic             WriteRegE;
     input logic             RdW,
     input logic             RegWriteW,
     input logic             ResultSrcE,
@@ -18,24 +19,25 @@ module HazardUnit (
     output logic  [1:0]     ForwardBE,  // Forward data to RD2E
     output logic            ForwardAD,  // 
     output logic            ForwardBD,  //
-    output logic            Stall,      // Stall pipeline registers
+    output logic            lwstall, 
     output logic            StallF,
-    output logic            StallD,      //
+    output logic            StallD,      
     output logic            FlushE
 
 );
-
-always_ff @(negedge clk) begin
-    // Sets Stall to 0 after one clock cycle
-    if(Stall)
-        Stall = 0;   
-end
-
+    logic                BranchStall;
+    
 always_comb begin
     // Initialize signals to no forwarding
+    BranchStall = 0;
     ForwardAE = 2'b00;
     ForwardBE = 2'b00;
-    Stall     = 0;  
+    ForwardAD = ((Rs1D != 0) && (Rs1D == RdM) && RegWriteM);
+    ForwardBD = ((Rs2D != 0) && (Rs2D == RdM) && RegWriteM);
+    lwstall   = (RegWriteE && ResultSrcE);
+    StallF    = (lwstall || BranchStall);
+    StallD    = (lwstall || BranchStall);
+    FlushE    = (lwstall || BranchStall);  
 
     // Check for data hazards
         if (RegWriteW && (RdW == Rs1E)) 
@@ -50,8 +52,8 @@ always_comb begin
         if (RegWriteM && (RdM == Rs2E)) 
             ForwardBE = 2'b10; // Forward data from memory stage (M) to execute stage (E) for RD2E
         
-        //if (IsLoadW && ((RdM == Rs1E) || (RdM == Rs2E)))
-            //Stall = 1;         // Set Stall to 1 if it is a Load Instruction and the next Instruction needs the value
+        if (BranchD && RegWriteE && ((WriteRegE == Rs1D) || (WriteRegE == Rs2D)))
+            BranchStall = 1;         // Set Stall to 1 if it is a Load Instruction and the next Instruction needs the value
     end
 
 endmodule
