@@ -24,24 +24,30 @@ assign PCNext_wire = PCSrcD ? PCBranchD : PCPlus4F_wire;
 
 //////////// Instantiating Modules ///////////
 PC ProgramCounter(
+    //////// INPUTS ////////
     .clk(clk),
     .rst(reset),
     .Stall(StallF),
+    //////// OUTPUTS ///////
     .PCNext(PCNext_wire),
     .PC(PCF_wire)
 );
 
 rom Instruction_Memory(
+    //////// INPUTS ////////
     .addr(PCF_wire),
+    //////// OUTPUTS ///////
     .dout(InstrF_wire)
 );
 
 RegF Pipeline_RegisterF(
+    //////// INPUTS ////////
     .InstrF(InstrF_wire),
     .PCPlus4F(PCPlus4F_wire),
     .clk(clk),
     .Stall(StallD),
     .Flush(PCSrcD),
+    //////// OUTPUTS ///////
     .InstrD(InstrD),
     .PCPlus4D(PCPlus4D)
 );
