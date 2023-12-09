@@ -23,19 +23,19 @@ typedef enum logic [6:0] {
     Type_B      = 7'b1100011,   // Branch Instructions
     Type_U      = 7'b0010111,   // Add upper immediate to PC
     Type_U_LUI  = 7'b0110111,   // Load upper immediate
-    Type_J_JALR = 7'b1100111,   // Jump and Link register
+    Type_I_JALR = 7'b1100111,   // Jump and Link register
     Type_J_JAL  = 7'b1101111    // Jump and Link
 } Type;
 
 always_comb begin
     Type Type_O = opcode;
-    RegWrite  = (Type_O == Type_R || Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_J_JALR || Type_O == Type_J_JAL || Type_O == Type_U || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
-    ALUsrc    = (Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_J_JALR || Type_O == Type_J_JAL || Type_O == Type_S || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
+    RegWrite  = (Type_O == Type_R || Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_I_JALR || Type_O == Type_J_JAL || Type_O == Type_U || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
+    ALUsrc    = (Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_I_JALR || Type_O == Type_J_JAL || Type_O == Type_S || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
     MemWrite  = (Type_O == (Type_S)) ? 1'b1 : 1'b0; // Sets Memory write enable only for store instructions
     ResultSrc = (Type_O == (Type_I)) ? 1'b1 : 1'b0; // Sets source to Data Memory only for load instructions
-    PCSrc     = ((Type_O == Type_B && funct3 == 3'b000 && EQ) || (Type_O == Type_B && funct3 == 3'b001 && ~EQ) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
-    JumpSrc   = (Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
-    JRetSrc   = (Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
+    PCSrc     = ((Type_O == Type_B && funct3 == 3'b000 && EQ) || (Type_O == Type_B && funct3 == 3'b001 && ~EQ) || Type_O == Type_J_JAL || Type_O == Type_I_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
+    JumpSrc   = (Type_O == Type_J_JAL || Type_O == Type_I_JALR) ? 1'b1 : 1'b0;
+    JRetSrc   = (Type_O == Type_I_JALR) ? 1'b1 : 1'b0;
 
     case (Type_O)
 
@@ -81,6 +81,7 @@ always_comb begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b0101; // Load Byte Unsigned
                 end
+                default: ;
             endcase
         end
 
@@ -95,6 +96,7 @@ always_comb begin
                     ImmSrc = 3'b011;
                     ALUctrl = 4'b0001; // BNE
                 end
+                default: ;
             endcase
         end
 
@@ -117,8 +119,8 @@ always_comb begin
             ALUctrl = 4'b0010; // Jump and Link
         end
 
-        Type_J_JALR: begin
-            ImmSrc = 3'b000;   // JALR is I-type not J-type 
+        Type_I_JALR: begin
+            ImmSrc = 3'b000;   
             ALUctrl = 4'b0011; // Jump and link register
         end
 

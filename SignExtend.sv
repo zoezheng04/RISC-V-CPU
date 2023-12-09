@@ -18,6 +18,8 @@ always_comb begin
     3'b011: Imm_o = {{20{Imm_i[31]}}, Imm_i[7], Imm_i[30:25], Imm_i[11:8], 1'b0};
     //J-type
     3'b100: Imm_o = {{12{Imm_i[31]}}, Imm_i[19:12], Imm_i[20], Imm_i[30:21], 1'b0};
+
+    default: Imm_o = 32'b0;
     endcase
 end
 

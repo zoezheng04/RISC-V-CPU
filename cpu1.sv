@@ -22,7 +22,7 @@ logic [DATA_WIDTH-1:0]  RD1_wire;
 logic [DATA_WIDTH-1:0]  RD2_wire;  
 logic [DATA_WIDTH-1:0]  Imm_o_wire;
 logic [DATA_WIDTH-1:0]  ALU_o_wire;
-logic [DATA_WIDTH-1:0]  JRet_o;
+//logic [DATA_WIDTH-1:0]  JRet_o;
 logic [DATA_WIDTH-1:0]  PC_target;
 logic [DATA_WIDTH-1:0]  PC_out_wire;
 logic [DATA_WIDTH-1:0]  JRet_o_wire;

@@ -37,7 +37,6 @@ class Vcpu1___024root final : public VerilatedModule {
     IData/*31:0*/ cpu1__DOT__RD2_wire;
     IData/*31:0*/ cpu1__DOT__Imm_o_wire;
     IData/*31:0*/ cpu1__DOT__ALU_o_wire;
-    IData/*31:0*/ cpu1__DOT__JRet_o;
     IData/*31:0*/ cpu1__DOT__PC_target;
     IData/*31:0*/ cpu1__DOT__JRet_o_wire;
     IData/*31:0*/ cpu1__DOT__IM__DOT__next;
