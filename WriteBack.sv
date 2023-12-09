@@ -1,5 +1,4 @@
 module WriteBack (
-    input logic          RegWriteW,
     input logic          ResultSrcW,
     input logic [31:0]   ALUResultW,
     input logic [31:0]   ReadDataW,
