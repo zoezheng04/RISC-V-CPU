@@ -1,6 +1,6 @@
 module RegD (
     input logic                 RegWriteD,
-    input logic  [1:0]          ResultSrcD,
+    input logic                 ResultSrcD,
     input logic                 MemWriteD,
     input logic                 PCSrcD,
     input logic  [3:0]          ALUctrlD,
@@ -18,7 +18,7 @@ module RegD (
     input logic                 Flush,
 
     output logic                 RegWriteE,
-    output logic  [1:0]          ResultSrcE,
+    output logic                 ResultSrcE,
     output logic                 MemWriteE,
     output logic                 PCSrcE,
     output logic  [3:0]          ALUctrlE,
