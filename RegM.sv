@@ -11,8 +11,7 @@ module RegM (
     output logic  [1:0]     ResultSrcW,
     output logic  [31:0]    ReadDataW,
     output logic  [4:0]     RdW,
-    output logic  [31:0]    ALUResultW,
-    
+    output logic  [31:0]    ALUResultW
 );
 
 always_ff @(negedge clk) begin
