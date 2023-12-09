@@ -2,7 +2,6 @@ module ControlUnit  (
     input logic [6:0]               opcode,     // Input determines the type of Instruction alongside funct3 and funct7
     input logic [2:0]               funct3,
     input logic                     funct7,
-    input logic                     EQ,         // zero flag
 
     output logic                    RegWrite,   // this needs to be synchronous
     output logic [3:0]              ALUctrl,    // Sets type of arithmetic operation is done
@@ -34,7 +33,7 @@ always_comb begin
     ALUsrc    = (Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_J_JALR || Type_O == Type_J_JAL || Type_O == Type_S || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
     MemWrite  = (Type_O == (Type_S)) ? 1'b1 : 1'b0; // Sets Memory write enable only for store instructions
     ResultSrc = (Type_O == (Type_I)) ? 1'b1 : 1'b0; // Sets source to Data Memory only for load instructions
-    PCSrc     = ((Type_O == Type_B && ~EQ) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
+    PCSrc     = ((Type_O == Type_B) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
     JumpSrc   = (Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
     JRetSrc   = (Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
     BranchD   = (Type_O == Type_B) ? 1'b1 : 1'b0;
