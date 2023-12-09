@@ -4,6 +4,7 @@ module Fetch (
     input logic             trigger, // trigger not implemented!
     input logic             StallF,
     input logic             StallD,
+    input logic             FlushD,
     input logic [31:0]      PCBranchD,
     input logic             PCSrcD,
 
