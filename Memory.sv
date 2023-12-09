@@ -6,14 +6,12 @@ module Memory (
     input logic [31:0]    ALUResultM,
     input logic [31:0]    WriteDataM,
     input logic [4:0]     RdM,
-    input logic [31:0]    PCPlus4M,
 
     output logic          RegWriteW,
     output logic [1:0]    ResultSrcW,
     output logic [31:0]   ALUResultW,
     output logic [31:0]   ReadDataW,
     output logic [4:0]    RdW,
-    output logic [31:0]   PCPlus4W
 );
 
 ////////////////// Wires //////////////////
@@ -38,7 +36,6 @@ RegM Pipeline_RegisterM(
     .ReadDataM(RD_wire),
     .RdM(RdM),
     .ALUResultM(ALUResultM),
-    .PCPlus4M(PCPlus4M),
     .clk(clk),
     //////// Outputs ///////
     .RegWriteW(RegWriteW),
@@ -46,8 +43,6 @@ RegM Pipeline_RegisterM(
     .ReadDataW(ReadDataW),
     .RdW(RdW),
     .ALUResultW(ALUResultW),
-    .PCPlus4W(PCPlus4W)
-
 );
     
 endmodule
