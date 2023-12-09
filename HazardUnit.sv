@@ -19,13 +19,14 @@ module HazardUnit (
     output logic  [1:0]     ForwardBE,  // Forward data to RD2E
     output logic            ForwardAD,  // 
     output logic            ForwardBD,  //
-    output logic            lwstall, 
+    output logic            Stall,
     output logic            StallF,
     output logic            StallD,      
     output logic            FlushE
 
 );
     logic                BranchStall;
+    logic                lwstall;
     
 always_comb begin
     // Initialize signals to no forwarding
@@ -38,6 +39,7 @@ always_comb begin
     StallF    = (lwstall || BranchStall);
     StallD    = (lwstall || BranchStall);
     FlushE    = (lwstall || BranchStall);  
+    Stall     = (lwstall || BranchStall);
 
     // Check for data hazards
         if (RegWriteW && (RdW == Rs1E)) 
@@ -54,6 +56,9 @@ always_comb begin
         
         if (BranchD && RegWriteE && ((WriteRegE == Rs1D) || (WriteRegE == Rs2D)))
             BranchStall = 1;         // Set Stall to 1 if it is a Load Instruction and the next Instruction needs the value
+    
+        if (BranchD && ResultSrcM && ((RdM == Rs1D) || (RdM == Rs2D)))
+            BranchStall = 1;
     end
 
 endmodule
