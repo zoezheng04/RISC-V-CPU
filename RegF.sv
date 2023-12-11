@@ -9,7 +9,7 @@ module RegF (
     output logic [31:0]    PCPlus4D
 );
     
-    always_ff @( negedge clk or posedge Flush) begin
+    always_ff @( negedge clk) begin
 
         if((Stall == 0) && (Flush == 0)) begin
             // Only passing through values if Stall and Flush are 0

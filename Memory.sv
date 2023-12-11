@@ -1,17 +1,17 @@
 module Memory (
     input logic           clk,
     input logic           RegWriteM,
-    input logic [1:0]     ResultSrcM,
+    input logic           ResultSrcM,
     input logic           MemWriteM,
     input logic [31:0]    ALUResultM,
     input logic [31:0]    WriteDataM,
     input logic [4:0]     RdM,
 
     output logic          RegWriteW,
-    output logic [1:0]    ResultSrcW,
+    output logic          ResultSrcW,
     output logic [31:0]   ALUResultW,
     output logic [31:0]   ReadDataW,
-    output logic [4:0]    RdW,
+    output logic [4:0]    RdW
 );
 
 ////////////////// Wires //////////////////
@@ -19,7 +19,7 @@ logic   [31:0]           RD_wire;
 
 /////////// Instantiate Modules ///////////
 
-DataMemory DataMemory(
+DataMemory Memory(
     ///////// Inputs ////////
     .clk(clk),
     .WE(MemWriteM),
@@ -42,7 +42,7 @@ RegM Pipeline_RegisterM(
     .ResultSrcW(ResultSrcW),
     .ReadDataW(ReadDataW),
     .RdW(RdW),
-    .ALUResultW(ALUResultW),
+    .ALUResultW(ALUResultW)
 );
     
 endmodule

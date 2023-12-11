@@ -3,7 +3,7 @@ module RegE (
     input logic                 ResultSrcE,
     input logic                 MemWriteE,
     input logic  [31:0]         ALUResultE,
-    input logic                 WriteDataE,
+    input logic  [31:0]         WriteDataE,
     input logic  [4:0]          RdE,
     input logic                 clk,
     
@@ -11,7 +11,7 @@ module RegE (
     output logic                 ResultSrcM,
     output logic                 MemWriteM,
     output logic  [31:0]         ALUResultM,
-    output logic                 WriteDataM,
+    output logic  [31:0]         WriteDataM,
     output logic  [4:0]          RdM
 
 );

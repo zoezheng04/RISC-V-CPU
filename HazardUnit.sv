@@ -1,32 +1,29 @@
 module HazardUnit (
     
-    input logic             Rs1E,
-    input logic             Rs2E,
-    input logic             Rs1D,
-    input logic             Rs2D,
-    input logic             RdM,
+    input logic [4:0]       Rs1E,
+    input logic [4:0]       Rs2E,
+    input logic [4:0]       Rs1D,
+    input logic [4:0]       Rs2D,
+    input logic [4:0]       RdM,
     input logic             BranchD,
     input logic             RegWriteE,
     input logic             RegWriteM,
-    input logic             WriteRegE;
-    input logic             RdW,
+    input logic [4:0]       WriteRegE,
+    input logic [4:0]       RdW,
     input logic             RegWriteW,
     input logic             ResultSrcE,
     input logic             ResultSrcM, // ResultSrc can be used here
-    input logic             clk,
 
     output logic  [1:0]     ForwardAE,  // Forward data to RD1E
     output logic  [1:0]     ForwardBE,  // Forward data to RD2E
     output logic            ForwardAD,  // 
     output logic            ForwardBD,  //
-    output logic            Stall,
     output logic            StallF,
-    output logic            StallD,      
+    output logic            StallD,
     output logic            FlushE
-
 );
-    logic                BranchStall;
-    logic                lwstall;
+logic                BranchStall;
+logic                lwstall;
     
 always_comb begin
     // Initialize signals to no forwarding
@@ -36,12 +33,9 @@ always_comb begin
     ForwardAD = ((Rs1D != 0) && (Rs1D == RdM) && RegWriteM);
     ForwardBD = ((Rs2D != 0) && (Rs2D == RdM) && RegWriteM);
     lwstall   = (RegWriteE && ResultSrcE);
-    StallF    = (lwstall || BranchStall);
-    StallD    = (lwstall || BranchStall);
-    FlushE    = (lwstall || BranchStall);  
-    Stall     = (lwstall || BranchStall);
+    StallD = (lwstall || BranchStall);
+    StallF = (lwstall || BranchStall);
 
-    // Check for data hazards
         if (RegWriteW && (RdW == Rs1E)) 
             ForwardAE = 2'b01; // Forward data from write-back stage (W) to execute stage (E) for RD1E
         
@@ -55,10 +49,10 @@ always_comb begin
             ForwardBE = 2'b10; // Forward data from memory stage (M) to execute stage (E) for RD2E
         
         if (BranchD && RegWriteE && ((WriteRegE == Rs1D) || (WriteRegE == Rs2D)))
-            BranchStall = 1;         // Set Stall to 1 if it is a Load Instruction and the next Instruction needs the value
+            BranchStall = 1'b1;         // Set Stall to 1 if it is a Load Instruction and the next Instruction needs the value
     
         if (BranchD && ResultSrcM && ((RdM == Rs1D) || (RdM == Rs2D)))
-            BranchStall = 1;
+            BranchStall = 1'b1;
     end
 
 endmodule

@@ -19,10 +19,11 @@ logic [DATA_WIDTH-1:0] registers [2**ADDRESS_WIDTH-1:0];
 always_ff @(posedge clk) begin
     if(WE3)
         registers[AD3] <= WD3;
+        registers[0]   <= 0;
 end
 
 //Read from register
 assign RD1 = registers[AD1];
 assign RD2 = registers[AD2];
-assign a0 = registers[10];
+assign a0  = registers[10];
 endmodule

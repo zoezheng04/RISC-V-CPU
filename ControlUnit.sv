@@ -7,12 +7,13 @@ module ControlUnit  (
     output logic [3:0]              ALUctrl,    // Sets type of arithmetic operation is done
     output logic                    ALUsrc,     // select line for ALU - selects ImmOp or regOp2
     output logic [2:0]              ImmSrc,     // selects what type of extension it is
-    output logic                    PCSrc,      // Sets PCNext to PCTarget or PCPlus4
+    //output logic                    PCSrc,      // Sets PCNext to PCTarget or PCPlus4
     output logic                    MemWrite,   // memory write enable
     output logic                    ResultSrc,  // Sets write data to Data Memory or ALUResult
     output logic                    JumpSrc,
     output logic                    JRetSrc,
-    output logic                    BranchD
+    output logic                    BEQ,
+    output logic                    BNE
 );
 
 typedef enum logic [6:0] {
@@ -33,17 +34,18 @@ always_comb begin
     ALUsrc    = (Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_J_JALR || Type_O == Type_J_JAL || Type_O == Type_S || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
     MemWrite  = (Type_O == (Type_S)) ? 1'b1 : 1'b0; // Sets Memory write enable only for store instructions
     ResultSrc = (Type_O == (Type_I)) ? 1'b1 : 1'b0; // Sets source to Data Memory only for load instructions
-    PCSrc     = ((Type_O == Type_B) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
-    JumpSrc   = (Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
+    //PCSrc     = ((Type_O == Type_B) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
+    JumpSrc   = (Type_O == Type_J_JAL) ? 1'b1 : 1'b0;
     JRetSrc   = (Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
-    BranchD   = (Type_O == Type_B) ? 1'b1 : 1'b0;
+    BEQ       = ((Type_O == Type_B) && (funct3 == 3'b000)) ? 1'b1 : 1'b0;
+    BNE       = ((Type_O == Type_B) && (funct3 == 3'b001)) ? 1'b1 : 1'b0;
     
     case (Type_O)
 
         Type_R, Type_I_ALU:
             case(funct3)
                 3'b000: begin
-                    if(funct7 == 7'b0100000) begin
+                    if(funct7) begin
                         ImmSrc = 3'b000;
                         ALUctrl = 4'b1000; // SUB
                     end else  begin
@@ -55,6 +57,7 @@ always_comb begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b0111; // Shift Left Logical 
                 end  
+
                 3'b100: begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b1010; // XOR
@@ -72,16 +75,20 @@ always_comb begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b1100; // AND
                 end
-                default: ;
+                default: begin
+                    ALUctrl = 4'b0000;
+                    ImmSrc = 3'b000;
+                end
             endcase
 
         Type_I: begin
-            case(funct3)
-                3'b100:begin
+            if(funct3 == 3'b100) begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b0101; // Load Byte Unsigned
-                end
-            endcase
+            end else begin
+                ImmSrc = 3'b000;
+                ALUctrl = 4'b0000;
+            end
         end
 
 
@@ -89,12 +96,13 @@ always_comb begin
             case (funct3)
                 3'b000: begin
                     ImmSrc = 3'b011;
-                    ALUctrl = 4'1101; // BEQ
+                    ALUctrl = 4'b1101; // BEQ
                 end
                 3'b001: begin
                     ImmSrc = 3'b011;
                     ALUctrl = 4'b0001; // BNE
                 end
+                default: ;
             endcase
         end
 

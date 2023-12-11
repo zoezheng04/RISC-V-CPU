@@ -1,32 +1,30 @@
 module top (
     input logic             clk,
     input logic             reset,
-    input logic             trigger, // trigger not implemented!
+    //input logic             trigger, // trigger not implemented!
 
     output logic [31:0]     a0
 );
 
 //////////////////// WIRES /////////////////////
 logic [31:0]        InstrD_wire, ExtImmE_wire, ALUResultM_wire, ALUResultW_wire, ResultW_wire;
-logic [31:0]        PCD_wire, PCE_wire, PCBranchD_wire, ReadDataW_wire;
-logic [31:0]        PCPlus4D_wire, PCPlus4E_wire, PCPlus4M_wire, PCPlus4W_wire, WriteDataM_wire;
+logic [31:0]        PCBranchD_wire, ReadDataW_wire;
+logic [31:0]        PCPlus4D_wire, WriteDataM_wire, RD1E_wire, RD2E_wire;
 logic [3:0]         ALUctrlE_wire;
-logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, Stall_wire, FlushE_wire;
+logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, StallF_wire, StallD_wire;
 logic [1:0]         ForwardAE_wire, ForwardBE_wire;
-logic               MemWriteE_wire, MemWriteM_wire, EQ_wire, ForwardAD_wire, ForwardBD_wire;
-logic               JumpSrcE_wire, JRetSrcE_wire, PCSrcE_wire, PCSrcE_o_wire, ALUsrcE_wire;
-logic [4:0]         RD1E_wire, RD2E_wire, Rs1E_wire, Rs2E_wire, RdE_wire, RdM_wire, RdW_wire;
-logic               ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, BranchD_wire;
-
+logic               MemWriteE_wire, MemWriteM_wire, ForwardAD_wire, ForwardBD_wire;
+logic               PCSrcD_wire, ALUsrcE_wire;
+logic [4:0]         Rs1E_wire, Rs2E_wire, RdE_wire, RdM_wire, RdW_wire, Rs1D_wire, Rs2D_wire;
+logic               ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, BranchD_wire, FlushE_wire;
 //////////////////// FETCH /////////////////////
 Fetch Fetch_Stage(
     /////// INPUTS ////////
     .clk(clk),
     .reset(reset),
-    .trigger(trigger), 
-    .StallF(Stall_wire),
-    .StallD(Stall_wire),
-    .FlushD(PCSrcD_wire),
+    //.trigger(trigger), 
+    .StallF(StallF_wire),
+    .StallD(StallD_wire),
     .PCBranchD(PCBranchD_wire),
     .PCSrcD(PCSrcD_wire),
     /////// OUTPUTS ///////
@@ -51,7 +49,7 @@ Decode Decode_Stage(
     .RegWriteE(RegWriteE_wire),
     .ResultSrcE(ResultSrcE_wire),
     .MemWriteE(MemWriteE_wire),
-    .PCSrcD(PCSrcE_wire),
+    .PCSrcD(PCSrcD_wire),
     .ALUctrlE(ALUctrlE_wire),
     .ALUsrcE(ALUsrcE_wire),
     .RD1E(RD1E_wire),
@@ -71,7 +69,6 @@ Decode Decode_Stage(
 Execute Execute_Stage(
     /////// INPUTS ////////
     .clk(clk),
-    .Stall(Stall_wire),
     .RegWriteE(RegWriteE_wire),
     .ResultSrcE(ResultSrcE_wire),
     .MemWriteE(MemWriteE_wire),
@@ -108,13 +105,12 @@ Memory Memory_Stage(
     .ResultSrcW(ResultSrcW_wire),
     .ALUResultW(ALUResultW_wire),
     .ReadDataW(ReadDataW_wire),
-    .RdW(RdW_wire),
+    .RdW(RdW_wire)
 );
 
 //////////////////// WRITE BACK /////////////////
 WriteBack WriteBack_Stage(
     /////// INPUTS ////////
-    .RegWriteW(RegWriteW_wire),
     .ResultSrcW(ResultSrcW_wire),
     .ALUResultW(ALUResultW_wire),
     .ReadDataW(ReadDataW_wire),
@@ -131,20 +127,21 @@ HazardUnit HazardUnit(
     .Rs2D(Rs2D_wire),
     .BranchD(BranchD_wire),
     .RegWriteE(RegWriteE_wire),
-    .WriteRegE(), //RdE
+    .ResultSrcE(ResultSrcE_wire),
+    .ResultSrcM(ResultSrcM_wire),
+    .WriteRegE(RdE_wire), //RdE
     .RdM(RdM_wire),
     .RegWriteM(RegWriteM_wire),
     .RdW(RdW_wire),
     .RegWriteW(RegWriteW_wire),
-    .ResultSrcM(ResultSrcM_wire),    
-    .clk(clk),
     /////// OUTPUTS ///////
     .ForwardAE(ForwardAE_wire),  
     .ForwardBE(ForwardBE_wire),  
     .ForwardAD(ForwardAD_wire),
     .ForwardBD(ForwardBD_wire),
-    .FlushE(FlushE_wire),
-    .Stall(Stall_wire)
+    .StallF(StallF_wire),
+    .StallD(StallD_wire),
+    .FlushE(FlushE_wire)
 );
 
 endmodule
