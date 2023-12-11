@@ -12,7 +12,8 @@ module ControlUnit  (
     output logic                    MemWrite,   // memory write enable
     output logic                    ResultSrc,  // Sets write data to Data Memory or ALUResult
     output logic                    JumpSrc,
-    output logic                    JRetSrc
+    output logic                    JRetSrc,
+    output logic                    MemType     // Memory address type - byte addressing or word addressing
 );
 
 typedef enum logic [6:0] {
@@ -45,32 +46,39 @@ always_comb begin
                     if(funct7) begin
                         ImmSrc = 3'b000;
                         ALUctrl = 4'b1000; // SUB
+                        MemType = 1'b0;
                     end 
                     else  begin
                         ALUctrl = 4'b0000; // Add
                         ImmSrc = 3'b000;
+                        MemType = 1'b0;
                     end
                 end
                 3'b001: begin
                     ImmSrc = 3'b000;
-                    ALUctrl = 4'b0111; // Shift Left Logical 
+                    ALUctrl = 4'b0111; // Shift Left Logical
+                    MemType = 1'b0; 
                 end  
                 3'b100: begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b1010; // XOR
+                    MemType = 1'b0;
                 end
                 
                 3'b101: begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b1001; // Shift Right Logical
+                    MemType = 1'b0;
                 end
                 3'b110: begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b1011; // OR
+                    MemType = 1'b0;
                 end
                 3'b111: begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b1100; // AND
+                    MemType = 1'b0;
                 end
                 default: ;
             endcase
@@ -80,6 +88,7 @@ always_comb begin
                 3'b100:begin
                     ImmSrc = 3'b000;
                     ALUctrl = 4'b0101; // Load Byte Unsigned
+                    MemType = 1'b1;
                 end
                 default: ;
             endcase
@@ -91,10 +100,12 @@ always_comb begin
                 3'b000: begin
                     ImmSrc = 3'b011;
                     ALUctrl = 4'b1101; // BEQ
+                    MemType = 1'b0;
                 end
                 3'b001: begin
                     ImmSrc = 3'b011;
                     ALUctrl = 4'b0001; // BNE
+                    MemType = 1'b0;
                 end
                 default: ;
             endcase
@@ -103,30 +114,36 @@ always_comb begin
         Type_S: begin
             ImmSrc = 3'b010;
             ALUctrl = 4'b0110; // Store Byte
+            MemType = 1'b1;
         end
 
         Type_U: begin
             ImmSrc = 3'b001;
             ALUctrl = 4'b0000; // Add
+            MemType = 1'b0;
         end
         Type_U_LUI: begin
             ImmSrc = 3'b100;
             ALUctrl = 4'b0100; // Load Upper Immediate
+            MemType = 1'b0;
         end
 
         Type_J_JAL: begin
             ImmSrc = 3'b100;
             ALUctrl = 4'b0010; // Jump and Link
+            MemType = 1'b0;
         end
 
         Type_I_JALR: begin
             ImmSrc = 3'b000;   
             ALUctrl = 4'b0011; // Jump and link register
+            MemType = 1'b0;
         end
 
         default: begin
             ImmSrc = 3'b000;
             ALUctrl = 4'b0000;
+            MemType = 1'b0;
         end
     endcase
 end    

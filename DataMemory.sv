@@ -4,6 +4,7 @@ module DataMemory #(
 )(
     input   logic                   clk,
     input   logic                   WE,
+    input   logic                   MemType,
     input   logic [WIDTH-1:0]       A,
     input   logic [WIDTH-1:0]       WD,
     output  logic [WIDTH-1:0]       RD
@@ -17,11 +18,17 @@ initial begin
      $display ("DataMemory loaded");
  end;
 
-always_comb
+always_comb begin // load
+    if (MemType == 1'b1) // byte addressing
+    RD = {24'b0, DataMemory_array[A]};
+    else // word addressing
     RD = {DataMemory_array[A + 3], DataMemory_array[A + 2], DataMemory_array[A + 1], DataMemory_array[A]};
+end
 
-always_ff @ (posedge clk) begin
-    if(WE == 1'b1) begin
+always_ff @ (posedge clk) begin // store
+    if(WE == 1'b1 && MemType == 1'b0)
+        DataMemory_array[A] <= WD[7:0];
+    else if(WE == 1'b1 && MemType == 1'b1) begin
         DataMemory_array[A] <= WD[7:0];
         DataMemory_array[A + 1] <= WD[15:8];
         DataMemory_array[A + 2] <= WD[23:16];
