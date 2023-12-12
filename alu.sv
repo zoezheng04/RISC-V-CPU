@@ -11,7 +11,7 @@ output logic Zero
 always_comb begin
     case (ALUControl)
         4'b0000: ALUResult = SrcA + SrcB; //ADD 
-        4'b0001: ALUResult = 32'(SrcA != SrcB); //BNE
+        4'b0001: ALUResult = (SrcA ^ SrcB); //BNE
         //4'b0001: ALUResult = (SrcA != SrcB); //BNE
         4'b0010: ALUResult = SrcB; //JAL
         //4'b0010: ALUResult = SrcA + SrcB; //JAL

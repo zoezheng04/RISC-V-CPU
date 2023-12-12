@@ -22,10 +22,10 @@ logic [DATA_WIDTH-1:0]  RD1_wire;
 logic [DATA_WIDTH-1:0]  RD2_wire;  
 logic [DATA_WIDTH-1:0]  Imm_o_wire;
 logic [DATA_WIDTH-1:0]  ALU_o_wire;
-//logic [DATA_WIDTH-1:0]  JRet_o;
 logic [DATA_WIDTH-1:0]  PC_target;
 logic [DATA_WIDTH-1:0]  PC_out_wire;
 logic [DATA_WIDTH-1:0]  JRet_o_wire;
+logic                   MemType_wire;
 
 InstructionMemory IM(
     .clk(clk),
@@ -55,7 +55,8 @@ Decoder D(
     .ALUsrc(ALUSrc_wire),
     .JumpSrc(JumpSrc_wire),
     .JRetSrc(JRetSrc_wire),
-    .a0(a0)
+    .a0(a0),
+    .MemType(MemType_wire)
 );
 
 Execute E(
@@ -74,7 +75,8 @@ DM dm_top(
     .WD(RD2_wire),
     .ResultSrc(ResultSrc_wire),
     .MemWrite(MemWrite_wire),
-    .Result(Result_wire)
+    .Result(Result_wire),
+    .MemType(MemType_wire)
 );
 
 always_comb begin

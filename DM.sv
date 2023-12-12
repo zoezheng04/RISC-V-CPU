@@ -6,6 +6,7 @@ module DM #(
     input logic  [DATA_WIDTH-1:0] WD,
     input logic                   ResultSrc,
     input logic                   MemWrite,
+    input logic                   MemType,
     output logic [DATA_WIDTH-1:0] Result
 );
 
@@ -16,7 +17,8 @@ DataMemory DataMem(
     .WE(MemWrite),
     .A(ALU_o),
     .WD(WD),
-    .RD(RD_wire)
+    .RD(RD_wire),
+    .MemType(MemType)
 );
 
 always_comb begin

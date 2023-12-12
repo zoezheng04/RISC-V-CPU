@@ -19,32 +19,44 @@ VL_INLINE_OPT void Vcpu1___024root___sequent__TOP__0(Vcpu1___024root* vlSelf) {
     CData/*0:0*/ __Vdlyvset__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v0;
     IData/*16:0*/ __Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1;
     CData/*7:0*/ __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1;
+    CData/*0:0*/ __Vdlyvset__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1;
     IData/*16:0*/ __Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v2;
     CData/*7:0*/ __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v2;
     IData/*16:0*/ __Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v3;
     CData/*7:0*/ __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v3;
+    IData/*16:0*/ __Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v4;
+    CData/*7:0*/ __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v4;
     // Body
     __Vdlyvset__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v0 = 0U;
+    __Vdlyvset__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1 = 0U;
     __Vdlyvset__cpu1__DOT__D__DOT__rf__DOT__registers__v1 = 0U;
-    if (vlSelf->cpu1__DOT__MemWrite_wire) {
+    if (((IData)(vlSelf->cpu1__DOT__MemWrite_wire) 
+         & (IData)(vlSelf->cpu1__DOT__MemType_wire))) {
         __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v0 
             = (0xffU & vlSelf->cpu1__DOT__RD2_wire);
         __Vdlyvset__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v0 = 1U;
         __Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v0 
             = (0x1ffffU & vlSelf->cpu1__DOT__ALU_o_wire);
+    } else if (((IData)(vlSelf->cpu1__DOT__MemWrite_wire) 
+                & (~ (IData)(vlSelf->cpu1__DOT__MemType_wire)))) {
         __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1 
-            = (0xffU & (vlSelf->cpu1__DOT__RD2_wire 
-                        >> 8U));
+            = (0xffU & vlSelf->cpu1__DOT__RD2_wire);
+        __Vdlyvset__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1 = 1U;
         __Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1 
-            = (0x1ffffU & ((IData)(1U) + vlSelf->cpu1__DOT__ALU_o_wire));
+            = (0x1ffffU & vlSelf->cpu1__DOT__ALU_o_wire);
         __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v2 
             = (0xffU & (vlSelf->cpu1__DOT__RD2_wire 
-                        >> 0x10U));
+                        >> 8U));
         __Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v2 
-            = (0x1ffffU & ((IData)(2U) + vlSelf->cpu1__DOT__ALU_o_wire));
+            = (0x1ffffU & ((IData)(1U) + vlSelf->cpu1__DOT__ALU_o_wire));
         __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v3 
-            = (vlSelf->cpu1__DOT__RD2_wire >> 0x18U);
+            = (0xffU & (vlSelf->cpu1__DOT__RD2_wire 
+                        >> 0x10U));
         __Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v3 
+            = (0x1ffffU & ((IData)(2U) + vlSelf->cpu1__DOT__ALU_o_wire));
+        __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v4 
+            = (vlSelf->cpu1__DOT__RD2_wire >> 0x18U);
+        __Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v4 
             = (0x1ffffU & ((IData)(3U) + vlSelf->cpu1__DOT__ALU_o_wire));
     }
     vlSelf->cpu1__DOT__IM__DOT__pc_wire = ((IData)(vlSelf->rst)
@@ -60,12 +72,16 @@ VL_INLINE_OPT void Vcpu1___024root___sequent__TOP__0(Vcpu1___024root* vlSelf) {
     if (__Vdlyvset__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v0) {
         vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array[__Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v0] 
             = __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v0;
+    }
+    if (__Vdlyvset__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1) {
         vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array[__Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1] 
             = __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v1;
         vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array[__Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v2] 
             = __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v2;
         vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array[__Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v3] 
             = __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v3;
+        vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array[__Vdlyvdim0__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v4] 
+            = __Vdlyvval__cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array__v4;
     }
     vlSelf->cpu1__DOT__D__DOT__rf__DOT__registers[0U] = 0U;
     if (__Vdlyvset__cpu1__DOT__D__DOT__rf__DOT__registers__v1) {
@@ -156,36 +172,44 @@ VL_INLINE_OPT void Vcpu1___024root___combo__TOP__0(Vcpu1___024root* vlSelf) {
             if ((0x10U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                 vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                vlSelf->cpu1__DOT__MemType_wire = 0U;
             } else if ((8U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                 if ((4U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                     if ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                         if ((1U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 4U;
                             vlSelf->cpu1__DOT__ALUctrl_wire = 2U;
+                            vlSelf->cpu1__DOT__MemType_wire = 0U;
                         } else {
                             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                             vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                            vlSelf->cpu1__DOT__MemType_wire = 0U;
                         }
                     } else {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     }
                 } else {
                     vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                     vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                    vlSelf->cpu1__DOT__MemType_wire = 0U;
                 }
             } else if ((4U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                 if ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                     if ((1U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 3U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     } else {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     }
                 } else {
                     vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                     vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                    vlSelf->cpu1__DOT__MemType_wire = 0U;
                 }
             } else if ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                 if ((1U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
@@ -193,40 +217,49 @@ VL_INLINE_OPT void Vcpu1___024root___combo__TOP__0(Vcpu1___024root* vlSelf) {
                                       >> 0xcU)))) {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 3U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 0xdU;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     } else if ((1U == (7U & (vlSelf->cpu1__DOT__instr_wire 
                                              >> 0xcU)))) {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 3U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 1U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     }
                 } else {
                     vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                     vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                    vlSelf->cpu1__DOT__MemType_wire = 0U;
                 }
             } else {
                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                 vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                vlSelf->cpu1__DOT__MemType_wire = 0U;
             }
         } else {
             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
             vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+            vlSelf->cpu1__DOT__MemType_wire = 0U;
         }
     } else if ((0x20U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
         if ((0x10U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
             if ((8U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                 vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                vlSelf->cpu1__DOT__MemType_wire = 0U;
             } else if ((4U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                 if ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                     if ((1U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 4U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 4U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     } else {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     }
                 } else {
                     vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                     vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                    vlSelf->cpu1__DOT__MemType_wire = 0U;
                 }
             } else if ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                 if ((1U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
@@ -235,72 +268,90 @@ VL_INLINE_OPT void Vcpu1___024root___combo__TOP__0(Vcpu1___024root* vlSelf) {
                             if ((0x1000U & vlSelf->cpu1__DOT__instr_wire)) {
                                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                                 vlSelf->cpu1__DOT__ALUctrl_wire = 0xcU;
+                                vlSelf->cpu1__DOT__MemType_wire = 0U;
                             } else {
                                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                                 vlSelf->cpu1__DOT__ALUctrl_wire = 0xbU;
+                                vlSelf->cpu1__DOT__MemType_wire = 0U;
                             }
                         } else if ((0x1000U & vlSelf->cpu1__DOT__instr_wire)) {
                             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                             vlSelf->cpu1__DOT__ALUctrl_wire = 9U;
+                            vlSelf->cpu1__DOT__MemType_wire = 0U;
                         } else {
                             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                             vlSelf->cpu1__DOT__ALUctrl_wire = 0xaU;
+                            vlSelf->cpu1__DOT__MemType_wire = 0U;
                         }
                     } else if ((1U & (~ (vlSelf->cpu1__DOT__instr_wire 
                                          >> 0xdU)))) {
                         if ((0x1000U & vlSelf->cpu1__DOT__instr_wire)) {
                             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                             vlSelf->cpu1__DOT__ALUctrl_wire = 7U;
+                            vlSelf->cpu1__DOT__MemType_wire = 0U;
                         } else if ((0x40000000U & vlSelf->cpu1__DOT__instr_wire)) {
                             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                             vlSelf->cpu1__DOT__ALUctrl_wire = 8U;
+                            vlSelf->cpu1__DOT__MemType_wire = 0U;
                         } else {
                             vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
                             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
+                            vlSelf->cpu1__DOT__MemType_wire = 0U;
                         }
                     }
                 } else {
                     vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                     vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                    vlSelf->cpu1__DOT__MemType_wire = 0U;
                 }
             } else {
                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                 vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                vlSelf->cpu1__DOT__MemType_wire = 0U;
             }
         } else if ((8U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
             vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+            vlSelf->cpu1__DOT__MemType_wire = 0U;
         } else if ((4U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
             vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+            vlSelf->cpu1__DOT__MemType_wire = 0U;
         } else if ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
             if ((1U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 2U;
                 vlSelf->cpu1__DOT__ALUctrl_wire = 6U;
+                vlSelf->cpu1__DOT__MemType_wire = 1U;
             } else {
                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                 vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                vlSelf->cpu1__DOT__MemType_wire = 0U;
             }
         } else {
             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
             vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+            vlSelf->cpu1__DOT__MemType_wire = 0U;
         }
     } else if ((0x10U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
         if ((8U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
             vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+            vlSelf->cpu1__DOT__MemType_wire = 0U;
         } else if ((4U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
             if ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                 if ((1U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
                     vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 1U;
                     vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                    vlSelf->cpu1__DOT__MemType_wire = 0U;
                 } else {
                     vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                     vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                    vlSelf->cpu1__DOT__MemType_wire = 0U;
                 }
             } else {
                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                 vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                vlSelf->cpu1__DOT__MemType_wire = 0U;
             }
         } else if ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
             if ((1U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
@@ -309,58 +360,72 @@ VL_INLINE_OPT void Vcpu1___024root___combo__TOP__0(Vcpu1___024root* vlSelf) {
                         if ((0x1000U & vlSelf->cpu1__DOT__instr_wire)) {
                             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                             vlSelf->cpu1__DOT__ALUctrl_wire = 0xcU;
+                            vlSelf->cpu1__DOT__MemType_wire = 0U;
                         } else {
                             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                             vlSelf->cpu1__DOT__ALUctrl_wire = 0xbU;
+                            vlSelf->cpu1__DOT__MemType_wire = 0U;
                         }
                     } else if ((0x1000U & vlSelf->cpu1__DOT__instr_wire)) {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 9U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     } else {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 0xaU;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     }
                 } else if ((1U & (~ (vlSelf->cpu1__DOT__instr_wire 
                                      >> 0xdU)))) {
                     if ((0x1000U & vlSelf->cpu1__DOT__instr_wire)) {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 7U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     } else if ((0x40000000U & vlSelf->cpu1__DOT__instr_wire)) {
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                         vlSelf->cpu1__DOT__ALUctrl_wire = 8U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     } else {
                         vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
                         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
+                        vlSelf->cpu1__DOT__MemType_wire = 0U;
                     }
                 }
             } else {
                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                 vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+                vlSelf->cpu1__DOT__MemType_wire = 0U;
             }
         } else {
             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
             vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+            vlSelf->cpu1__DOT__MemType_wire = 0U;
         }
     } else if ((8U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
         vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+        vlSelf->cpu1__DOT__MemType_wire = 0U;
     } else if ((4U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
         vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+        vlSelf->cpu1__DOT__MemType_wire = 0U;
     } else if ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
         if ((1U & (IData)(vlSelf->cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O))) {
             if ((4U == (7U & (vlSelf->cpu1__DOT__instr_wire 
                               >> 0xcU)))) {
                 vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
                 vlSelf->cpu1__DOT__ALUctrl_wire = 5U;
+                vlSelf->cpu1__DOT__MemType_wire = 1U;
             }
         } else {
             vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
             vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+            vlSelf->cpu1__DOT__MemType_wire = 0U;
         }
     } else {
         vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire = 0U;
         vlSelf->cpu1__DOT__ALUctrl_wire = 0U;
+        vlSelf->cpu1__DOT__MemType_wire = 0U;
     }
     vlSelf->cpu1__DOT__Imm_o_wire = ((4U & (IData)(vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire))
                                       ? ((2U & (IData)(vlSelf->cpu1__DOT__D__DOT__ImmSrc_wire))
@@ -461,8 +526,8 @@ VL_INLINE_OPT void Vcpu1___024root___combo__TOP__0(Vcpu1___024root* vlSelf) {
                                               : ((1U 
                                                   & (IData)(vlSelf->cpu1__DOT__ALUctrl_wire))
                                                   ? 
-                                                 (0xffU 
-                                                  & vlSelf->cpu1__DOT__E__DOT__ALUop2)
+                                                 (vlSelf->cpu1__DOT__RD1_wire 
+                                                  + vlSelf->cpu1__DOT__E__DOT__ALUop2)
                                                   : 
                                                  (0xfffff000U 
                                                   & vlSelf->cpu1__DOT__E__DOT__ALUop2)))
@@ -477,30 +542,37 @@ VL_INLINE_OPT void Vcpu1___024root___combo__TOP__0(Vcpu1___024root* vlSelf) {
                                                   & (IData)(vlSelf->cpu1__DOT__ALUctrl_wire))
                                                   ? 
                                                  (vlSelf->cpu1__DOT__RD1_wire 
-                                                  != vlSelf->cpu1__DOT__E__DOT__ALUop2)
+                                                  ^ vlSelf->cpu1__DOT__E__DOT__ALUop2)
                                                   : 
                                                  (vlSelf->cpu1__DOT__RD1_wire 
                                                   + vlSelf->cpu1__DOT__E__DOT__ALUop2)))));
     vlSelf->cpu1__DOT__EQ_wire = (0U == vlSelf->cpu1__DOT__ALU_o_wire);
     vlSelf->cpu1__DOT__Result_wire = ((IData)(vlSelf->cpu1__DOT__ResultSrc_wire)
-                                       ? ((vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array
-                                           [(0x1ffffU 
-                                             & ((IData)(3U) 
-                                                + vlSelf->cpu1__DOT__ALU_o_wire))] 
-                                           << 0x18U) 
-                                          | ((vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array
-                                              [(0x1ffffU 
-                                                & ((IData)(2U) 
-                                                   + vlSelf->cpu1__DOT__ALU_o_wire))] 
-                                              << 0x10U) 
-                                             | ((vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array
-                                                 [(0x1ffffU 
-                                                   & ((IData)(1U) 
+                                       ? ((IData)(vlSelf->cpu1__DOT__MemType_wire)
+                                           ? vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array
+                                          [(0x1ffffU 
+                                            & vlSelf->cpu1__DOT__ALU_o_wire)]
+                                           : ((vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array
+                                               [(0x1ffffU 
+                                                 & ((IData)(3U) 
+                                                    + vlSelf->cpu1__DOT__ALU_o_wire))] 
+                                               << 0x18U) 
+                                              | ((vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array
+                                                  [
+                                                  (0x1ffffU 
+                                                   & ((IData)(2U) 
                                                       + vlSelf->cpu1__DOT__ALU_o_wire))] 
-                                                 << 8U) 
-                                                | vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array
-                                                [(0x1ffffU 
-                                                  & vlSelf->cpu1__DOT__ALU_o_wire)])))
+                                                  << 0x10U) 
+                                                 | ((vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array
+                                                     [
+                                                     (0x1ffffU 
+                                                      & ((IData)(1U) 
+                                                         + vlSelf->cpu1__DOT__ALU_o_wire))] 
+                                                     << 8U) 
+                                                    | vlSelf->cpu1__DOT__dm_top__DOT__DataMem__DOT__DataMemory_array
+                                                    [
+                                                    (0x1ffffU 
+                                                     & vlSelf->cpu1__DOT__ALU_o_wire)]))))
                                        : vlSelf->cpu1__DOT__ALU_o_wire);
     vlSelf->cpu1__DOT__PC_target = (vlSelf->cpu1__DOT__Imm_o_wire 
                                     + vlSelf->cpu1__DOT__IM__DOT__pc_wire);

@@ -14,7 +14,7 @@ logic [DATA_WIDTH-1:0] DataMemory_array [32'h1ffff : 32'h0]; // according to mem
 
 initial begin
      $display ("Loading DataMemory.");
-     $readmemh("gaussian.mem", DataMemory_array, 32'h10000);
+     $readmemh("triangle.mem", DataMemory_array, 32'h10000);
      $display ("DataMemory loaded");
  end;
 
@@ -26,9 +26,9 @@ always_comb begin // load
 end
 
 always_ff @ (posedge clk) begin // store
-    if(WE == 1'b1 && MemType == 1'b0)
+    if(WE == 1'b1 && MemType == 1'b1)
         DataMemory_array[A] <= WD[7:0];
-    else if(WE == 1'b1 && MemType == 1'b1) begin
+    else if(WE == 1'b1 && MemType == 1'b0) begin
         DataMemory_array[A] <= WD[7:0];
         DataMemory_array[A + 1] <= WD[15:8];
         DataMemory_array[A + 2] <= WD[23:16];

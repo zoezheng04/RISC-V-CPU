@@ -16,7 +16,8 @@ module Decoder #(
     output logic                    ALUsrc,
     output logic                    JumpSrc,
     output logic                    JRetSrc,
-    output logic [DATA_WIDTH-1:0]   a0
+    output logic [DATA_WIDTH-1:0]   a0,
+    output logic                    MemType
 );
 
 logic [WIDTH-1:0]   ImmSrc_wire;
@@ -35,7 +36,8 @@ ControlUnit control(
     .MemWrite(MemWrite),
     .ResultSrc(ResultSrc),
     .JumpSrc(JumpSrc),
-    .JRetSrc(JRetSrc)
+    .JRetSrc(JRetSrc),
+    .MemType(MemType)
 );
 
 regfile rf(
