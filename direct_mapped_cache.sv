@@ -27,7 +27,7 @@ assign data_tag = address[32:5];
 assign cache_hit = ((tag == data_tag) && V);
 
 always_comb begin
-    if (cache_hit) cache_data = data[data_tag];
+    if (cache_hit) cache_data = data[data_set];
 end
 
 always_ff @(negedge clk) begin
