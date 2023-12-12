@@ -11,10 +11,11 @@
 ## Overview
 This individual statement provides a comprehensive overview of my contributions to the project. Each section details specific modules or features I worked on, relevant commits, and design decisions made during the implementation.
 The following are my contributions:
-* Wrote, tested and debugged the [ALU](path/to/ALU/file)
+* Wrote, tested and debugged the [ALU](path/to/ALU/file), [Register File](path/to/Regfile/file) and relevant MUXs
 * Wrote, tested and debugged the [Cache](path/to/Cache/file)
 * Assisted in debugging Single Cycle design
-* Responsible for Git Repo structure and README.md file
+* Assisted in integrating data cache with the pipelined RISC-V CPU
+* Responsible for maintaining Git Repo structure and writing README.md file
   
 ## ALU
 ### Description
