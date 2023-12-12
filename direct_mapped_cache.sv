@@ -2,7 +2,7 @@ module dircet_mapped_cache #(
     parameter DATA_WIDTH = 32,
               TAG_WIDTH = 27,
               SET_WIDTH = 3,
-              OFFSET_WIDTH = 2
+              OFFSET_WIDTH = 2,
               CACHE_WIDTH = 8
 )(
     input logic clk;
@@ -11,7 +11,7 @@ module dircet_mapped_cache #(
     input logic overwrite;
     output logic cache_hit;
     output logic [DATA_WIDTH-1:0] cache_data;
-)
+);
 
 //cache array
 logic V [CACHE_WIDTH-1:0];
