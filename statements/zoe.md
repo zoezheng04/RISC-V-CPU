@@ -1,4 +1,4 @@
-# Individual Statement: Zoe Zheng
+# Individual Statement - Zoe Zheng
 ## Table of Contents
 - [Overview](#overview)
 - [ALU](#alu)
