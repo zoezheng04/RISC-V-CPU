@@ -19,7 +19,7 @@ The following are my contributions:
 
 ## Register File
 ### Module Description
-The Register File module consists of an array of registers, each capable of holding data of the specified width. The register file's capacity is determined by the address width parameter, allowing for scalability and adaptability to various RISC-V configurations. In the context of the project, this register file supports 32 registers, with a special consideration given to register 10 (a0).
+The Register File module consists of an array of registers, each capable of holding data of the specified width of 5 bits. In the context of the project, this register file supports 32 registers, with a special consideration given to register 10 (a0).
 
 ### Read and Write Operations
 To support read operations, the Register File module dynamically selects the read addresses based on the instruction's encoding. 
@@ -42,9 +42,9 @@ end
 
 ## ALU
 ### Module Description
-The ALU module I designed is parameterized to accommodate different data widths, providing flexibility for integration into the broader RISC-V architecture. The module takes two source operands, SrcA and SrcB, along with a 4-bit ALUControl signal. It produces the ALUResult as the output, representing the result of the specified operation, and a Zero signal indicating whether the result is zero.
+The ALU module I designed is parameterized to accommodate different data widths, providing flexibility for integration into the broader RISC-V architecture. The module takes two source operands, SrcA and SrcB, along with a 4-bit ALUControl signal from the Control Unit. It produces the ALUResult as the output, representing the result of the specified operation, and a Zero flag indicating whether the result is zero.
 ### Supported Instructions
-The supported instructions of the ALU was determined based on the instructions used in the reference program as well as f1 program we wrote. The ALUControl signal selects one of the instructions to be executed, there are a total of  14 supported instructions required, so we chose the ALUControl signal to be 4 bits to accomodate this.
+The supported instructions of the ALU were determined based on the instructions used in the reference program as well as f1 program we wrote. The ALUControl signal selects one of the instructions to be executed, there are a total of  14 supported instructions required, so we chose the ALUControl signal to be 4 bits to accomodate this.
 ```System Verilog
 case (ALUControl)
         4'b0000: ALUResult = SrcA + SrcB; //ADD 
@@ -66,7 +66,7 @@ case (ALUControl)
     endcase;
 ```
 ### Zero Flag
-The Zero flag is set to 1 if the ALUResult is zero, providing a crucial status indicator for conditional branching in the RISC-V processor.
+The Zero flag is set to 1 if the ALUResult is zero, providing a status indicator for conditional branching in the RISC-V processor.
 ```System Verilog
 case (ALUResult)
         32'b0: Zero = 1'b1;
@@ -93,6 +93,9 @@ for (int control = 0; control < 14; control++) {
 ```
 
 ## Cache
+To enhance overall system performance by mitigating memory access latencies, I worked on designing and integrating a cache into our RISC-V processor. The cache acts as a high-speed, intermediary storage between the processor and main memory, allowing for faster retrieval of frequently accessed data. 
+
+The cache is used to store recently accessed data and caching contiguous blocks of memory, addressing both temporal locality and spatial locality, reducing the need to fetch the same data repeatedly from slower main memory and anticipating adjacent data will be accessed in sequence.
 
 ### Direct Mapped Cache
 The initial phase of my cache design involved the creation of the Direct Mapped Cache module. This design employs a direct mapping strategy, associating each memory block with a specific cache location. The module is parameterized to support various data widths and cache configurations. 
