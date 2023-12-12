@@ -97,7 +97,7 @@ for (int control = 0; control < 14; control++) {
 
 ### Direct Mapped Cache
 The initial phase of my cache design involved the creation of the Direct Mapped Cache module. This design employs a direct mapping strategy, associating each memory block with a specific cache location. The module is parameterized to support various data widths and cache configurations. 
-![Alt text](images/2_way_cache.png)
+![direct_mapped_cache](images/direct_mapped_cache.png)
 #### Cache Hit
 #### Cache Miss
 #### Data Output
