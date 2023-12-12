@@ -46,7 +46,8 @@ endmodule
 ### Direct Mapped Cache
 
 ### Two Way Set Associative Cache
-
+#### Overview
+Recognizing the limitations of the direct-mapped approach, my contributions extended to the development of a more sophisticated Two-Way Set Associative Cache. This cache design mitigates conflicts by allowing multiple lines in a set, thus providing a more nuanced solution to memory access challenges. The cache employs a Least Recently Used (LRU) eviction policy to manage data placement and replacement.
 
 ## Conclusion
 In conclusion, my contributions spanned various modules, design decisions, and testing phases. The project allowed me to enhance my understanding of RISC-V, SystemVerilog, and hardware design principles.
