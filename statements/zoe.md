@@ -96,11 +96,16 @@ for (int control = 0; control < 14; control++) {
 ## Cache
 
 ### Direct Mapped Cache
+The initial phase of my cache design involved the creation of the Direct Mapped Cache module. This design employs a direct mapping strategy, associating each memory block with a specific cache location. The module is parameterized to support various data widths and cache configurations. 
+![Alt text](images/2_way_cache.png)
+#### Cache Hit
+#### Cache Miss
+#### Data Output
+#### Overwrite
 
 ### Two Way Set Associative Cache
-#### Overview
 Recognizing the limitations of the direct-mapped approach, my contributions extended to the development of a more sophisticated Two-Way Set Associative Cache. This cache design mitigates conflicts by allowing multiple lines in a set, thus providing a more nuanced solution to memory access challenges. The cache employs a Least Recently Used (LRU) eviction policy to manage data placement and replacement.
-
+#### 
 ## Conclusion
 In conclusion, my contributions spanned various modules, design decisions, and testing phases. The project allowed me to enhance my understanding of RISC-V, SystemVerilog, and hardware design principles.
 
