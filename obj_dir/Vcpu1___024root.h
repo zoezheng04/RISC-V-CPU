@@ -27,6 +27,7 @@ class Vcpu1___024root final : public VerilatedModule {
     CData/*0:0*/ cpu1__DOT__MemType_wire;
     CData/*2:0*/ cpu1__DOT__D__DOT__ImmSrc_wire;
     CData/*0:0*/ cpu1__DOT__D__DOT__RegWrite_wire;
+    CData/*1:0*/ cpu1__DOT__D__DOT__control__DOT__opfunct7;
     CData/*6:0*/ cpu1__DOT__D__DOT__control__DOT__unnamedblk1__DOT__Type_O;
     CData/*0:0*/ __Vclklast__TOP__clk;
     CData/*0:0*/ __Vchglast__TOP__cpu1__DOT__EQ_wire;

@@ -16,6 +16,10 @@ module ControlUnit  (
     output logic                    MemType     // Memory address type - byte addressing or word addressing
 );
 
+logic [1:0]                         opfunct7;
+
+assign opfunct7 = {opcode[5], funct7};
+
 typedef enum logic [6:0] {
     Type_R      = 7'b0110011,   // 3 register instructions (ALU operations)
     Type_I      = 7'b0000011,   // Immediate Load Instructions
@@ -43,13 +47,13 @@ always_comb begin
         Type_R, Type_I_ALU:
             case(funct3)
                 3'b000: begin
-                    if(funct7) begin
+                    if(opfunct7 == 2'b11) begin
                         ImmSrc = 3'b000;
                         ALUctrl = 4'b1000; // SUB
                         MemType = 1'b0;
                     end 
-                    else  begin
-                        ALUctrl = 4'b0000; // Add
+                    else begin
+                        ALUctrl = 4'b0000; // ADD
                         ImmSrc = 3'b000;
                         MemType = 1'b0;
                     end
@@ -117,11 +121,6 @@ always_comb begin
             MemType = 1'b1;
         end
 
-        Type_U: begin
-            ImmSrc = 3'b001;
-            ALUctrl = 4'b0000; // Add
-            MemType = 1'b0;
-        end
         Type_U_LUI: begin
             ImmSrc = 3'b100;
             ALUctrl = 4'b0100; // Load Upper Immediate

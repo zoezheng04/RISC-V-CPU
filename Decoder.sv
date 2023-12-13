@@ -26,7 +26,7 @@ logic               RegWrite_wire;
 ControlUnit control(
     .opcode(instr[6:0]),
     .funct3(instr[14:12]),
-    .funct7(instr[30]),        // funct 7 isn't used in the control unit
+    .funct7(instr[30]),
     .EQ(EQ),
     .RegWrite(RegWrite_wire),
     .ALUctrl(ALUctrl),

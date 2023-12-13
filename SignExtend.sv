@@ -9,11 +9,11 @@ module SignExtend#(
 always_comb begin
     case(ImmSrc)
     //I-type
-    3'b000: Imm_o = {{21{Imm_i[31]}}, Imm_i[30:20]};
+    3'b000: Imm_o = {{20{Imm_i[31]}}, Imm_i[31:20]};
     //U-type
     3'b001: Imm_o = {Imm_i[31:12], 12'b0};
     //S-type
-    3'b010: Imm_o = {{21{Imm_i[31]}}, Imm_i[30:25], Imm_i[11:7]};
+    3'b010: Imm_o = {{20{Imm_i[31]}}, Imm_i[31:25], Imm_i[11:7]};
     //B-type
     3'b011: Imm_o = {{20{Imm_i[31]}}, Imm_i[7], Imm_i[30:25], Imm_i[11:8], 1'b0};
     //J-type
