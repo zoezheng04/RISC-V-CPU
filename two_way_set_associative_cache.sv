@@ -1,4 +1,3 @@
-//Eviction Policy: LRU
 module two_way_cache #(
     parameters DATA_WIDTH = 32,
                 TAG_WIDTH = 27,
@@ -9,10 +8,12 @@ module two_way_cache #(
     input logic clk;
     input logic [DATA_WIDTH-1:0] address;
     input logic [DATA_WIDTH-1:0] data;
-    input logic overwrite;
     output logic cache_hit;
     output logic [DATA_WIDTH-1:0] cache_data;
 );
+// LRU counter
+logic lru_counter_0 [CACHE_WIDTH-1:0];
+logic lru_counter_1 [CACHE_WIDTH-1:0];
 
 //cache array
 logic V_0 [CACHE_WIDTH-1:0];
@@ -36,39 +37,48 @@ assign cache_hit_0 = ((tag_0 == data_tag) && V_0);
 assign cache_hit_1 = ((tag_1 == data_tag) && V_1);
 assign cache_hit = cache_hit_0 || cache_hit_1;
 
-//cache data output
+//cache hit data output
 always_comb begin
     if(cache_hit) begin
-        if(cache_hit_1) cache_data = data_1[data_set];
-        else cache_data = data_0[data_set];
+        if(cache_hit_1) begin
+            cache_data = data_1[data_set];
+            lru_counter_1[data_set] <= lru_counter_1[data_set] + 1;
+        end
+        else begin
+            cache_data = data_0[data_set];
+            lru_counter_0[data_set] <= lru_counter_0[data_set] + 1;
+        end
     end
 end
 
-//cache update
+//cache miss
 always_ff @(negedge clk) begin
-    //cache miss
     if(!cache_hit) begin
-        if(!cache_hit_0) begin
+        //compulsory miss
+        if(!V_0[data_set]) begin
             tag_0[data_set] <= data_tag;
             data_0[data_set] <= data;
             V_0[data_set] <= 1'b1;
+            lru_counter_0[data_set] <= 0;
         end
-        else if (!cache_hit_1) begin
+        else if (!V_1[data_set]) begin
             tag_1[data_set] <= data_tag;
             data_1[data_set] <= data;
             V_1[data_set] <= 1'b1;
+            lru_counter_1[data_set] <= 0;
         end
-    end
-
-    //overwrite
-    if(overwrite) begin
-        if(data_tag == tag_0[data_set]) begin
-            tag_0[data_set] <= data_tag;
-            data_0[data_set] <= data;
-        end
-        else if(data_tag == tag_1[data_set]) begin
-            tag_1[data_set] <= data_tag;
-            data_1[data_set] <= data;
+        //capacity miss -> LRU
+        else if (V_1[data_set] && V_0[data_set]) begin
+            if (lru_counter_0[data_set] < lru_counter_1[data_set]) begin
+                tag_0[data_set] <= data_tag;
+                data_0[data_set] <= data;
+                lru_counter_0[data_set] <= 0;
+            end
+            else begin
+                tag_1[data_set] <= data_tag;
+                data_1[data_set] <= data;
+                lru_counter_1[data_set] <= 0;
+            end
         end
     end
 end
