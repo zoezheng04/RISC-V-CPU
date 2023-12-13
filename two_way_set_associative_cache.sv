@@ -1,6 +1,6 @@
 //Eviction Policy: LRU
 module two_way_cache #(
-    parameters DATA_WIDTH = 32,
+    parameter DATA_WIDTH = 32,
                 TAG_WIDTH = 27,
                 SET_WIDTH = 3,
                 OFFSET_WIDTH = 2,
