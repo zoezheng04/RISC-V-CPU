@@ -26,16 +26,19 @@ assign data_set = address[4:2];
 assign data_tag = address[32:5];
 assign cache_hit = ((tag == data_tag) && V);
 
+//cache hit
 always_comb begin
     if (cache_hit) cache_data = data[data_set];
 end
 
 always_ff @(negedge clk) begin
+    //cache miss
     if(data_tag != tag[data_set]) begin
         tag[data_set] <= data_tag;
         data[data_set] <= data;
         V[data_set] <= 1'b1;
     end
+    //overwrite
     if(overwrite) begin
         if(data_tag == tag[data_set]) begin
             tag[data_set] <= data_tag;
