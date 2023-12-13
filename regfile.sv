@@ -2,7 +2,7 @@ module regfile #(
     parameter ADDRESS_WIDTH = 5,
             DATA_WIDTH = 32
 )(
-    input logic                         clk,
+    //input logic                         clk,
     input logic                         WE3, //write enable
     input logic  [DATA_WIDTH-1:0]       WD3, //write data <- ALUout
     input logic  [ADDRESS_WIDTH-1:0]    AD1,
@@ -16,10 +16,16 @@ module regfile #(
 logic [DATA_WIDTH-1:0] registers [2**ADDRESS_WIDTH-1:0];
 
 //Write to register
-always_ff @(posedge clk) begin
-    if(WE3)
-        registers[AD3] <= WD3;
-        registers[0]   <= 0;
+// always_ff @(posedge clk) begin
+//     if(WE3)
+//         registers[AD3] <= WD3;
+//         registers[0]   <= 0;
+// end
+always_comb begin
+    if(WE3) begin
+        registers[AD3]  = WD3;
+        registers[0]    = 0;
+    end
 end
 
 //Read from register

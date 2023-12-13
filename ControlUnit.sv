@@ -13,7 +13,8 @@ module ControlUnit  (
     output logic                    JumpSrc,
     output logic                    JRetSrc,
     output logic                    BEQ,
-    output logic                    BNE
+    output logic                    BNE,
+    output logic                    MemType
 );
 
 typedef enum logic [6:0] {
@@ -39,6 +40,7 @@ always_comb begin
     JRetSrc   = (Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
     BEQ       = ((Type_O == Type_B) && (funct3 == 3'b000)) ? 1'b1 : 1'b0;
     BNE       = ((Type_O == Type_B) && (funct3 == 3'b001)) ? 1'b1 : 1'b0;
+    MemType   = ((Type_O == Type_I) || (Type_O == Type_S)) ? 1'b1 : 1'b0;
     
     case (Type_O)
 

@@ -26,10 +26,12 @@ VL_MODULE(Vtop) {
     // propagate new values into/out from the Verilated model.
     VL_IN8(clk,0,0);
     VL_IN8(reset,0,0);
+    VL_IN8(trigger,0,0);
     VL_OUT(a0,31,0);
     
     // LOCAL SIGNALS
     // Internals; generally not touched by application code
+    CData/*0:0*/ top__DOT__FlushE_wire;
     CData/*3:0*/ top__DOT__ALUctrlE_wire;
     CData/*0:0*/ top__DOT__RegWriteE_wire;
     CData/*0:0*/ top__DOT__RegWriteM_wire;
@@ -42,6 +44,8 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ top__DOT__MemWriteM_wire;
     CData/*0:0*/ top__DOT__PCSrcD_wire;
     CData/*0:0*/ top__DOT__ALUsrcE_wire;
+    CData/*0:0*/ top__DOT__MemTypeE_wire;
+    CData/*0:0*/ top__DOT__MemTypeM_wire;
     CData/*4:0*/ top__DOT__Rs1E_wire;
     CData/*4:0*/ top__DOT__Rs2E_wire;
     CData/*4:0*/ top__DOT__RdE_wire;
@@ -51,18 +55,18 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ top__DOT__ResultSrcM_wire;
     CData/*0:0*/ top__DOT__ResultSrcW_wire;
     CData/*0:0*/ top__DOT__BranchD_wire;
-    CData/*0:0*/ top__DOT__FlushE_wire;
+    CData/*0:0*/ top__DOT__Fetch_Stage__DOT__FlushD;
     CData/*0:0*/ top__DOT__Decode_Stage__DOT__RegWrite_wire;
     CData/*3:0*/ top__DOT__Decode_Stage__DOT__ALUctrl_wire;
     CData/*0:0*/ top__DOT__Decode_Stage__DOT__ALUSrc_wire;
     CData/*2:0*/ top__DOT__Decode_Stage__DOT__ImmSrc_wire;
     CData/*0:0*/ top__DOT__Decode_Stage__DOT__MemWrite_wire;
     CData/*0:0*/ top__DOT__Decode_Stage__DOT__ResultSrc_wire;
-    CData/*0:0*/ top__DOT__Decode_Stage__DOT__BranchD_wire;
     CData/*0:0*/ top__DOT__Decode_Stage__DOT__JumpSrc_wire;
     CData/*0:0*/ top__DOT__Decode_Stage__DOT__JRetSrc_wire;
     CData/*0:0*/ top__DOT__Decode_Stage__DOT__BEQ_wire;
     CData/*0:0*/ top__DOT__Decode_Stage__DOT__BNE_wire;
+    CData/*0:0*/ top__DOT__Decode_Stage__DOT__MemType_wire;
     CData/*6:0*/ top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O;
     CData/*0:0*/ top__DOT__HazardUnit__DOT__BranchStall;
     CData/*0:0*/ top__DOT__HazardUnit__DOT__lwstall;
@@ -78,6 +82,7 @@ VL_MODULE(Vtop) {
     IData/*31:0*/ top__DOT__RD2E_wire;
     IData/*31:0*/ top__DOT__Fetch_Stage__DOT__PCF_wire;
     IData/*31:0*/ top__DOT__Fetch_Stage__DOT__PCNext_wire;
+    IData/*31:0*/ top__DOT__Fetch_Stage__DOT__InstrF_wire;
     IData/*31:0*/ top__DOT__Decode_Stage__DOT__RD1D_wire;
     IData/*31:0*/ top__DOT__Decode_Stage__DOT__RD2D_wire;
     IData/*31:0*/ top__DOT__Decode_Stage__DOT__ExtImmD_wire;
@@ -93,8 +98,11 @@ VL_MODULE(Vtop) {
     
     // LOCAL VARIABLES
     // Internals; generally not touched by application code
+    CData/*0:0*/ __VinpClk__TOP__top__DOT__FlushE_wire;
+    CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__FlushE_wire;
     CData/*0:0*/ __Vclklast__TOP__clk;
-    CData/*0:0*/ __Vm_traceActivity[4];
+    CData/*0:0*/ __Vchglast__TOP__top__DOT__FlushE_wire;
+    CData/*0:0*/ __Vm_traceActivity[6];
     
     // INTERNAL VARIABLES
     // Internals; generally not touched by application code
@@ -132,6 +140,9 @@ VL_MODULE(Vtop) {
   private:
     static QData _change_request(Vtop__Syms* __restrict vlSymsp);
     static QData _change_request_1(Vtop__Syms* __restrict vlSymsp);
+  public:
+    static void _combo__TOP__10(Vtop__Syms* __restrict vlSymsp);
+  private:
     void _ctor_var_reset() VL_ATTR_COLD;
   public:
     static void _eval(Vtop__Syms* __restrict vlSymsp);
@@ -142,11 +153,13 @@ VL_MODULE(Vtop) {
   public:
     static void _eval_initial(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _eval_settle(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
-    static void _initial__TOP__4(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
-    static void _multiclk__TOP__5(Vtop__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__1(Vtop__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__2(Vtop__Syms* __restrict vlSymsp);
-    static void _settle__TOP__3(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
+    static void _initial__TOP__1(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
+    static void _sequent__TOP__3(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__4(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__7(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__8(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__9(Vtop__Syms* __restrict vlSymsp);
+    static void _settle__TOP__6(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
   private:
     static void traceChgSub0(void* userp, VerilatedVcd* tracep);
     static void traceChgTop0(void* userp, VerilatedVcd* tracep);

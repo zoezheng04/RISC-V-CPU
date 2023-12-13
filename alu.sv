@@ -14,10 +14,10 @@ always_comb begin
         4'b0010: ALUResult = SrcB; //JAL
         4'b0011: ALUResult = SrcA + SrcB; //JALR
         4'b0100: ALUResult = {SrcB[31:12], 12'b0}; //LUI
-        4'b0101: ALUResult = {24'b0, SrcB[7:0]}; //LBU
+        4'b0101: ALUResult = SrcA + SrcB; //LBU
         4'b0110: ALUResult = SrcA + SrcB; //SB
         4'b0111: ALUResult = SrcA << SrcB[4:0]; //SLL
-        4'b1000: ALUResult = SrcA - SrcB; //SUB
+        4'b1000: ALUResult = SrcA + SrcB; //SUB
         4'b1001: ALUResult = SrcA >> SrcB[4:0];//SRL
         4'b1010: ALUResult = SrcA ^ SrcB; //XOR
         4'b1011: ALUResult = SrcA | SrcB; //OR

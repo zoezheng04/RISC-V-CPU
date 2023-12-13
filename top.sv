@@ -1,7 +1,7 @@
 module top (
     input logic             clk,
     input logic             reset,
-    //input logic             trigger, // trigger not implemented!
+    input logic             trigger,
 
     output logic [31:0]     a0
 );
@@ -14,7 +14,7 @@ logic [3:0]         ALUctrlE_wire;
 logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, StallF_wire, StallD_wire;
 logic [1:0]         ForwardAE_wire, ForwardBE_wire;
 logic               MemWriteE_wire, MemWriteM_wire, ForwardAD_wire, ForwardBD_wire;
-logic               PCSrcD_wire, ALUsrcE_wire;
+logic               PCSrcD_wire, ALUsrcE_wire, MemTypeE_wire, MemTypeM_wire;
 logic [4:0]         Rs1E_wire, Rs2E_wire, RdE_wire, RdM_wire, RdW_wire, Rs1D_wire, Rs2D_wire;
 logic               ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, BranchD_wire, FlushE_wire;
 //////////////////// FETCH /////////////////////
@@ -22,11 +22,12 @@ Fetch Fetch_Stage(
     /////// INPUTS ////////
     .clk(clk),
     .reset(reset),
-    //.trigger(trigger), 
+    .trigger(trigger), 
     .StallF(StallF_wire),
     .StallD(StallD_wire),
     .PCBranchD(PCBranchD_wire),
     .PCSrcD(PCSrcD_wire),
+    .BranchD(BranchD_wire),
     /////// OUTPUTS ///////
     .InstrD(InstrD_wire),
     .PCPlus4D(PCPlus4D_wire) 
@@ -62,6 +63,7 @@ Decode Decode_Stage(
     .ExtImmE(ExtImmE_wire),
     .PCBranchD(PCBranchD_wire),
     .BranchD(BranchD_wire),
+    .MemTypeE(MemTypeE_wire),
     .a0(a0)
 );
 
@@ -81,13 +83,15 @@ Execute Execute_Stage(
     .ForwardAE(ForwardAE_wire),
     .ForwardBE(ForwardBE_wire),
     .ResultW(ResultW_wire),
+    .MemTypeE(MemTypeE_wire),
     /////// OUTPUTS ///////
     .RegWriteM(RegWriteM_wire),
     .ResultSrcM(ResultSrcM_wire),
     .MemWriteM(MemWriteM_wire),
     .ALUResultM(ALUResultM_wire),
     .WriteDataM(WriteDataM_wire),
-    .RdM(RdM_wire)
+    .RdM(RdM_wire),
+    .MemTypeM(MemTypeM_wire)
 );
 
 //////////////////// MEMORY /////////////////////
@@ -100,6 +104,7 @@ Memory Memory_Stage(
     .ALUResultM(ALUResultM_wire),
     .WriteDataM(WriteDataM_wire),
     .RdM(RdM_wire),
+    .MemTypeM(MemTypeM_wire),
     /////// OUTPUTS ///////
     .RegWriteW(RegWriteW_wire),
     .ResultSrcW(ResultSrcW_wire),

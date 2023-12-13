@@ -9,13 +9,13 @@ module PC #(
 );
 
     always_ff @ (posedge clk) begin
-  
-            if (~Stall) begin
-                if (rst)
-                PC <= 32'b0;
-                else
-                PC <= PCNext;
-            end
+ 
+        if (~Stall) begin
+            if (rst)
+            PC <= 32'b0;
+            else
+            PC <= PCNext;
         end
+    end
 
 endmodule

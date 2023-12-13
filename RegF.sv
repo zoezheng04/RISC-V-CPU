@@ -17,7 +17,7 @@ module RegF (
             PCPlus4D <= PCPlus4F;
         end
         if (Flush) begin
-            InstrD   <= 0;
+            InstrD   <= 0'h00000013;
             PCPlus4D <= 0;
         end
     end

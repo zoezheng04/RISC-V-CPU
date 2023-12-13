@@ -12,6 +12,7 @@ module RegD (
     input logic  [31:0]         ExtImmD,
     input logic                 clk,
     input logic                 FlushE,
+    input logic                 MemTypeD,
 
     output logic                 RegWriteE,
     output logic                 ResultSrcE,
@@ -23,26 +24,27 @@ module RegD (
     output logic  [4:0]          Rs1E,
     output logic  [4:0]          Rs2E,
     output logic  [4:0]          RdE,
-    output logic  [31:0]         ExtImmE
+    output logic  [31:0]         ExtImmE,
+    output logic                 MemTypeE
 
 );
+    always_ff@(posedge FlushE) begin
+            RegWriteE   <= 0;
+            ResultSrcE  <= 0;
+            MemWriteE   <= 0;
+            ALUctrlE    <= 0;
+            ALUsrcE     <= 0;
+            RD1E        <= 0;
+            RD2E        <= 0;
+            Rs1E        <= 0;
+            Rs2E        <= 0;
+            RdE         <= 0;
+            ExtImmE     <= 0;
+            MemTypeE    <= 0;
+    end
     
     always_ff @( negedge clk) begin
         
-        if((FlushE == 0)) begin
-            // Only passing through values if Stall and Flush is 0
-            RegWriteE   <= RegWriteD;
-            ResultSrcE  <= ResultSrcD;
-            MemWriteE   <= MemWriteD;
-            ALUctrlE    <= ALUctrlD;
-            ALUsrcE     <= ALUsrcD;
-            RD1E        <= RD1D;
-            RD2E        <= RD2D;
-            Rs1E        <= Rs1D;
-            Rs2E        <= Rs2D;
-            RdE         <= RdD;
-            ExtImmE     <= ExtImmD;
-        end
         if (FlushE) begin 
             RegWriteE   <= 0;
             ResultSrcE  <= 0;
@@ -55,6 +57,20 @@ module RegD (
             Rs2E        <= 0;
             RdE         <= 0;
             ExtImmE     <= 0;
+            MemTypeE    <= 0;
+        end else begin
+            RegWriteE   <= RegWriteD;
+            ResultSrcE  <= ResultSrcD;
+            MemWriteE   <= MemWriteD;
+            ALUctrlE    <= ALUctrlD;
+            ALUsrcE     <= ALUsrcD;
+            RD1E        <= RD1D;
+            RD2E        <= RD2D;
+            Rs1E        <= Rs1D;
+            Rs2E        <= Rs2D;
+            RdE         <= RdD;
+            ExtImmE     <= ExtImmD;
+            MemTypeE    <= MemTypeD;
         end
     end
 

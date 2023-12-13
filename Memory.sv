@@ -6,6 +6,7 @@ module Memory (
     input logic [31:0]    ALUResultM,
     input logic [31:0]    WriteDataM,
     input logic [4:0]     RdM,
+    input logic           MemTypeM,
 
     output logic          RegWriteW,
     output logic          ResultSrcW,
@@ -25,6 +26,7 @@ DataMemory Memory(
     .WE(MemWriteM),
     .A(ALUResultM),
     .WD(WriteDataM),
+    .MemType(MemTypeM),
     //////// Outputs ///////
     .RD(RD_wire)
 );

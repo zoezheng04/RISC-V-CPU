@@ -12,13 +12,15 @@ module Execute (
     input logic  [1:0]     ForwardAE,
     input logic  [1:0]     ForwardBE,
     input logic  [31:0]    ResultW,
+    input logic            MemTypeE,
 
     output logic           RegWriteM,
     output logic           ResultSrcM,
     output logic           MemWriteM,
     output logic [31:0]    ALUResultM,
     output logic [31:0]    WriteDataM,
-    output logic [4:0]     RdM
+    output logic [4:0]     RdM,
+    output logic           MemTypeM
 );
 
 ///////////////// Wires ///////////////////
@@ -63,13 +65,15 @@ RegE Pipeline_RegisterE(
     .WriteDataE(SrcBE_Forwarding_wire),
     .RdE(RdE),
     .clk(clk),
+    .MemTypeE(MemTypeE),
     //////// Outputs //////
     .RegWriteM(RegWriteM),
     .ResultSrcM(ResultSrcM),
     .MemWriteM(MemWriteM),
     .ALUResultM(ALUResultM),
     .WriteDataM(WriteDataM),
-    .RdM(RdM)
+    .RdM(RdM),
+    .MemTypeM(MemTypeM)
 );
 
 endmodule

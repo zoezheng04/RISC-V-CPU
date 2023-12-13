@@ -26,6 +26,7 @@ module Decode (
     output logic  [31:0]    ExtImmE,
     output logic  [31:0]    PCBranchD,
     output logic            BranchD,
+    output logic            MemTypeE,
     output logic  [31:0]    a0
 );
 
@@ -37,11 +38,11 @@ logic                       ALUSrc_wire;
 logic   [2:0]               ImmSrc_wire;
 logic                       MemWrite_wire;
 logic                       ResultSrc_wire;
-logic                       BranchD_wire;
 logic                       JumpSrc_wire;
 logic                       JRetSrc_wire;
 logic                       BEQ_wire;
 logic                       BNE_wire;
+logic                       MemType_wire;
 
 //////////// Register File Wires //////////
 logic   [31:0]              RD1D_wire;
@@ -55,7 +56,7 @@ logic   [31:0]              ExtImmDReg_wire;
 logic  [31:0]               ForwardAD_MUX, ForwardBD_MUX;
 assign ForwardAD_MUX = ForwardAD ? ALUOutM : RD1D_wire;
 assign ForwardBD_MUX = ForwardBD ? ALUOutM : RD2D_wire;
-assign PCBranchD = JRetSrc_wire ? RD1D_wire : ((ExtImmD_wire) + (PCPlus4D - 8));    
+assign PCBranchD = JRetSrc_wire ? RD1D_wire : (BranchD ? ((ExtImmD_wire) + (PCPlus4D - 4)) : ((ExtImmD_wire) + (PCPlus4D - 8)));    
 assign BranchD = (BEQ_wire || BNE_wire);
 assign Rs1D = InstrD[19:15];
 assign Rs2D = InstrD[24:20];
@@ -86,12 +87,13 @@ ControlUnit ControlUnit(
     .BEQ(BEQ_wire),
     .BNE(BNE_wire),
     .JumpSrc(JumpSrc_wire),
-    .JRetSrc(JRetSrc_wire)
+    .JRetSrc(JRetSrc_wire),
+    .MemType(MemType_wire)
 );
 
 regfile RegisterFile( 
     //////// Inputs ///////////    
-    .clk(clk),
+    //.clk(clk),
     .WE3(RegWriteW),
     .WD3(ResultW),
     .AD1(InstrD[19:15]),
@@ -126,6 +128,7 @@ RegD Pipeline_RegisterD(
     .ExtImmD(ExtImmDReg_wire),
     .clk(clk),
     .FlushE(FlushE),
+    .MemTypeD(MemType_wire),
     /////// Outputs ////////
     .RegWriteE(RegWriteE),
     .ResultSrcE(ResultSrcE),
@@ -137,7 +140,8 @@ RegD Pipeline_RegisterD(
     .Rs1E(Rs1E),
     .Rs2E(Rs2E),
     .RdE(RdE),
-    .ExtImmE(ExtImmE)
+    .ExtImmE(ExtImmE),
+    .MemTypeE(MemTypeE)
 );
 
 endmodule

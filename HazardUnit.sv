@@ -27,32 +27,28 @@ logic                lwstall;
     
 always_comb begin
     // Initialize signals to no forwarding
-    BranchStall = 0;
     ForwardAE = 2'b00;
     ForwardBE = 2'b00;
     ForwardAD = ((Rs1D != 0) && (Rs1D == RdM) && RegWriteM);
     ForwardBD = ((Rs2D != 0) && (Rs2D == RdM) && RegWriteM);
+    BranchStall = (BranchD && RegWriteE && ((WriteRegE == Rs1D) || (WriteRegE == Rs2D))) || (BranchD && ResultSrcM && ((RdM == Rs1D) || (RdM == Rs2D)));
     lwstall   = (RegWriteE && ResultSrcE);
     StallD = (lwstall || BranchStall);
     StallF = (lwstall || BranchStall);
-
-        if (RegWriteW && (RdW == Rs1E)) 
+    FlushE = (lwstall);
+    
+        if ((Rs1E != 0) && RegWriteW && (RdW == Rs1E)) 
             ForwardAE = 2'b01; // Forward data from write-back stage (W) to execute stage (E) for RD1E
         
-        if (RegWriteW && (RdW == Rs2E)) 
+        if ((Rs2E != 0) && RegWriteW && (RdW == Rs2E)) 
             ForwardBE = 2'b01; // Forward data from write-back stage (W) to execute stage (E) for RD2E        
 
-        if (RegWriteM && (RdM == Rs1E)) 
+        if ((Rs1E != 0) && RegWriteM && (RdM == Rs1E)) 
             ForwardAE = 2'b10; // Forward data from memory stage (M) to execute stage (E) for RD1E
         
-        if (RegWriteM && (RdM == Rs2E)) 
+        if ((Rs2E != 0) && RegWriteM && (RdM == Rs2E)) 
             ForwardBE = 2'b10; // Forward data from memory stage (M) to execute stage (E) for RD2E
         
-        if (BranchD && RegWriteE && ((WriteRegE == Rs1D) || (WriteRegE == Rs2D)))
-            BranchStall = 1'b1;         // Set Stall to 1 if it is a Load Instruction and the next Instruction needs the value
-    
-        if (BranchD && ResultSrcM && ((RdM == Rs1D) || (RdM == Rs2D)))
-            BranchStall = 1'b1;
     end
 
 endmodule
