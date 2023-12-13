@@ -1,9 +1,9 @@
-#include "Vcpu1.h"
+#include "Vcpu.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
 #include "vbuddy.cpp"
-#define MAX_SIM_CYC 1000000
+#define MAX_SIM_CYC 400000
 
 int main(int argc, char **argv, char **env){
 
@@ -12,12 +12,12 @@ int main(int argc, char **argv, char **env){
 
     Verilated::commandArgs(argc, argv);
 
-    Vcpu1* top = new Vcpu1;
+    Vcpu* top = new Vcpu;
 
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace (tfp,99);
-    tfp->open ("cpu1.vcd");
+    tfp->open ("cpu.vcd");
 
     //init Vbuddy
     if(vbdOpen()!=1) return(-1);

@@ -1,4 +1,4 @@
-module cpu1 #(
+module cpu #(
     parameter DATA_WIDTH = 32
 )(
     input logic                     clk,
