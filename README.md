@@ -26,9 +26,9 @@ Provide a brief introduction to the project.
 
 ---
 ## Quick Start
-Highlight the key features of your project.
+Highlight the key features
 
-Provide step-by-step instructions on how to install your project.
+Provide step-by-step instructions on testing
 
 ```bash
 # Example installation commands
