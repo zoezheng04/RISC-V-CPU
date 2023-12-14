@@ -1,6 +1,6 @@
 module Decode (
     input logic             clk,
-    input logic             FlushE,
+    input logic             FlushD,
     input logic [31:0]      InstrD,
     input logic [31:0]      PCPlus4D,
     input logic             RegWriteW,
@@ -52,15 +52,15 @@ logic   [31:0]              RD2D_wire;
 logic   [31:0]              ExtImmD_wire;
 logic   [31:0]              ExtImmDReg_wire;
 
-//////////// Branch MUXs /////////////////
+//////////// Assign and MUXs //////////////
+// Forwarding Logic
 logic  [31:0]               ForwardAD_MUX, ForwardBD_MUX;
 assign ForwardAD_MUX = ForwardAD ? ALUOutM : RD1D_wire;
 assign ForwardBD_MUX = ForwardBD ? ALUOutM : RD2D_wire;
+// Programme Counter logic (Jumps and Branches)
 assign PCBranchD = JRetSrc_wire ? RD1D_wire : (BranchD ? ((ExtImmD_wire) + (PCPlus4D - 4)) : ((ExtImmD_wire) + (PCPlus4D - 8)));    
 assign BranchD = (BEQ_wire || BNE_wire);
-assign Rs1D = InstrD[19:15];
-assign Rs2D = InstrD[24:20];
-assign ExtImmDReg_wire = JumpSrc_wire ? (PCPlus4D - 4) : ExtImmD_wire;
+assign ExtImmDReg_wire = JumpSrc_wire ? (PCPlus4D - 4) : ExtImmD_wire; 
 always_comb begin
     if(BNE_wire) begin
         PCSrcD = (ForwardAD_MUX != ForwardBD_MUX);
@@ -70,6 +70,9 @@ always_comb begin
         PCSrcD = (JumpSrc_wire || JRetSrc_wire);
     end   
 end
+assign Rs1D = InstrD[19:15];
+assign Rs2D = InstrD[24:20];
+
 /////////// Instantiate Modules ///////////
 ControlUnit ControlUnit(
     //////// Inputs ///////////
@@ -81,7 +84,6 @@ ControlUnit ControlUnit(
     .ALUctrl(ALUctrl_wire),
     .ALUsrc(ALUSrc_wire),
     .ImmSrc(ImmSrc_wire),
-    //.PCSrc(PCSrc_wire),
     .MemWrite(MemWrite_wire),
     .ResultSrc(ResultSrc_wire),
     .BEQ(BEQ_wire),
@@ -93,7 +95,6 @@ ControlUnit ControlUnit(
 
 regfile RegisterFile( 
     //////// Inputs ///////////    
-    //.clk(clk),
     .WE3(RegWriteW),
     .WD3(ResultW),
     .AD1(InstrD[19:15]),
@@ -127,7 +128,7 @@ RegD Pipeline_RegisterD(
     .RdD(InstrD[11:7]),
     .ExtImmD(ExtImmDReg_wire),
     .clk(clk),
-    .FlushE(FlushE),
+    .FlushD(FlushD),
     .MemTypeD(MemType_wire),
     /////// Outputs ////////
     .RegWriteE(RegWriteE),
