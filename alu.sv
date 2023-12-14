@@ -17,7 +17,7 @@ always_comb begin
         4'b0101: ALUResult = SrcA + SrcB; //LBU
         4'b0110: ALUResult = SrcA + SrcB; //SB
         4'b0111: ALUResult = SrcA << SrcB[4:0]; //SLL
-        4'b1000: ALUResult = SrcA + SrcB; //SUB
+        4'b1000: ALUResult = SrcA - SrcB; //SUB
         4'b1001: ALUResult = SrcA >> SrcB[4:0];//SRL
         4'b1010: ALUResult = SrcA ^ SrcB; //XOR
         4'b1011: ALUResult = SrcA | SrcB; //OR
