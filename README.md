@@ -13,7 +13,7 @@
 
 ## Introduction
 
-Provide a brief introduction to your project. Explain its purpose and what problem it solves.
+Provide a brief introduction to the project.
 
 ## Individual Statements
 
