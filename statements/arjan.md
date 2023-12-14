@@ -419,11 +419,11 @@ To accommodate the pipelined cpu I made some changes to a few modules to help wi
 ## Reflection
 I feel as though I have contributed significantly to this project and have made alot of progress in my SystemVerilog skills as well as computer architecture and git knowledge. If time permitted I would have liked to implement all the instructions of the ISA and test the cpu with more programs, however I am very satisfied with what my team and I were able to accomplish. Here is a list of what we completed:
 
-* Fully working Single cycle cpu
-* Fully working Pipelined cpu
-* Fully working hazard prevention
-* Fully working branch prediction
-* Two-way Associative Cache integrated into the pipelined cpu.
+* Fully working Single cycle cpu.
+* Fully working Pipelined cpu.
+* Fully working Hazard prevention.
+* Fully working Branch prediction.
+* Fully working Cache integrated into the pipelined cpu.
 
 
 
