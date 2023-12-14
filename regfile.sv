@@ -15,12 +15,6 @@ module regfile #(
 
 logic [DATA_WIDTH-1:0] registers [2**ADDRESS_WIDTH-1:0];
 
-//Write to register
-// always_ff @(posedge clk) begin
-//     if(WE3)
-//         registers[AD3] <= WD3;
-//         registers[0]   <= 0;
-// end
 always_comb begin
     if(WE3) begin
         registers[AD3]  = WD3;
