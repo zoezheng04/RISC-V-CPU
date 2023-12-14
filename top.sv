@@ -11,20 +11,20 @@ logic [31:0]        InstrD_wire, ExtImmE_wire, ALUResultM_wire, ALUResultW_wire,
 logic [31:0]        PCBranchD_wire, ReadDataW_wire;
 logic [31:0]        PCPlus4D_wire, WriteDataM_wire, RD1E_wire, RD2E_wire;
 logic [3:0]         ALUctrlE_wire;
-logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, StallF_wire, StallD_wire;
+logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, StallF_wire, StallPC_wire;
 logic [1:0]         ForwardAE_wire, ForwardBE_wire;
 logic               MemWriteE_wire, MemWriteM_wire, ForwardAD_wire, ForwardBD_wire;
 logic               PCSrcD_wire, ALUsrcE_wire, MemTypeE_wire, MemTypeM_wire;
 logic [4:0]         Rs1E_wire, Rs2E_wire, RdE_wire, RdM_wire, RdW_wire, Rs1D_wire, Rs2D_wire;
-logic               ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, BranchD_wire, FlushE_wire;
+logic               ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, BranchD_wire, FlushD_wire;
 //////////////////// FETCH /////////////////////
 Fetch Fetch_Stage(
     /////// INPUTS ////////
     .clk(clk),
     .reset(reset),
     .trigger(trigger), 
+    .StallPC(StallPC_wire),
     .StallF(StallF_wire),
-    .StallD(StallD_wire),
     .PCBranchD(PCBranchD_wire),
     .PCSrcD(PCSrcD_wire),
     .BranchD(BranchD_wire),
@@ -37,7 +37,7 @@ Fetch Fetch_Stage(
 Decode Decode_Stage(
     /////// INPUTS ////////
     .clk(clk),
-    .FlushE(FlushE_wire),
+    .FlushD(FlushD_wire),
     .InstrD(InstrD_wire),
     .PCPlus4D(PCPlus4D_wire),
     .RegWriteW(RegWriteW_wire),
@@ -134,7 +134,7 @@ HazardUnit HazardUnit(
     .RegWriteE(RegWriteE_wire),
     .ResultSrcE(ResultSrcE_wire),
     .ResultSrcM(ResultSrcM_wire),
-    .WriteRegE(RdE_wire), //RdE
+    .WriteRegE(RdE_wire),
     .RdM(RdM_wire),
     .RegWriteM(RegWriteM_wire),
     .RdW(RdW_wire),
@@ -145,8 +145,8 @@ HazardUnit HazardUnit(
     .ForwardAD(ForwardAD_wire),
     .ForwardBD(ForwardBD_wire),
     .StallF(StallF_wire),
-    .StallD(StallD_wire),
-    .FlushE(FlushE_wire)
+    .StallPC(StallPC_wire),
+    .FlushD(FlushD_wire)
 );
 
 endmodule
