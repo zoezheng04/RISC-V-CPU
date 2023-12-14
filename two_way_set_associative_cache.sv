@@ -5,36 +5,36 @@ module two_way_set_associative_cache #(
                 OFFSET_WIDTH = 2,
                 CACHE_LENGTH = 8
 ) (
-    input logic clk,
-    input logic write_enable,
-    input logic [DATA_WIDTH-1:0] address,
-    input logic [DATA_WIDTH-1:0] data,
-    output logic cache_hit,
-    output logic [DATA_WIDTH-1:0] cache_data,
-    output logic [DATA_WIDTH-1:0] write_back_data,
-    output logic [DATA_WIDTH-1:0] write_back_address
+    input logic                     clk,
+    input logic                     write_enable,
+    input logic [DATA_WIDTH-1:0]    address,
+    input logic [DATA_WIDTH-1:0]    data,
+    output logic                    cache_hit,
+    output logic [DATA_WIDTH-1:0]   cache_data,
+    output logic [DATA_WIDTH-1:0]   write_back_data,
+    output logic [DATA_WIDTH-1:0]   write_back_address
 );
 // LRU counter
 logic lru_counter_0 [CACHE_LENGTH-1:0];
 logic lru_counter_1 [CACHE_LENGTH-1:0];
 
 //cache array
-logic V_0 [CACHE_LENGTH-1:0];
-logic D_0 [CACHE_LENGTH-1:0]; //dirty bit
-logic [TAG_WIDTH-1:0] tag_0 [CACHE_LENGTH-1:0];
-logic [DATA_WIDTH-1:0] data_0 [CACHE_LENGTH-1:0];
+logic                   V_0     [CACHE_LENGTH-1:0];
+logic                   D_0     [CACHE_LENGTH-1:0]; //dirty bit
+logic [TAG_WIDTH-1:0]   tag_0   [CACHE_LENGTH-1:0];
+logic [DATA_WIDTH-1:0]  data_0  [CACHE_LENGTH-1:0];
 
-logic V_1 [CACHE_LENGTH-1:0];
-logic D_1 [CACHE_LENGTH-1:0];
-logic [TAG_WIDTH-1:0] tag_1 [CACHE_LENGTH-1:0];
-logic [DATA_WIDTH-1:0] data_1 [CACHE_LENGTH-1:0];
+logic                   V_1     [CACHE_LENGTH-1:0];
+logic                   D_1     [CACHE_LENGTH-1:0];
+logic [TAG_WIDTH-1:0]   tag_1   [CACHE_LENGTH-1:0];
+logic [DATA_WIDTH-1:0]  data_1  [CACHE_LENGTH-1:0];
 
 //tag and set
 logic [SET_WIDTH-1:0] data_set;
 logic [TAG_WIDTH-1:0] data_tag;
 
 assign data_set = address[4:2];
-assign data_tag = address[32:5];
+assign data_tag = address[31:5];
 
 //cache hit
 logic cache_hit_0, cache_hit_1; //cache hit way 0 and 1
@@ -42,7 +42,7 @@ assign cache_hit_0 = ((tag_0[data_set] == data_tag) && V_0[data_set]);
 assign cache_hit_1 = ((tag_1[data_set] == data_tag) && V_1[data_set]);
 assign cache_hit = cache_hit_0 || cache_hit_1;
 
-always_comb begin
+always_ff @(posedge clk) begin
     if(cache_hit) begin
         //write operation
         if(write_enable) begin
@@ -60,11 +60,11 @@ always_comb begin
         //read operation
         else begin
             if(cache_hit_1) begin
-                cache_data = data_1[data_set];
+                cache_data <= data_1[data_set];
                 lru_counter_1[data_set] <= lru_counter_1[data_set] + 1;
             end
             else begin
-                cache_data = data_0[data_set];
+                cache_data <= data_0[data_set];
                 lru_counter_0[data_set] <= lru_counter_0[data_set] + 1;
             end
         end
@@ -93,8 +93,8 @@ always_ff @(negedge clk) begin
         else if (V_1[data_set] && V_0[data_set]) begin
             if (lru_counter_0[data_set] < lru_counter_1[data_set]) begin
                 if(D_0[data_set]) begin //write back to main mem
-                    write_back_data = data_0[data_set];
-                    write_back_address = {tag_0[data_set], data_set, {OFFSET_WIDTH{1'b0}}};
+                    write_back_data <= data_0[data_set];
+                    write_back_address <= {tag_0[data_set], data_set, {OFFSET_WIDTH{1'b0}}};
                     D_0[data_set] <= 1'b0;
                 end
                 //evict and fill
@@ -104,8 +104,8 @@ always_ff @(negedge clk) begin
             end
             else begin
                 if(D_1[data_set]) begin
-                    write_back_data = data_1[data_set]; 
-                    write_back_address = {tag_1[data_set], data_set, {OFFSET_WIDTH{1'b0}}};
+                    write_back_data <= data_1[data_set]; 
+                    write_back_address <= {tag_1[data_set], data_set, {OFFSET_WIDTH{1'b0}}};
                     D_1[data_set] <= 1'b0;
                 end
                 tag_1[data_set] <= data_tag;

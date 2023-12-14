@@ -38,15 +38,27 @@ Vtwo_way_set_associative_cache::~Vtwo_way_set_associative_cache() {
 }
 
 //============================================================
-// Evaluation function
+// Evaluation loop
 
-#ifdef VL_DEBUG
-void Vtwo_way_set_associative_cache___024root___eval_debug_assertions(Vtwo_way_set_associative_cache___024root* vlSelf);
-#endif  // VL_DEBUG
-void Vtwo_way_set_associative_cache___024root___eval_static(Vtwo_way_set_associative_cache___024root* vlSelf);
 void Vtwo_way_set_associative_cache___024root___eval_initial(Vtwo_way_set_associative_cache___024root* vlSelf);
 void Vtwo_way_set_associative_cache___024root___eval_settle(Vtwo_way_set_associative_cache___024root* vlSelf);
 void Vtwo_way_set_associative_cache___024root___eval(Vtwo_way_set_associative_cache___024root* vlSelf);
+#ifdef VL_DEBUG
+void Vtwo_way_set_associative_cache___024root___eval_debug_assertions(Vtwo_way_set_associative_cache___024root* vlSelf);
+#endif  // VL_DEBUG
+void Vtwo_way_set_associative_cache___024root___final(Vtwo_way_set_associative_cache___024root* vlSelf);
+
+static void _eval_initial_loop(Vtwo_way_set_associative_cache__Syms* __restrict vlSymsp) {
+    vlSymsp->__Vm_didInit = true;
+    Vtwo_way_set_associative_cache___024root___eval_initial(&(vlSymsp->TOP));
+    // Evaluate till stable
+    vlSymsp->__Vm_activity = true;
+    do {
+        VL_DEBUG_IF(VL_DBG_MSGF("+ Initial loop\n"););
+        Vtwo_way_set_associative_cache___024root___eval_settle(&(vlSymsp->TOP));
+        Vtwo_way_set_associative_cache___024root___eval(&(vlSymsp->TOP));
+    } while (0);
+}
 
 void Vtwo_way_set_associative_cache::eval_step() {
     VL_DEBUG_IF(VL_DBG_MSGF("+++++TOP Evaluate Vtwo_way_set_associative_cache::eval_step\n"); );
@@ -54,32 +66,15 @@ void Vtwo_way_set_associative_cache::eval_step() {
     // Debug assertions
     Vtwo_way_set_associative_cache___024root___eval_debug_assertions(&(vlSymsp->TOP));
 #endif  // VL_DEBUG
+    // Initialize
+    if (VL_UNLIKELY(!vlSymsp->__Vm_didInit)) _eval_initial_loop(vlSymsp);
+    // Evaluate till stable
     vlSymsp->__Vm_activity = true;
-    vlSymsp->__Vm_deleter.deleteAll();
-    if (VL_UNLIKELY(!vlSymsp->__Vm_didInit)) {
-        vlSymsp->__Vm_didInit = true;
-        VL_DEBUG_IF(VL_DBG_MSGF("+ Initial\n"););
-        Vtwo_way_set_associative_cache___024root___eval_static(&(vlSymsp->TOP));
-        Vtwo_way_set_associative_cache___024root___eval_initial(&(vlSymsp->TOP));
-        Vtwo_way_set_associative_cache___024root___eval_settle(&(vlSymsp->TOP));
-    }
-    // MTask 0 start
-    VL_DEBUG_IF(VL_DBG_MSGF("MTask0 starting\n"););
-    Verilated::mtaskId(0);
-    VL_DEBUG_IF(VL_DBG_MSGF("+ Eval\n"););
-    Vtwo_way_set_associative_cache___024root___eval(&(vlSymsp->TOP));
+    do {
+        VL_DEBUG_IF(VL_DBG_MSGF("+ Clock loop\n"););
+        Vtwo_way_set_associative_cache___024root___eval(&(vlSymsp->TOP));
+    } while (0);
     // Evaluate cleanup
-    Verilated::endOfThreadMTask(vlSymsp->__Vm_evalMsgQp);
-    Verilated::endOfEval(vlSymsp->__Vm_evalMsgQp);
-}
-
-//============================================================
-// Events and timing
-bool Vtwo_way_set_associative_cache::eventsPending() { return false; }
-
-uint64_t Vtwo_way_set_associative_cache::nextTimeSlot() {
-    VL_FATAL_MT(__FILE__, __LINE__, "", "%Error: No delays in the design");
-    return 0;
 }
 
 //============================================================
@@ -92,10 +87,8 @@ const char* Vtwo_way_set_associative_cache::name() const {
 //============================================================
 // Invoke final blocks
 
-void Vtwo_way_set_associative_cache___024root___eval_final(Vtwo_way_set_associative_cache___024root* vlSelf);
-
 VL_ATTR_COLD void Vtwo_way_set_associative_cache::final() {
-    Vtwo_way_set_associative_cache___024root___eval_final(&(vlSymsp->TOP));
+    Vtwo_way_set_associative_cache___024root___final(&(vlSymsp->TOP));
 }
 
 //============================================================
@@ -104,10 +97,6 @@ VL_ATTR_COLD void Vtwo_way_set_associative_cache::final() {
 const char* Vtwo_way_set_associative_cache::hierName() const { return vlSymsp->name(); }
 const char* Vtwo_way_set_associative_cache::modelName() const { return "Vtwo_way_set_associative_cache"; }
 unsigned Vtwo_way_set_associative_cache::threads() const { return 1; }
-void Vtwo_way_set_associative_cache::prepareClone() const { contextp()->prepareClone(); }
-void Vtwo_way_set_associative_cache::atClone() const {
-    contextp()->threadPoolpOnClone();
-}
 std::unique_ptr<VerilatedTraceConfig> Vtwo_way_set_associative_cache::traceConfig() const {
     return std::unique_ptr<VerilatedTraceConfig>{new VerilatedTraceConfig{false, false, false}};
 };
@@ -136,9 +125,6 @@ VL_ATTR_COLD static void trace_init(void* voidSelf, VerilatedVcd* tracep, uint32
 VL_ATTR_COLD void Vtwo_way_set_associative_cache___024root__trace_register(Vtwo_way_set_associative_cache___024root* vlSelf, VerilatedVcd* tracep);
 
 VL_ATTR_COLD void Vtwo_way_set_associative_cache::trace(VerilatedVcdC* tfp, int levels, int options) {
-    if (tfp->isOpen()) {
-        vl_fatal(__FILE__, __LINE__, __FILE__,"'Vtwo_way_set_associative_cache::trace()' shall not be called after 'VerilatedVcdC::open()'.");
-    }
     if (false && levels && options) {}  // Prevent unused
     tfp->spTrace()->addModel(this);
     tfp->spTrace()->addInitCb(&trace_init, &(vlSymsp->TOP));
