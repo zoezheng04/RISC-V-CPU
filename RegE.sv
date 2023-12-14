@@ -19,7 +19,6 @@ module RegE (
 );
 
 always_ff @(negedge clk) begin
-
     RegWriteM   <= RegWriteE;
     ResultSrcM  <= ResultSrcE;
     MemWriteM   <= MemWriteE;
