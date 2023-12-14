@@ -11,7 +11,7 @@ module RegD (
     input logic  [4:0]          RdD,
     input logic  [31:0]         ExtImmD,
     input logic                 clk,
-    input logic                 FlushE,
+    input logic                 FlushD,
     input logic                 MemTypeD,
 
     output logic                 RegWriteE,
@@ -28,24 +28,10 @@ module RegD (
     output logic                 MemTypeE
 
 );
-    always_ff@(posedge FlushE) begin
-            RegWriteE   <= 0;
-            ResultSrcE  <= 0;
-            MemWriteE   <= 0;
-            ALUctrlE    <= 0;
-            ALUsrcE     <= 0;
-            RD1E        <= 0;
-            RD2E        <= 0;
-            Rs1E        <= 0;
-            Rs2E        <= 0;
-            RdE         <= 0;
-            ExtImmE     <= 0;
-            MemTypeE    <= 0;
-    end
     
     always_ff @( negedge clk) begin
         
-        if (FlushE) begin 
+        if (FlushD) begin 
             RegWriteE   <= 0;
             ResultSrcE  <= 0;
             MemWriteE   <= 0;
