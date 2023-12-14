@@ -29,7 +29,8 @@ logic   [31:0]    SrcAE_wire;
 logic   [31:0]    SrcBE_wire;
 logic   [31:0]    SrcBE_Forwarding_wire;
 logic   [31:0]    Result_wire;
-    
+
+//////////// Forwarding MUXs /////////////    
 always_comb begin
 case (ForwardAE)
     2'b00: assign SrcAE_wire = RD1E;
