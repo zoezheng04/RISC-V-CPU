@@ -1,4 +1,4 @@
-#include "Vtwo_way_cache.h"
+#include "Vtwo_way_set_associative_cache.h"
 #include <verilated.h>
 #include <iostream>
 
@@ -6,7 +6,7 @@ int main(int argc, char** argv, char** env) {
     Verilated::commandArgs(argc, argv);
 
     // Create an instance of the Verilated module
-    Vtwo_way_cache* top = new Vtwo_way_cache;
+    Vtwo_way_set_associative_cache* top = new Vtwo_way_set_associative_cache;
 
     // Initialize simulation inputs
     top->clk = 0;
