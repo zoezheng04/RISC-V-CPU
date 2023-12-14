@@ -58,9 +58,10 @@ logic  [31:0]               ForwardAD_MUX, ForwardBD_MUX;
 assign ForwardAD_MUX = ForwardAD ? ALUOutM : RD1D_wire;
 assign ForwardBD_MUX = ForwardBD ? ALUOutM : RD2D_wire;
 // Programme Counter logic (Jumps and Branches)
-assign PCBranchD = JRetSrc_wire ? RD1D_wire : (BranchD ? ((ExtImmD_wire) + (PCPlus4D - 4)) : ((ExtImmD_wire) + (PCPlus4D - 8)));    
+assign PCBranchD = JRetSrc_wire ? RD1D_wire : ((ExtImmD_wire) + (PCPlus4D - 4));    
 assign BranchD = (BEQ_wire || BNE_wire);
-assign ExtImmDReg_wire = JumpSrc_wire ? (PCPlus4D - 4) : ExtImmD_wire; 
+assign ExtImmDReg_wire = JumpSrc_wire ? (PCPlus4D) : ExtImmD_wire; 
+    
 always_comb begin
     if(BNE_wire) begin
         PCSrcD = (ForwardAD_MUX != ForwardBD_MUX);
