@@ -7,32 +7,40 @@ module cached_memory#(
 )(
     input logic                     clk,
     input logic  [DATA_WIDTH-1:0]   addr,
-    input logic  [DATA_WIDTH-1:0]   WD,
+    input logic  [DATA_WIDTH-1:0]   Write_Data,
     input logic                     WE,
+    input logic                     MemType,                    
     output logic [DATA_WIDTH-1:0]   Data_o
 );
 
-logic   [DATA_WIDTH-1:0]    addr_wire, cache_data_wire, missed_dta;
-logic                       hit_wire;
+logic   [DATA_WIDTH-1:0]    WBData, WBaddr, mem_addr, mem_data, missed_data;
+logic                       hit_wire, WBEN;
 
-
-
-DataMemory(
+DataMemory main_memory(
     .clk(clk),
-    .WE(WE),
-    .A(addr_wire),
-    .WD(WD),
-    .RD(missed_data)
+    .WE(WBEN),
+    .MemType(MemType),
+    .A(mem_addr),
+    .WD(WBData),
+    .RD(mem_data)
 );
 
-two_way_cache(
+two_way_set_associative_cache cache(
     .clk(clk),
-    .address(addr_wire),
+    .write_enable(WE),
+    .address(addr),
     .data(missed_data),
     .cache_hit(hit_wire),
-    .cache_data(cache_data_wire)
+    .cache_data(cache_data_wire),
+    .write_back_data(WBData),
+    .write_back_address(WBaddr),
+    .write_back_enable(WBEN)
 );
 
-always_comb Data_o = hit_wire ? cache_data_wire: missed_dta;
+always_comb begin
+    Data_o = hit_wire ? cache_data_wire : mem_data;
+    missed_data = hit_wire ? Write_Data : mem_data;
+    mem_addr = WBEN ? WBaddr ? addr;
+end
 
 endmodule

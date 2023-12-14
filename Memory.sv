@@ -7,6 +7,7 @@ module Memory (
     input logic [31:0]    WriteDataM,
     input logic [4:0]     RdM,
     input logic [31:0]    PCPlus4M,
+    input logic           MemTypeM,
 
     output logic          RegWriteW,
     output logic [1:0]    ResultSrcW,
@@ -21,14 +22,15 @@ logic   [31:0]           RD_wire;
 
 /////////// Instantiate Modules ///////////
 
-DataMemory DataMemory(
+DataMemory cached_memory(
     ///////// Inputs ////////
     .clk(clk),
     .WE(MemWriteM),
-    .A(ALUResultM),
-    .WD(WriteDataM),
+    .addr(ALUResultM),
+    .Write_Data(WriteDataM),
+    .MemType(MemTypeM)
     //////// Outputs ///////
-    .RD(RD_wire)
+    .Data_o(RD_wire)
 );
 
 RegM Pipeline_RegisterM(
