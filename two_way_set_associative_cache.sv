@@ -12,7 +12,8 @@ module two_way_set_associative_cache #(
     output logic                    cache_hit,
     output logic [DATA_WIDTH-1:0]   cache_data,
     output logic [DATA_WIDTH-1:0]   write_back_data,
-    output logic [DATA_WIDTH-1:0]   write_back_address
+    output logic [DATA_WIDTH-1:0]   write_back_address,
+    output logic                    write_back_enable
 );
 // LRU counter
 logic lru_counter_0 [CACHE_LENGTH-1:0];
@@ -95,6 +96,7 @@ always_ff @(negedge clk) begin
                 if(D_0[data_set]) begin //write back to main mem
                     write_back_data <= data_0[data_set];
                     write_back_address <= {tag_0[data_set], data_set, {OFFSET_WIDTH{1'b0}}};
+                    write_back_enable <= 1'b1;
                     D_0[data_set] <= 1'b0;
                 end
                 //evict and fill
@@ -106,6 +108,7 @@ always_ff @(negedge clk) begin
                 if(D_1[data_set]) begin
                     write_back_data <= data_1[data_set]; 
                     write_back_address <= {tag_1[data_set], data_set, {OFFSET_WIDTH{1'b0}}};
+                    write_back_enable <= 1'b1;
                     D_1[data_set] <= 1'b0;
                 end
                 tag_1[data_set] <= data_tag;
