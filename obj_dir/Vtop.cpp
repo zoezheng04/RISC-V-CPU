@@ -1,870 +1,128 @@
 // Verilated -*- C++ -*-
-// DESCRIPTION: Verilator output: Design implementation internals
-// See Vtop.h for the primary calling header
+// DESCRIPTION: Verilator output: Model implementation (design independent parts)
 
 #include "Vtop.h"
 #include "Vtop__Syms.h"
+#include "verilated_vcd_c.h"
 
-//==========
+//============================================================
+// Constructors
+
+Vtop::Vtop(VerilatedContext* _vcontextp__, const char* _vcname__)
+    : VerilatedModel{*_vcontextp__}
+    , vlSymsp{new Vtop__Syms(contextp(), _vcname__, this)}
+    , clk{vlSymsp->TOP.clk}
+    , reset{vlSymsp->TOP.reset}
+    , trigger{vlSymsp->TOP.trigger}
+    , a0{vlSymsp->TOP.a0}
+    , rootp{&(vlSymsp->TOP)}
+{
+    // Register model with the context
+    contextp()->addModel(this);
+}
+
+Vtop::Vtop(const char* _vcname__)
+    : Vtop(Verilated::threadContextp(), _vcname__)
+{
+}
+
+//============================================================
+// Destructor
+
+Vtop::~Vtop() {
+    delete vlSymsp;
+}
+
+//============================================================
+// Evaluation loop
+
+void Vtop___024root___eval_initial(Vtop___024root* vlSelf);
+void Vtop___024root___eval_settle(Vtop___024root* vlSelf);
+void Vtop___024root___eval(Vtop___024root* vlSelf);
+#ifdef VL_DEBUG
+void Vtop___024root___eval_debug_assertions(Vtop___024root* vlSelf);
+#endif  // VL_DEBUG
+void Vtop___024root___final(Vtop___024root* vlSelf);
+
+static void _eval_initial_loop(Vtop__Syms* __restrict vlSymsp) {
+    vlSymsp->__Vm_didInit = true;
+    Vtop___024root___eval_initial(&(vlSymsp->TOP));
+    // Evaluate till stable
+    vlSymsp->__Vm_activity = true;
+    do {
+        VL_DEBUG_IF(VL_DBG_MSGF("+ Initial loop\n"););
+        Vtop___024root___eval_settle(&(vlSymsp->TOP));
+        Vtop___024root___eval(&(vlSymsp->TOP));
+    } while (0);
+}
 
 void Vtop::eval_step() {
-    VL_DEBUG_IF(VL_DBG_MSGF("+++++TOP Evaluate Vtop::eval\n"); );
-    Vtop__Syms* __restrict vlSymsp = this->__VlSymsp;  // Setup global symbol table
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
+    VL_DEBUG_IF(VL_DBG_MSGF("+++++TOP Evaluate Vtop::eval_step\n"); );
 #ifdef VL_DEBUG
     // Debug assertions
-    _eval_debug_assertions();
+    Vtop___024root___eval_debug_assertions(&(vlSymsp->TOP));
 #endif  // VL_DEBUG
     // Initialize
     if (VL_UNLIKELY(!vlSymsp->__Vm_didInit)) _eval_initial_loop(vlSymsp);
     // Evaluate till stable
-    int __VclockLoop = 0;
-    QData __Vchange = 1;
+    vlSymsp->__Vm_activity = true;
     do {
         VL_DEBUG_IF(VL_DBG_MSGF("+ Clock loop\n"););
-        vlSymsp->__Vm_activity = true;
-        _eval(vlSymsp);
-        if (VL_UNLIKELY(++__VclockLoop > 100)) {
-            // About to fail, so enable debug to see what's not settling.
-            // Note you must run make with OPT=-DVL_DEBUG for debug prints.
-            int __Vsaved_debug = Verilated::debug();
-            Verilated::debug(1);
-            __Vchange = _change_request(vlSymsp);
-            Verilated::debug(__Vsaved_debug);
-            VL_FATAL_MT("top.sv", 1, "",
-                "Verilated model didn't converge\n"
-                "- See DIDNOTCONVERGE in the Verilator manual");
-        } else {
-            __Vchange = _change_request(vlSymsp);
-        }
-    } while (VL_UNLIKELY(__Vchange));
+        Vtop___024root___eval(&(vlSymsp->TOP));
+    } while (0);
+    // Evaluate cleanup
 }
 
-void Vtop::_eval_initial_loop(Vtop__Syms* __restrict vlSymsp) {
-    vlSymsp->__Vm_didInit = true;
-    _eval_initial(vlSymsp);
-    vlSymsp->__Vm_activity = true;
-    // Evaluate till stable
-    int __VclockLoop = 0;
-    QData __Vchange = 1;
-    do {
-        _eval_settle(vlSymsp);
-        _eval(vlSymsp);
-        if (VL_UNLIKELY(++__VclockLoop > 100)) {
-            // About to fail, so enable debug to see what's not settling.
-            // Note you must run make with OPT=-DVL_DEBUG for debug prints.
-            int __Vsaved_debug = Verilated::debug();
-            Verilated::debug(1);
-            __Vchange = _change_request(vlSymsp);
-            Verilated::debug(__Vsaved_debug);
-            VL_FATAL_MT("top.sv", 1, "",
-                "Verilated model didn't DC converge\n"
-                "- See DIDNOTCONVERGE in the Verilator manual");
-        } else {
-            __Vchange = _change_request(vlSymsp);
-        }
-    } while (VL_UNLIKELY(__Vchange));
+//============================================================
+// Utilities
+
+const char* Vtop::name() const {
+    return vlSymsp->name();
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__3(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__3\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    vlTOPp->top__DOT__WriteDataM_wire = vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_Forwarding_wire;
-    vlTOPp->top__DOT__MemWriteM_wire = vlTOPp->top__DOT__MemWriteE_wire;
-    vlTOPp->top__DOT__RegWriteW_wire = vlTOPp->top__DOT__RegWriteM_wire;
-    vlTOPp->top__DOT__ALUResultW_wire = vlTOPp->top__DOT__ALUResultM_wire;
-    vlTOPp->top__DOT__ResultSrcW_wire = vlTOPp->top__DOT__ResultSrcM_wire;
-    vlTOPp->top__DOT__ReadDataW_wire = ((IData)(vlTOPp->top__DOT__MemTypeM_wire)
-                                         ? vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array
-                                        [(0x1ffffU 
-                                          & vlTOPp->top__DOT__ALUResultM_wire)]
-                                         : ((vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array
-                                             [(0x1ffffU 
-                                               & ((IData)(3U) 
-                                                  + vlTOPp->top__DOT__ALUResultM_wire))] 
-                                             << 0x18U) 
-                                            | ((vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array
-                                                [(0x1ffffU 
-                                                  & ((IData)(2U) 
-                                                     + vlTOPp->top__DOT__ALUResultM_wire))] 
-                                                << 0x10U) 
-                                               | ((vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array
-                                                   [
-                                                   (0x1ffffU 
-                                                    & ((IData)(1U) 
-                                                       + vlTOPp->top__DOT__ALUResultM_wire))] 
-                                                   << 8U) 
-                                                  | vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array
-                                                  [
-                                                  (0x1ffffU 
-                                                   & vlTOPp->top__DOT__ALUResultM_wire)]))));
-    vlTOPp->top__DOT__RdW_wire = vlTOPp->top__DOT__RdM_wire;
-    vlTOPp->top__DOT__RegWriteM_wire = vlTOPp->top__DOT__RegWriteE_wire;
-    vlTOPp->top__DOT__ResultSrcM_wire = vlTOPp->top__DOT__ResultSrcE_wire;
-    vlTOPp->top__DOT__ALUResultM_wire = vlTOPp->top__DOT__Execute_Stage__DOT__Result_wire;
-    vlTOPp->top__DOT__MemTypeM_wire = vlTOPp->top__DOT__MemTypeE_wire;
-    vlTOPp->top__DOT__ResultW_wire = ((IData)(vlTOPp->top__DOT__ResultSrcW_wire)
-                                       ? vlTOPp->top__DOT__ReadDataW_wire
-                                       : vlTOPp->top__DOT__ALUResultW_wire);
-    vlTOPp->top__DOT__RdM_wire = vlTOPp->top__DOT__RdE_wire;
-    if (vlTOPp->top__DOT__RegWriteW_wire) {
-        vlTOPp->top__DOT__Decode_Stage__DOT__RegisterFile__DOT__registers[vlTOPp->top__DOT__RdW_wire] 
-            = vlTOPp->top__DOT__ResultW_wire;
-        vlTOPp->top__DOT__Decode_Stage__DOT__RegisterFile__DOT__registers[0U] = 0U;
-    }
-    vlTOPp->a0 = vlTOPp->top__DOT__Decode_Stage__DOT__RegisterFile__DOT__registers
-        [0xaU];
+//============================================================
+// Invoke final blocks
+
+VL_ATTR_COLD void Vtop::final() {
+    Vtop___024root___final(&(vlSymsp->TOP));
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__4(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__4\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Variables
-    CData/*7:0*/ __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0;
-    CData/*0:0*/ __Vdlyvset__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0;
-    CData/*7:0*/ __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1;
-    CData/*0:0*/ __Vdlyvset__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1;
-    CData/*7:0*/ __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v2;
-    CData/*7:0*/ __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v3;
-    CData/*7:0*/ __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v4;
-    IData/*16:0*/ __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0;
-    IData/*16:0*/ __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1;
-    IData/*16:0*/ __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v2;
-    IData/*16:0*/ __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v3;
-    IData/*16:0*/ __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v4;
-    // Body
-    __Vdlyvset__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0 = 0U;
-    __Vdlyvset__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1 = 0U;
-    if ((1U & (~ (IData)(vlTOPp->top__DOT__StallF_wire)))) {
-        vlTOPp->top__DOT__Fetch_Stage__DOT__PCF_wire 
-            = ((IData)(vlTOPp->reset) ? 0U : vlTOPp->top__DOT__Fetch_Stage__DOT__PCNext_wire);
+//============================================================
+// Implementations of abstract methods from VerilatedModel
+
+const char* Vtop::hierName() const { return vlSymsp->name(); }
+const char* Vtop::modelName() const { return "Vtop"; }
+unsigned Vtop::threads() const { return 1; }
+std::unique_ptr<VerilatedTraceConfig> Vtop::traceConfig() const {
+    return std::unique_ptr<VerilatedTraceConfig>{new VerilatedTraceConfig{false, false, false}};
+};
+
+//============================================================
+// Trace configuration
+
+void Vtop___024root__trace_init_top(Vtop___024root* vlSelf, VerilatedVcd* tracep);
+
+VL_ATTR_COLD static void trace_init(void* voidSelf, VerilatedVcd* tracep, uint32_t code) {
+    // Callback from tracep->open()
+    Vtop___024root* const __restrict vlSelf VL_ATTR_UNUSED = static_cast<Vtop___024root*>(voidSelf);
+    Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    if (!vlSymsp->_vm_contextp__->calcUnusedSigs()) {
+        VL_FATAL_MT(__FILE__, __LINE__, __FILE__,
+            "Turning on wave traces requires Verilated::traceEverOn(true) call before time 0.");
     }
-    if (((IData)(vlTOPp->top__DOT__MemWriteM_wire) 
-         & (IData)(vlTOPp->top__DOT__MemTypeM_wire))) {
-        __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0 
-            = (0xffU & vlTOPp->top__DOT__WriteDataM_wire);
-        __Vdlyvset__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0 = 1U;
-        __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0 
-            = (0x1ffffU & vlTOPp->top__DOT__ALUResultM_wire);
-    } else {
-        if (((IData)(vlTOPp->top__DOT__MemWriteM_wire) 
-             & (~ (IData)(vlTOPp->top__DOT__MemTypeM_wire)))) {
-            __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1 
-                = (0xffU & vlTOPp->top__DOT__WriteDataM_wire);
-            __Vdlyvset__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1 = 1U;
-            __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1 
-                = (0x1ffffU & vlTOPp->top__DOT__ALUResultM_wire);
-            __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v2 
-                = (0xffU & (vlTOPp->top__DOT__WriteDataM_wire 
-                            >> 8U));
-            __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v2 
-                = (0x1ffffU & ((IData)(1U) + vlTOPp->top__DOT__ALUResultM_wire));
-            __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v3 
-                = (0xffU & (vlTOPp->top__DOT__WriteDataM_wire 
-                            >> 0x10U));
-            __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v3 
-                = (0x1ffffU & ((IData)(2U) + vlTOPp->top__DOT__ALUResultM_wire));
-            __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v4 
-                = (0xffU & (vlTOPp->top__DOT__WriteDataM_wire 
-                            >> 0x18U));
-            __Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v4 
-                = (0x1ffffU & ((IData)(3U) + vlTOPp->top__DOT__ALUResultM_wire));
-        }
-    }
-    if (__Vdlyvset__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0) {
-        vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array[__Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0] 
-            = __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v0;
-    }
-    if (__Vdlyvset__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1) {
-        vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array[__Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1] 
-            = __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v1;
-        vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array[__Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v2] 
-            = __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v2;
-        vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array[__Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v3] 
-            = __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v3;
-        vlTOPp->top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array[__Vdlyvdim0__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v4] 
-            = __Vdlyvval__top__DOT__Memory_Stage__DOT__Memory__DOT__DataMemory_array__v4;
-    }
-    vlTOPp->top__DOT__Fetch_Stage__DOT__InstrF_wire 
-        = ((vlTOPp->top__DOT__Fetch_Stage__DOT__Instruction_Memory__DOT__rom_array
-            [(0xfffU & ((IData)(3U) + vlTOPp->top__DOT__Fetch_Stage__DOT__PCF_wire))] 
-            << 0x18U) | ((vlTOPp->top__DOT__Fetch_Stage__DOT__Instruction_Memory__DOT__rom_array
-                          [(0xfffU & ((IData)(2U) + vlTOPp->top__DOT__Fetch_Stage__DOT__PCF_wire))] 
-                          << 0x10U) | ((vlTOPp->top__DOT__Fetch_Stage__DOT__Instruction_Memory__DOT__rom_array
-                                        [(0xfffU & 
-                                          ((IData)(1U) 
-                                           + vlTOPp->top__DOT__Fetch_Stage__DOT__PCF_wire))] 
-                                        << 8U) | vlTOPp->top__DOT__Fetch_Stage__DOT__Instruction_Memory__DOT__rom_array
-                                       [(0xfffU & vlTOPp->top__DOT__Fetch_Stage__DOT__PCF_wire)])));
-    if ((0U == vlTOPp->top__DOT__Fetch_Stage__DOT__InstrF_wire)) {
-        vlTOPp->top__DOT__Fetch_Stage__DOT__InstrF_wire = 0x13U;
-    }
+    vlSymsp->__Vm_baseCode = code;
+    tracep->scopeEscape(' ');
+    tracep->pushNamePrefix(std::string{vlSymsp->name()} + ' ');
+    Vtop___024root__trace_init_top(vlSelf, tracep);
+    tracep->popNamePrefix();
+    tracep->scopeEscape('.');
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__7\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    vlTOPp->top__DOT__RD2E_wire = 0U;
-    vlTOPp->top__DOT__RD1E_wire = 0U;
-    vlTOPp->top__DOT__MemTypeE_wire = 0U;
-    vlTOPp->top__DOT__MemWriteE_wire = 0U;
-    vlTOPp->top__DOT__ALUctrlE_wire = 0U;
-    vlTOPp->top__DOT__ResultSrcE_wire = 0U;
-    vlTOPp->top__DOT__RegWriteE_wire = 0U;
-    vlTOPp->top__DOT__ALUsrcE_wire = 0U;
-    vlTOPp->top__DOT__ExtImmE_wire = 0U;
-    vlTOPp->top__DOT__RdE_wire = 0U;
-    vlTOPp->top__DOT__Rs1E_wire = 0U;
-    vlTOPp->top__DOT__Rs2E_wire = 0U;
-}
+VL_ATTR_COLD void Vtop___024root__trace_register(Vtop___024root* vlSelf, VerilatedVcd* tracep);
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__8(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__8\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    if (vlTOPp->top__DOT__FlushE_wire) {
-        vlTOPp->top__DOT__RD2E_wire = 0U;
-        vlTOPp->top__DOT__RD1E_wire = 0U;
-    } else {
-        vlTOPp->top__DOT__RD2E_wire = vlTOPp->top__DOT__Decode_Stage__DOT__RD2D_wire;
-        vlTOPp->top__DOT__RD1E_wire = vlTOPp->top__DOT__Decode_Stage__DOT__RD1D_wire;
-    }
-    vlTOPp->top__DOT__MemTypeE_wire = ((~ (IData)(vlTOPp->top__DOT__FlushE_wire)) 
-                                       & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__MemType_wire));
-    vlTOPp->top__DOT__MemWriteE_wire = ((~ (IData)(vlTOPp->top__DOT__FlushE_wire)) 
-                                        & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__MemWrite_wire));
-    vlTOPp->top__DOT__ALUctrlE_wire = ((IData)(vlTOPp->top__DOT__FlushE_wire)
-                                        ? 0U : (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire));
-    vlTOPp->top__DOT__ResultSrcE_wire = ((~ (IData)(vlTOPp->top__DOT__FlushE_wire)) 
-                                         & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ResultSrc_wire));
-    vlTOPp->top__DOT__RegWriteE_wire = ((~ (IData)(vlTOPp->top__DOT__FlushE_wire)) 
-                                        & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__RegWrite_wire));
-    vlTOPp->top__DOT__ALUsrcE_wire = ((~ (IData)(vlTOPp->top__DOT__FlushE_wire)) 
-                                      & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ALUSrc_wire));
-    if (vlTOPp->top__DOT__FlushE_wire) {
-        vlTOPp->top__DOT__ExtImmE_wire = 0U;
-        vlTOPp->top__DOT__RdE_wire = 0U;
-        vlTOPp->top__DOT__Rs1E_wire = 0U;
-        vlTOPp->top__DOT__Rs2E_wire = 0U;
-    } else {
-        vlTOPp->top__DOT__ExtImmE_wire = ((IData)(vlTOPp->top__DOT__Decode_Stage__DOT__JumpSrc_wire)
-                                           ? (vlTOPp->top__DOT__PCPlus4D_wire 
-                                              - (IData)(4U))
-                                           : vlTOPp->top__DOT__Decode_Stage__DOT__ExtImmD_wire);
-        vlTOPp->top__DOT__RdE_wire = (0x1fU & (vlTOPp->top__DOT__InstrD_wire 
-                                               >> 7U));
-        vlTOPp->top__DOT__Rs1E_wire = (0x1fU & (vlTOPp->top__DOT__InstrD_wire 
-                                                >> 0xfU));
-        vlTOPp->top__DOT__Rs2E_wire = (0x1fU & (vlTOPp->top__DOT__InstrD_wire 
-                                                >> 0x14U));
-    }
-    if ((1U & ((~ (IData)(vlTOPp->top__DOT__StallD_wire)) 
-               & (~ (IData)(vlTOPp->top__DOT__Fetch_Stage__DOT__FlushD))))) {
-        vlTOPp->top__DOT__PCPlus4D_wire = ((IData)(4U) 
-                                           + vlTOPp->top__DOT__Fetch_Stage__DOT__PCF_wire);
-    }
-    if (vlTOPp->top__DOT__Fetch_Stage__DOT__FlushD) {
-        vlTOPp->top__DOT__PCPlus4D_wire = 0U;
-    }
-    if ((1U & ((~ (IData)(vlTOPp->top__DOT__StallD_wire)) 
-               & (~ (IData)(vlTOPp->top__DOT__Fetch_Stage__DOT__FlushD))))) {
-        vlTOPp->top__DOT__InstrD_wire = vlTOPp->top__DOT__Fetch_Stage__DOT__InstrF_wire;
-    }
-    if (vlTOPp->top__DOT__Fetch_Stage__DOT__FlushD) {
-        vlTOPp->top__DOT__InstrD_wire = 0x13U;
-    }
-    vlTOPp->top__DOT__Decode_Stage__DOT__RD2D_wire 
-        = vlTOPp->top__DOT__Decode_Stage__DOT__RegisterFile__DOT__registers
-        [(0x1fU & (vlTOPp->top__DOT__InstrD_wire >> 0x14U))];
-    vlTOPp->top__DOT__Decode_Stage__DOT__RD1D_wire 
-        = vlTOPp->top__DOT__Decode_Stage__DOT__RegisterFile__DOT__registers
-        [(0x1fU & (vlTOPp->top__DOT__InstrD_wire >> 0xfU))];
-    vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O 
-        = (0x7fU & vlTOPp->top__DOT__InstrD_wire);
-    vlTOPp->top__DOT__Decode_Stage__DOT__RegWrite_wire 
-        = (((((((0x33U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O)) 
-                | (3U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) 
-               | (0x13U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) 
-              | (0x67U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) 
-             | (0x6fU == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) 
-            | (0x17U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) 
-           | (0x37U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O)));
-    vlTOPp->top__DOT__Decode_Stage__DOT__ALUSrc_wire 
-        = ((((((3U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O)) 
-               | (0x13U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) 
-              | (0x67U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) 
-             | (0x6fU == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) 
-            | (0x23U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) 
-           | (0x37U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O)));
-    vlTOPp->top__DOT__Decode_Stage__DOT__MemWrite_wire 
-        = (0x23U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O));
-    vlTOPp->top__DOT__Decode_Stage__DOT__ResultSrc_wire 
-        = (3U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O));
-    vlTOPp->top__DOT__Decode_Stage__DOT__JumpSrc_wire 
-        = (0x6fU == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O));
-    vlTOPp->top__DOT__Decode_Stage__DOT__JRetSrc_wire 
-        = (0x67U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O));
-    vlTOPp->top__DOT__Decode_Stage__DOT__BEQ_wire = 
-        ((0x63U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O)) 
-         & (0U == (7U & (vlTOPp->top__DOT__InstrD_wire 
-                         >> 0xcU))));
-    vlTOPp->top__DOT__Decode_Stage__DOT__BNE_wire = 
-        ((0x63U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O)) 
-         & (1U == (7U & (vlTOPp->top__DOT__InstrD_wire 
-                         >> 0xcU))));
-    vlTOPp->top__DOT__Decode_Stage__DOT__MemType_wire 
-        = ((3U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O)) 
-           | (0x23U == (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O)));
-    if ((0x40U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-        if ((0x20U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-            if ((0x10U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-            } else {
-                if ((8U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                    if ((4U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                        if ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                            if ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 4U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 2U;
-                            } else {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                        }
-                    } else {
-                        vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                        vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                    }
-                } else {
-                    if ((4U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                        if ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                            if ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 4U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 3U;
-                            } else {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                        }
-                    } else {
-                        if ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                            if ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                                if ((0U == (7U & (vlTOPp->top__DOT__InstrD_wire 
-                                                  >> 0xcU)))) {
-                                    vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 3U;
-                                    vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0xdU;
-                                } else {
-                                    if ((1U == (7U 
-                                                & (vlTOPp->top__DOT__InstrD_wire 
-                                                   >> 0xcU)))) {
-                                        vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 3U;
-                                        vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 1U;
-                                    }
-                                }
-                            } else {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                        }
-                    }
-                }
-            }
-        } else {
-            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-        }
-    } else {
-        if ((0x20U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-            if ((0x10U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                if ((8U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                    vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                    vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                } else {
-                    if ((4U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                        if ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                            if ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 4U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 4U;
-                            } else {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                        }
-                    } else {
-                        if ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                            if ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                                if ((0x4000U & vlTOPp->top__DOT__InstrD_wire)) {
-                                    if ((0x2000U & vlTOPp->top__DOT__InstrD_wire)) {
-                                        if ((0x1000U 
-                                             & vlTOPp->top__DOT__InstrD_wire)) {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0xcU;
-                                        } else {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0xbU;
-                                        }
-                                    } else {
-                                        if ((0x1000U 
-                                             & vlTOPp->top__DOT__InstrD_wire)) {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 9U;
-                                        } else {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0xaU;
-                                        }
-                                    }
-                                } else {
-                                    if ((0x2000U & vlTOPp->top__DOT__InstrD_wire)) {
-                                        vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                                        vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                    } else {
-                                        if ((0x1000U 
-                                             & vlTOPp->top__DOT__InstrD_wire)) {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 7U;
-                                        } else {
-                                            if ((0x40000000U 
-                                                 & vlTOPp->top__DOT__InstrD_wire)) {
-                                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 8U;
-                                            } else {
-                                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                        }
-                    }
-                }
-            } else {
-                if ((8U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                    vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                    vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                } else {
-                    if ((4U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                        vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                        vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                    } else {
-                        if ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                            if ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 2U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 6U;
-                            } else {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                        }
-                    }
-                }
-            }
-        } else {
-            if ((0x10U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                if ((8U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                    vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                    vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                } else {
-                    if ((4U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                        if ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                            if ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 1U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            } else {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                        }
-                    } else {
-                        if ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                            if ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                                if ((0x4000U & vlTOPp->top__DOT__InstrD_wire)) {
-                                    if ((0x2000U & vlTOPp->top__DOT__InstrD_wire)) {
-                                        if ((0x1000U 
-                                             & vlTOPp->top__DOT__InstrD_wire)) {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0xcU;
-                                        } else {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0xbU;
-                                        }
-                                    } else {
-                                        if ((0x1000U 
-                                             & vlTOPp->top__DOT__InstrD_wire)) {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 9U;
-                                        } else {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0xaU;
-                                        }
-                                    }
-                                } else {
-                                    if ((0x2000U & vlTOPp->top__DOT__InstrD_wire)) {
-                                        vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                                        vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                    } else {
-                                        if ((0x1000U 
-                                             & vlTOPp->top__DOT__InstrD_wire)) {
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 7U;
-                                        } else {
-                                            if ((0x40000000U 
-                                                 & vlTOPp->top__DOT__InstrD_wire)) {
-                                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 8U;
-                                            } else {
-                                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                        }
-                    }
-                }
-            } else {
-                if ((8U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                    vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                    vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                } else {
-                    if ((4U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                        vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                        vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                    } else {
-                        if ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                            if ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ControlUnit__DOT__unnamedblk1__DOT__Type_O))) {
-                                if ((4U == (7U & (vlTOPp->top__DOT__InstrD_wire 
-                                                  >> 0xcU)))) {
-                                    vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                    vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 5U;
-                                } else {
-                                    vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                    vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                                }
-                            } else {
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                                vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire = 0U;
-                            vlTOPp->top__DOT__Decode_Stage__DOT__ALUctrl_wire = 0U;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    vlTOPp->top__DOT__Decode_Stage__DOT__ForwardBD_MUX 
-        = ((((0U != (0x1fU & (vlTOPp->top__DOT__InstrD_wire 
-                              >> 0x14U))) & ((0x1fU 
-                                              & (vlTOPp->top__DOT__InstrD_wire 
-                                                 >> 0x14U)) 
-                                             == (IData)(vlTOPp->top__DOT__RdM_wire))) 
-            & (IData)(vlTOPp->top__DOT__RegWriteM_wire))
-            ? vlTOPp->top__DOT__ALUResultM_wire : vlTOPp->top__DOT__Decode_Stage__DOT__RD2D_wire);
-    vlTOPp->top__DOT__Decode_Stage__DOT__ForwardAD_MUX 
-        = ((((0U != (0x1fU & (vlTOPp->top__DOT__InstrD_wire 
-                              >> 0xfU))) & ((0x1fU 
-                                             & (vlTOPp->top__DOT__InstrD_wire 
-                                                >> 0xfU)) 
-                                            == (IData)(vlTOPp->top__DOT__RdM_wire))) 
-            & (IData)(vlTOPp->top__DOT__RegWriteM_wire))
-            ? vlTOPp->top__DOT__ALUResultM_wire : vlTOPp->top__DOT__Decode_Stage__DOT__RD1D_wire);
-    if ((4U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire))) {
-        if ((1U & (~ ((IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire) 
-                      >> 1U)))) {
-            if ((1U & (~ (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire)))) {
-                vlTOPp->top__DOT__Decode_Stage__DOT__ExtImmD_wire 
-                    = ((0xfff00000U & ((- (IData)((1U 
-                                                   & (vlTOPp->top__DOT__InstrD_wire 
-                                                      >> 0x1fU)))) 
-                                       << 0x14U)) | 
-                       ((0xff000U & vlTOPp->top__DOT__InstrD_wire) 
-                        | ((0x800U & (vlTOPp->top__DOT__InstrD_wire 
-                                      >> 9U)) | (0x7feU 
-                                                 & (vlTOPp->top__DOT__InstrD_wire 
-                                                    >> 0x14U)))));
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__Decode_Stage__DOT__ExtImmD_wire 
-            = ((2U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire))
-                ? ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire))
-                    ? ((0xfffff000U & ((- (IData)((1U 
-                                                   & (vlTOPp->top__DOT__InstrD_wire 
-                                                      >> 0x1fU)))) 
-                                       << 0xcU)) | 
-                       ((0x800U & (vlTOPp->top__DOT__InstrD_wire 
-                                   << 4U)) | ((0x7e0U 
-                                               & (vlTOPp->top__DOT__InstrD_wire 
-                                                  >> 0x14U)) 
-                                              | (0x1eU 
-                                                 & (vlTOPp->top__DOT__InstrD_wire 
-                                                    >> 7U)))))
-                    : ((0xfffff800U & ((- (IData)((1U 
-                                                   & (vlTOPp->top__DOT__InstrD_wire 
-                                                      >> 0x1fU)))) 
-                                       << 0xbU)) | 
-                       ((0x7e0U & (vlTOPp->top__DOT__InstrD_wire 
-                                   >> 0x14U)) | (0x1fU 
-                                                 & (vlTOPp->top__DOT__InstrD_wire 
-                                                    >> 7U)))))
-                : ((1U & (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__ImmSrc_wire))
-                    ? (0xfffff000U & vlTOPp->top__DOT__InstrD_wire)
-                    : ((0xfffff800U & ((- (IData)((1U 
-                                                   & (vlTOPp->top__DOT__InstrD_wire 
-                                                      >> 0x1fU)))) 
-                                       << 0xbU)) | 
-                       (0x7ffU & (vlTOPp->top__DOT__InstrD_wire 
-                                  >> 0x14U)))));
-    }
-    vlTOPp->top__DOT__BranchD_wire = ((IData)(vlTOPp->top__DOT__Decode_Stage__DOT__BEQ_wire) 
-                                      | (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__BNE_wire));
-    vlTOPp->top__DOT__PCSrcD_wire = ((IData)(vlTOPp->top__DOT__Decode_Stage__DOT__BNE_wire)
-                                      ? (vlTOPp->top__DOT__Decode_Stage__DOT__ForwardAD_MUX 
-                                         != vlTOPp->top__DOT__Decode_Stage__DOT__ForwardBD_MUX)
-                                      : ((IData)(vlTOPp->top__DOT__Decode_Stage__DOT__BEQ_wire)
-                                          ? (vlTOPp->top__DOT__Decode_Stage__DOT__ForwardAD_MUX 
-                                             == vlTOPp->top__DOT__Decode_Stage__DOT__ForwardBD_MUX)
-                                          : ((IData)(vlTOPp->top__DOT__Decode_Stage__DOT__JumpSrc_wire) 
-                                             | (IData)(vlTOPp->top__DOT__Decode_Stage__DOT__JRetSrc_wire))));
-    vlTOPp->top__DOT__Fetch_Stage__DOT__FlushD = ((~ (IData)(vlTOPp->top__DOT__BranchD_wire)) 
-                                                  & (IData)(vlTOPp->top__DOT__PCSrcD_wire));
+VL_ATTR_COLD void Vtop::trace(VerilatedVcdC* tfp, int levels, int options) {
+    if (false && levels && options) {}  // Prevent unused
+    tfp->spTrace()->addModel(this);
+    tfp->spTrace()->addInitCb(&trace_init, &(vlSymsp->TOP));
+    Vtop___024root__trace_register(&(vlSymsp->TOP), tfp->spTrace());
 }
-
-VL_INLINE_OPT void Vtop::_sequent__TOP__9(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__9\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    vlTOPp->top__DOT__HazardUnit__DOT__BranchStall 
-        = ((((IData)(vlTOPp->top__DOT__BranchD_wire) 
-             & (IData)(vlTOPp->top__DOT__RegWriteE_wire)) 
-            & (((IData)(vlTOPp->top__DOT__RdE_wire) 
-                == (0x1fU & (vlTOPp->top__DOT__InstrD_wire 
-                             >> 0xfU))) | ((IData)(vlTOPp->top__DOT__RdE_wire) 
-                                           == (0x1fU 
-                                               & (vlTOPp->top__DOT__InstrD_wire 
-                                                  >> 0x14U))))) 
-           | (((IData)(vlTOPp->top__DOT__BranchD_wire) 
-               & (IData)(vlTOPp->top__DOT__ResultSrcM_wire)) 
-              & (((IData)(vlTOPp->top__DOT__RdM_wire) 
-                  == (0x1fU & (vlTOPp->top__DOT__InstrD_wire 
-                               >> 0xfU))) | ((IData)(vlTOPp->top__DOT__RdM_wire) 
-                                             == (0x1fU 
-                                                 & (vlTOPp->top__DOT__InstrD_wire 
-                                                    >> 0x14U))))));
-    vlTOPp->top__DOT__HazardUnit__DOT__lwstall = ((IData)(vlTOPp->top__DOT__RegWriteE_wire) 
-                                                  & (IData)(vlTOPp->top__DOT__ResultSrcE_wire));
-    vlTOPp->top__DOT__StallD_wire = ((IData)(vlTOPp->top__DOT__HazardUnit__DOT__lwstall) 
-                                     | (IData)(vlTOPp->top__DOT__HazardUnit__DOT__BranchStall));
-    vlTOPp->top__DOT__StallF_wire = ((IData)(vlTOPp->top__DOT__HazardUnit__DOT__lwstall) 
-                                     | (IData)(vlTOPp->top__DOT__HazardUnit__DOT__BranchStall));
-    vlTOPp->top__DOT__FlushE_wire = vlTOPp->top__DOT__HazardUnit__DOT__lwstall;
-    vlTOPp->top__DOT__ForwardAE_wire = 0U;
-    if ((((0U != (IData)(vlTOPp->top__DOT__Rs1E_wire)) 
-          & (IData)(vlTOPp->top__DOT__RegWriteW_wire)) 
-         & ((IData)(vlTOPp->top__DOT__RdW_wire) == (IData)(vlTOPp->top__DOT__Rs1E_wire)))) {
-        vlTOPp->top__DOT__ForwardAE_wire = 1U;
-    }
-    if ((((0U != (IData)(vlTOPp->top__DOT__Rs1E_wire)) 
-          & (IData)(vlTOPp->top__DOT__RegWriteM_wire)) 
-         & ((IData)(vlTOPp->top__DOT__RdM_wire) == (IData)(vlTOPp->top__DOT__Rs1E_wire)))) {
-        vlTOPp->top__DOT__ForwardAE_wire = 2U;
-    }
-    vlTOPp->top__DOT__ForwardBE_wire = 0U;
-    if ((((0U != (IData)(vlTOPp->top__DOT__Rs2E_wire)) 
-          & (IData)(vlTOPp->top__DOT__RegWriteW_wire)) 
-         & ((IData)(vlTOPp->top__DOT__RdW_wire) == (IData)(vlTOPp->top__DOT__Rs2E_wire)))) {
-        vlTOPp->top__DOT__ForwardBE_wire = 1U;
-    }
-    if ((((0U != (IData)(vlTOPp->top__DOT__Rs2E_wire)) 
-          & (IData)(vlTOPp->top__DOT__RegWriteM_wire)) 
-         & ((IData)(vlTOPp->top__DOT__RdM_wire) == (IData)(vlTOPp->top__DOT__Rs2E_wire)))) {
-        vlTOPp->top__DOT__ForwardBE_wire = 2U;
-    }
-    vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-        = ((0U == (IData)(vlTOPp->top__DOT__ForwardAE_wire))
-            ? vlTOPp->top__DOT__RD1E_wire : ((1U == (IData)(vlTOPp->top__DOT__ForwardAE_wire))
-                                              ? vlTOPp->top__DOT__ResultW_wire
-                                              : ((2U 
-                                                  == (IData)(vlTOPp->top__DOT__ForwardAE_wire))
-                                                  ? vlTOPp->top__DOT__ALUResultM_wire
-                                                  : vlTOPp->top__DOT__RD1E_wire)));
-    vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_Forwarding_wire 
-        = ((0U == (IData)(vlTOPp->top__DOT__ForwardBE_wire))
-            ? vlTOPp->top__DOT__RD2E_wire : ((1U == (IData)(vlTOPp->top__DOT__ForwardBE_wire))
-                                              ? vlTOPp->top__DOT__ResultW_wire
-                                              : ((2U 
-                                                  == (IData)(vlTOPp->top__DOT__ForwardBE_wire))
-                                                  ? vlTOPp->top__DOT__ALUResultM_wire
-                                                  : vlTOPp->top__DOT__RD2E_wire)));
-    vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire 
-        = ((IData)(vlTOPp->top__DOT__ALUsrcE_wire) ? vlTOPp->top__DOT__ExtImmE_wire
-            : vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_Forwarding_wire);
-    vlTOPp->top__DOT__Execute_Stage__DOT__Result_wire 
-        = ((8U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-            ? ((4U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                ? ((2U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                    ? 0U : ((1U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                             ? (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                                ^ vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire)
-                             : (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                                & vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire)))
-                : ((2U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                    ? ((1U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                        ? (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           | vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire)
-                        : (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           ^ vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire))
-                    : ((1U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                        ? (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           >> (0x1fU & vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire))
-                        : (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           + vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire))))
-            : ((4U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                ? ((2U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                    ? ((1U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                        ? (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           << (0x1fU & vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire))
-                        : (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           + vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire))
-                    : ((1U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                        ? (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           + vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire)
-                        : (0xfffff000U & vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire)))
-                : ((2U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                    ? ((1U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                        ? (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           + vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire)
-                        : vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire)
-                    : ((1U & (IData)(vlTOPp->top__DOT__ALUctrlE_wire))
-                        ? (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           != vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire)
-                        : (vlTOPp->top__DOT__Execute_Stage__DOT__SrcAE_wire 
-                           + vlTOPp->top__DOT__Execute_Stage__DOT__SrcBE_wire)))));
-}
-
-VL_INLINE_OPT void Vtop::_combo__TOP__10(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_combo__TOP__10\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    vlTOPp->top__DOT__Fetch_Stage__DOT__PCNext_wire 
-        = ((IData)(vlTOPp->trigger) ? ((IData)(vlTOPp->top__DOT__PCSrcD_wire)
-                                        ? ((IData)(vlTOPp->top__DOT__Decode_Stage__DOT__JRetSrc_wire)
-                                            ? vlTOPp->top__DOT__Decode_Stage__DOT__RD1D_wire
-                                            : ((IData)(vlTOPp->top__DOT__BranchD_wire)
-                                                ? (vlTOPp->top__DOT__Decode_Stage__DOT__ExtImmD_wire 
-                                                   + 
-                                                   (vlTOPp->top__DOT__PCPlus4D_wire 
-                                                    - (IData)(4U)))
-                                                : (vlTOPp->top__DOT__Decode_Stage__DOT__ExtImmD_wire 
-                                                   + 
-                                                   (vlTOPp->top__DOT__PCPlus4D_wire 
-                                                    - (IData)(8U)))))
-                                        : ((IData)(4U) 
-                                           + vlTOPp->top__DOT__Fetch_Stage__DOT__PCF_wire))
-            : 0U);
-}
-
-void Vtop::_eval(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_eval\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    if (((~ (IData)(vlTOPp->clk)) & (IData)(vlTOPp->__Vclklast__TOP__clk))) {
-        vlTOPp->_sequent__TOP__3(vlSymsp);
-        vlTOPp->__Vm_traceActivity[1U] = 1U;
-    }
-    if (((IData)(vlTOPp->clk) & (~ (IData)(vlTOPp->__Vclklast__TOP__clk)))) {
-        vlTOPp->_sequent__TOP__4(vlSymsp);
-        vlTOPp->__Vm_traceActivity[2U] = 1U;
-    }
-    if (((IData)(vlTOPp->__VinpClk__TOP__top__DOT__FlushE_wire) 
-         & (~ (IData)(vlTOPp->__Vclklast__TOP____VinpClk__TOP__top__DOT__FlushE_wire)))) {
-        vlTOPp->_sequent__TOP__7(vlSymsp);
-        vlTOPp->__Vm_traceActivity[3U] = 1U;
-    }
-    if (((~ (IData)(vlTOPp->clk)) & (IData)(vlTOPp->__Vclklast__TOP__clk))) {
-        vlTOPp->_sequent__TOP__8(vlSymsp);
-        vlTOPp->__Vm_traceActivity[4U] = 1U;
-    }
-    if ((((~ (IData)(vlTOPp->clk)) & (IData)(vlTOPp->__Vclklast__TOP__clk)) 
-         | ((IData)(vlTOPp->__VinpClk__TOP__top__DOT__FlushE_wire) 
-            & (~ (IData)(vlTOPp->__Vclklast__TOP____VinpClk__TOP__top__DOT__FlushE_wire))))) {
-        vlTOPp->_sequent__TOP__9(vlSymsp);
-        vlTOPp->__Vm_traceActivity[5U] = 1U;
-    }
-    vlTOPp->_combo__TOP__10(vlSymsp);
-    // Final
-    vlTOPp->__Vclklast__TOP____VinpClk__TOP__top__DOT__FlushE_wire 
-        = vlTOPp->__VinpClk__TOP__top__DOT__FlushE_wire;
-    vlTOPp->__Vclklast__TOP__clk = vlTOPp->clk;
-    vlTOPp->__VinpClk__TOP__top__DOT__FlushE_wire = vlTOPp->top__DOT__FlushE_wire;
-}
-
-VL_INLINE_OPT QData Vtop::_change_request(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_change_request\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    return (vlTOPp->_change_request_1(vlSymsp));
-}
-
-VL_INLINE_OPT QData Vtop::_change_request_1(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_change_request_1\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    // Change detection
-    QData __req = false;  // Logically a bool
-    __req |= ((vlTOPp->top__DOT__FlushE_wire ^ vlTOPp->__Vchglast__TOP__top__DOT__FlushE_wire));
-    VL_DEBUG_IF( if(__req && ((vlTOPp->top__DOT__FlushE_wire ^ vlTOPp->__Vchglast__TOP__top__DOT__FlushE_wire))) VL_DBG_MSGF("        CHANGE: top.sv:19: top.FlushE_wire\n"); );
-    // Final
-    vlTOPp->__Vchglast__TOP__top__DOT__FlushE_wire 
-        = vlTOPp->top__DOT__FlushE_wire;
-    return __req;
-}
-
-#ifdef VL_DEBUG
-void Vtop::_eval_debug_assertions() {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_eval_debug_assertions\n"); );
-    // Body
-    if (VL_UNLIKELY((clk & 0xfeU))) {
-        Verilated::overWidthError("clk");}
-    if (VL_UNLIKELY((reset & 0xfeU))) {
-        Verilated::overWidthError("reset");}
-    if (VL_UNLIKELY((trigger & 0xfeU))) {
-        Verilated::overWidthError("trigger");}
-}
-#endif  // VL_DEBUG

@@ -20,15 +20,15 @@ logic   [31:0]           RD_wire;
 
 /////////// Instantiate Modules ///////////
 
-DataMemory Memory(
+cached_memory memory(
     ///////// Inputs ////////
     .clk(clk),
     .WE(MemWriteM),
-    .A(ALUResultM),
-    .WD(WriteDataM),
+    .addr(ALUResultM),
+    .Write_Data(WriteDataM),
     .MemType(MemTypeM),
     //////// Outputs ///////
-    .RD(RD_wire)
+    .Data_o(RD_wire)
 );
 
 RegM Pipeline_RegisterM(
