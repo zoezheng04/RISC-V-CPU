@@ -11,7 +11,7 @@
 | ALU, Register, Mux                 | Zoe                       |
 | Data Memory                        | Natalie                   |
 | Testbench, Assemble                | Gurjan                    |
-| Pipelining                         | All                       |
+| Pipelining                         | Arjan                     |
 | Data Memory Cache                  | All                       |
 
 
