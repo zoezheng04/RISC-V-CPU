@@ -3,19 +3,21 @@ module ControlUnit  (
     input logic [2:0]               funct3,
     input logic                     funct7,
 
-    output logic                    RegWrite,   // this needs to be synchronous
+    output logic                    RegWrite,   // Write Enable for registers
     output logic [3:0]              ALUctrl,    // Sets type of arithmetic operation is done
     output logic                    ALUsrc,     // select line for ALU - selects ImmOp or regOp2
     output logic [2:0]              ImmSrc,     // selects what type of extension it is
-    //output logic                    PCSrc,      // Sets PCNext to PCTarget or PCPlus4
-    output logic                    MemWrite,   // memory write enable
+    output logic                    MemWrite,   // Write Enable for Memory
     output logic                    ResultSrc,  // Sets write data to Data Memory or ALUResult
-    output logic                    JumpSrc,
+    output logic                    JumpSrc,    // Used to set PCNext = imm
     output logic                    JRetSrc,
     output logic                    BEQ,
     output logic                    BNE,
     output logic                    MemType
 );
+logic [1:0]         opfunct7;
+
+assign opfunct7 = {opcode[5], funct7};
 
 typedef enum logic [6:0] {
     Type_R      = 7'b0110011,   // 3 register instructions (ALU operations)
@@ -35,7 +37,6 @@ always_comb begin
     ALUsrc    = (Type_O == Type_I || Type_O == Type_I_ALU || Type_O == Type_J_JALR || Type_O == Type_J_JAL || Type_O == Type_S || Type_O == Type_U_LUI) ? 1'b1 : 1'b0;
     MemWrite  = (Type_O == (Type_S)) ? 1'b1 : 1'b0; // Sets Memory write enable only for store instructions
     ResultSrc = (Type_O == (Type_I)) ? 1'b1 : 1'b0; // Sets source to Data Memory only for load instructions
-    //PCSrc     = ((Type_O == Type_B) || Type_O == Type_J_JAL || Type_O == Type_J_JALR) ? 1'b1 : 1'b0; //Sets PCSrc to true for branch and jump instructions
     JumpSrc   = (Type_O == Type_J_JAL) ? 1'b1 : 1'b0;
     JRetSrc   = (Type_O == Type_J_JALR) ? 1'b1 : 1'b0;
     BEQ       = ((Type_O == Type_B) && (funct3 == 3'b000)) ? 1'b1 : 1'b0;
@@ -47,7 +48,7 @@ always_comb begin
         Type_R, Type_I_ALU:
             case(funct3)
                 3'b000: begin
-                    if(funct7) begin
+                    if(opfunct7 == 2'b11) begin
                         ImmSrc = 3'b000;
                         ALUctrl = 4'b1000; // SUB
                     end else  begin
@@ -80,6 +81,7 @@ always_comb begin
                 default: begin
                     ALUctrl = 4'b0000;
                     ImmSrc = 3'b000;
+                    MemType = 0;
                 end
             endcase
 
