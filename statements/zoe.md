@@ -143,7 +143,7 @@ While the direct mapped cache design simplifies the mapping of memory addresses 
 
 ### Two Way Set Associative Cache
 Recognizing the limitations of the direct-mapped approach, my contributions extended to the development of a more sophisticated Two-Way Set Associative Cache, designed to optimize memory access by providing a compromise between the simplicity of a direct-mapped cache and the flexibility of a fully associative cache. This cache design reduces conflicts by allowing multiple lines in a set, improving overall cache performance.
-![direct_mapped_cache](images/direct_mapped_cache.png)
+![direct_mapped_cache](images/2_way_cache.png)
 #### Cache Organization
 Unlike the Direct Mapped Cache, the Two-Way Set Associative Cache employs a set-associative organization, dividing the cache into multiple sets, each containing two cache lines. This departure from the direct-mapped approach allows for multiple addresses to map to the same set, reducing conflicts and enhancing cache utilization.
 ```System Verilog
