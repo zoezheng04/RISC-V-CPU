@@ -17,12 +17,10 @@ logic  [31:0]            PCF_wire;
 logic  [31:0]            PCNext_wire;
 logic  [31:0]            PCPlus4F_wire;
 logic  [31:0]            InstrF_wire;
-logic                    FlushF;
 
 //////////////// Assignments /////////////////
 assign PCPlus4F_wire = PCF_wire + 4;
 assign PCNext_wire = trigger ? (PCSrcD ? PCBranchD : PCPlus4F_wire) : 32'h0;
-assign FlushF = (((BranchD == 0) && PCSrcD));
 //////////// Instantiating Modules ///////////
 PC ProgramCounter(
     //////// INPUTS ////////
@@ -47,7 +45,6 @@ RegF Pipeline_RegisterF(
     .PCPlus4F(PCPlus4F_wire),
     .clk(clk),
     .Stall(StallF),
-    .FlushF(FlushF),
     //////// OUTPUTS ///////
     .InstrD(InstrD),
     .PCPlus4D(PCPlus4D)
