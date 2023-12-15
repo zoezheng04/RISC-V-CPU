@@ -1,6 +1,6 @@
 ## Quick Start
-### Clone Repo
-### Execute Shell Script
+### Step 1: Clone Repo
+### Step 2: Execute Shell Script
 
 #### F1 Program
 
