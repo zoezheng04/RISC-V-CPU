@@ -19,7 +19,7 @@ The following are my contributions:
 
 ## Register File
 ### Module Description
-The Register File module consists of an array of registers, each capable of holding data of the specified width of 5 bits. In the context of the project, this register file supports 32 registers, with a special consideration given to register 10 (a0).
+The Register File module consists of an array of registers, each capable of holding data of the specified width of 5 bits. In the context of the project, this register file supports 32 registers.
 
 ### Read and Write Operations
 To support read operations, the Register File module dynamically selects the read addresses based on the instruction's encoding. 
@@ -74,23 +74,11 @@ case (ALUResult)
     endcase;
 ```
 ### Testing
-Upon completion of the ALU design, I wrote a testbench for verification. The testbench loops through all 14 instructions and outputs the ALUResult and Zero Flag
-```System Verilog
-for (int control = 0; control < 14; control++) {
-        // Apply inputs for each instruction
-        top->SrcA = 1;
-        top->SrcB = 1;
-        top->ALUControl = control;
+Upon completion of the ALU design, I wrote a testbench for verification. The testbench sets the input SrcA and SrcB to certain values, loops through all 14 instructions and outputs the ALUResult and Zero Flag
+The output I got from the testbench verifies my ALU design. Below is the output when SrcA is set to 3 and SrcB is set to 5:
 
-        // Evaluate the module
-        top->eval();
+<img width="165" alt="Screenshot 2023-12-15 at 6 21 41 PM" src="https://github.com/zoezheng04/Team-8/assets/137006967/5a2d1f1c-6a7e-46cc-9f0c-c16f952c0dc1">
 
-        // Display results for each instruction
-        std::cout << "Instruction: " << control << std::endl;
-        std::cout << "ALUResult: " << top->ALUResult << std::endl;
-        std::cout << "Zero: " << static_cast<int>(top->Zero) << std::endl;
-    }
-```
 
 ## Cache
 To enhance overall system performance by mitigating memory access latencies, I worked on designing and integrating a cache into our RISC-V processor. The cache acts as a high-speed, intermediary storage between the processor and main memory, allowing for faster retrieval of frequently accessed data. 
@@ -142,7 +130,7 @@ Upon completing the desing of the direct mapped cache, I proceeded verify its fu
 
 <img width="277" alt="Screenshot 2023-12-15 at 5 12 38 PM" src="https://github.com/zoezheng04/Team-8/assets/137006967/eba72882-bb33-439a-81c8-d29e47890b7f">
 
-Once the direct mapped cache design is verified, I proceeded to work with my teammate Gurjan to implement it to the top file for the pipelined RISC-V Design, I provided him with the expected behaviour of the cache from a top level view.
+Once the direct mapped cache design was verified, I proceeded to work with my teammate Gurjan to implement it to the top file for the pipelined RISC-V Design, I provided him with the expected behaviour of the cache from a top level view.
 
 ### Two Way Set Associative Cache
 Upon completing the direct mapped cache and a verified version of the pipelined RISC-V with data memory cache, recognizing the limitations of the direct-mapped cache, I moved on to develop a more sophisticated two way set associative cache. The two way set associative cache is designed to optimize memory access by providing a compromise between the simplicity of a direct-mapped cache and the flexibility of a fully associative cache. This cache design reduces conflicts by allowing multiple lines in a set, improving overall cache performance.
@@ -181,7 +169,7 @@ logic [DATA_WIDTH-1:0]  data_1  [CACHE_LENGTH-1:0];
 ``` 
 
 #### Cache Hit
-The module retains the concepts of cache hits and misses, but with the added sophistication of associativity. A cache hit occurs when the presented memory address matches the stored tag in either of the two cache lines within the selected set. 
+The Two-Way Set Associative Cache retains the concepts of cache hits and misses, but with the added sophistication of associativity. A cache hit occurs when the presented memory address matches the stored tag in either of the two cache lines within the selected set. 
 ```System Verilog
 assign cache_hit = cache_hit_0 || cache_hit_1;
 ```
@@ -193,8 +181,8 @@ if(cache_hit) begin
     end
 ```
 #### Cache Miss
-Different from the direct mapped cache, this module handles the 2 types of misses seperately:
-1. Compulsory Miss
+Different from the direct mapped cache, the Two-Way Set Associative Cache handles the 2 types of misses seperately:
+##### 1. Compulsory Miss
 In the event of a compulsory miss, the module updates the tag, data, and valid bit, sets the dirty bit (D_0), and set the LRU counter (lru_counter_0) of the way that does not contain valid data:
 ```System Verilog
 //compulsory miss
@@ -213,7 +201,7 @@ In the event of a compulsory miss, the module updates the tag, data, and valid b
         lru_counter_1[data_set] <= 0;
     end
 ```
-2. Capacity Miss
+##### 2. Capacity Miss
 In the event of a capacity miss, the module compares the LRU counters of the two cache ways for the given set to evict the least recently used data and write in the new data, if the dirty bit of the evicted data is set, it writes back to the main memory, updating the data.
 ```System Verilog
 //capacity miss -> LRU eviction policy
@@ -231,5 +219,7 @@ else if (V_1[data_set] && V_0[data_set]) begin
         lru_counter_0[data_set] <= 0;
     end
 ```
+#### Testing and Implementing to RISC-V
+Upon completing the design of a Two-Way Set Associative Cache, I attempted to test and implement it to the RISC-V CPU along with my teammate Gurjan. However, we did not have enough time to fully implement the Two-Way Set Associative Cache, therefore our final version of the pipelined RISC-V CPU with data cache uses our initial design of a direct-mapped cache.
 
 ## Reflection
