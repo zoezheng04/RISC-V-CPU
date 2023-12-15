@@ -281,4 +281,4 @@ I feel as though I have contributed significantly to this project and have made 
 * Fully working Pipelined cpu.
 * Fully working Hazard prevention.
 * Fully working Branch prediction.
-* Fully working Cache integrated into the pipelined cpu.
+* Fully integrated Direct mapped Cache into the pipelined cpu.
