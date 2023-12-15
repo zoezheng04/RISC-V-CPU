@@ -18,7 +18,13 @@ npm install
 ## Testing Evidence
 ### F1 Program
 
+#### Trigger
+
 https://github.com/zoezheng04/Team-8/assets/147674445/93782107-cc51-4b60-bae0-e152f17378de
+
+#### One second delay
+
+https://github.com/zoezheng04/Team-8/assets/147674445/6ffda6d7-ccf6-4d8e-bccf-b58c25ef1f0e
 
 ### PDF Program
 
