@@ -40,7 +40,6 @@ npm install
 | ------------------------------|-------------|
 | `v1.0-Single-Cycle`           | Full implementation of single cycle cpu
 | `v2.0-Pipeline`               | Full implementation of pipelining with hazard prevention and branch prediction
-| `v3.0-Cache`                  | Full integration of simple cache to pipelined cpu
 | `v3.0-Direct-Mapping-Cache`   | Full implementation and integration of Direct mapped cache
 | `v3.1-2-Way-Associative-Cache`| Attempted implementing 2 way associative cache
 ## Testing Evidence
@@ -56,28 +55,34 @@ https://github.com/zoezheng04/Team-8/assets/77071320/125d735b-eac5-423f-b6af-26e
 Vbuddy is plotting every 8th value, making the waveform look like this.
 ## Contribution Table
 
+**Single Cycle**
 | Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
 |--------------------------------------------|----------|----------|--------|------------|--------|
-| **Single Cycle**                           |          |   p      |        |            |        |
-| Repo Setup                                 |          |          |        |            |
+| Repo Setup                                 |          |          |        |            |x
 | F1 Program                                 |          |          |        |            |
 | Program Counter & Instruction Memory       |          |          |        |            |
 | Control Unit                               |          |    x     |        |            |
-| Sign Extend                                |          |          |        |            |
-| ALU                                        |          |          |        |            |
+| Sign Extend                                |          |          |        |            |x
+| ALU                                        |          |          |        |            |x
 | Register File                              |          |          |        |            |
 | Data Memory                                |          |          |        |            |
-| Top Level Debugging                        |          |          |        |            |
+| Top files and Testing                        |          |          |        |            |x
 | README.md                                  |          |    p     |        |            |
-| **Pipeline**                               |          |    x     |        |            |        |
+
+**Pipeline** 
+| Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
+|--------------------------------------------|----------|----------|--------|------------|--------|
 | Pipelining Register Files                  |          |    x     |        |            |
 | Hazard Unit                                |          |    x     |        |            |
 | Branch Prediction                          |          |    x     |        |            |
 | Top files and Testing                      |          |    x     |        |            |
-| **Cache**                                  |          |          |        |            |        |
-|                                            |          |          |        |            |
-|                                            |          |          |        |            |
-|                                            |          |          |        |            |
+
+**Cache**
+| Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
+|--------------------------------------------|----------|----------|--------|------------|--------|
+| Direct Mapped Cache                                           |          |          |        |            | x
+| Two Way Set Associative Cache              |          |         |        |            | x
+| Top files and Testing                      |          |          |        |            | p
 
 **Legend:**
  "x" - full responsibility
