@@ -18,6 +18,7 @@ The following are my contributions:
 * Responsible for maintaining Git Repo structure and writing README.md file
 
 ## Register File
+[commit](908aa08c02a15aa8b8897d63f9f643cd4f441b2b)
 ### Module Description
 I first started making the register file. The Register File module consists of an array of registers, each capable of holding data of the specified width of 5 bits. In the context of the project, this register file supports 32 registers.
 
@@ -41,6 +42,7 @@ end
 ```
 
 ## ALU
+[commit](8fa09fbf7f6c5dee0af137e255ba0e972578b462)
 ### Module Description
 Upon completing the register file, I started implementing the ALU. The ALU takes two source operands, SrcA and SrcB, along with a 4-bit ALUControl signal from the Control Unit. It produces the ALUResult as the output, representing the result of the specified operation, and a Zero flag indicating whether the result is zero.
 ### Supported Instructions
@@ -89,6 +91,7 @@ To enhance overall system performance by mitigating memory access latencies, I w
 The cache is used to store recently accessed data and caching contiguous blocks of memory, addressing both temporal locality and spatial locality, reducing the need to fetch the same data repeatedly from slower main memory and anticipating adjacent data will be accessed in sequence.
 
 ### Direct Mapped Cache
+[commit](30a5a0a5e4a5d0b65e053f23c5a71d1775b3340a)
 The initial phase of my cache design involved the creation of the Direct Mapped Cache module. This design employs a direct mapping strategy, associating each memory block with a specific cache location. The module is parameterized to support various data widths and cache configurations. 
 
 #### Cache Organization
@@ -136,6 +139,7 @@ Upon completing the desing of the direct mapped cache, I proceeded verify its fu
 Once the direct mapped cache design was verified, I proceeded to work with my teammate Gurjan to implement it to the top file for the pipelined RISC-V Design, I provided him with the expected behaviour of the cache from a top level view.
 
 ### Two Way Set Associative Cache
+[commit](9a73810869893d34dee49c32ef7b6e6ac33d63ca)
 Upon completing the direct mapped cache and a verified version of the pipelined RISC-V with data memory cache, recognizing the limitations of the direct-mapped cache, I moved on to develop a more sophisticated two way set associative cache. The two way set associative cache is designed to optimize memory access by providing a compromise between the simplicity of a direct-mapped cache and the flexibility of a fully associative cache. This cache design reduces conflicts by allowing multiple lines in a set, improving overall cache performance.
 ![2_way_cache](images/2_way_cache.png)
 
