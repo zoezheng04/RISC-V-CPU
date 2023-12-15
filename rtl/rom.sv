@@ -10,7 +10,7 @@ logic [DATA_WIDTH-1:0] rom_array [32'hBFC00FFF:32'hBFC00000]; //range of ROM spe
 
 initial begin
         $display("Loading rom.");
-        $readmemh("pdf.hex", rom_array);
+        $readmemh("test/pdf.hex", rom_array);
 end;
 
 always_comb begin
