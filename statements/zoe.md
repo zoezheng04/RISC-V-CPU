@@ -120,32 +120,36 @@ always_comb begin
 end
 ```
 #### Cache Miss
-A cache miss occurs when the presented memory address does not match the stored tag in the identified set, signifying that the required data is not present in the cache. In this scenario, the module initiates the process of fetching the required data from the main memory. The cache line is updated with the new tag, data, and a valid bit (V) to mark its availability.
-```System Verilog
-if(data_tag != tag[data_set]) begin
-        tag[data_set] <= data_tag;
-        data[data_set] <= data;
-        V[data_set] <= 1'b1;
-    end
-```
+A cache miss occurs when the presented memory address does not match the stored tag in the identified set, signifying that the required data is not present in the cache. The cache hit signal is set to 0. The module handles 2 types of misses:
+1. Compulsory Miss: occurs when the cache is initially empty, and the requested data has never been loaded into the cache before.
+2. Capacity Miss: occurs when the cache is already populated, but there is not enough space to accommodate additional data that needs to be cached. 
+In a direct mapped cache, in both cases, the module initiates the process of fetching the required data from the main memory, and the cache line is updated with the new tag, data, and a valid bit (V) to mark its availability.
 
 #### Overwrite and Conflict Resolution
-The module provides a mechanism for overwriting existing data in the cache under specific conditions. The overwrite signal controls this behavior. If enabled, and the presented memory address matches the stored tag in the identified set, the module updates the cache line with the new data, ensuring consistency and correctness in the cache contents. 
+The module provides a mechanism for overwriting data in the cache. The overwrite signal controls this behavior. If enabled, the module writes to the cache line with the new data:
 ```System Verilog
-if(overwrite) begin
-        if(data_tag == tag[data_set]) begin
-            tag[data_set] <= data_tag;
-            data[data_set] <= data;
-        end
-    end
+if (overwrite) begin
+  // Write operation
+  V[data_set] <= 1;
+  tag[data_set] <= data_tag;
+  data[data_set] <= wr_data;
+end 
 ```
 While the direct mapped cache design simplifies the mapping of memory addresses to cache lines, it introduces the potential for conflicts when multiple addresses map to the same set. The module employs a straightforward conflict resolution strategy—overwriting the existing data in the cache with the new data. This strategy ensures the cache remains coherent with the most recently accessed or modified data.
 
+#### Testing and Implementing the Direct Mapped Cache to the RISC-V Design
+Upon completing the desing of the direct mapped cache, I proceeded verify its functionality. I wrote a testbench that first wrote some data to the cache, and performs read operations on the cache and prints out the cache outputs, and it functioned as expected: when there is a cache hit, the cache outputs the data, when there is a cache miss, the output data is set to 0, and the cache miss signal promps the cache to fetch the data from the main memory so to prevent cache miss when this data is accessed again in the future.
+
+<img width="277" alt="Screenshot 2023-12-15 at 5 12 38 PM" src="https://github.com/zoezheng04/Team-8/assets/137006967/eba72882-bb33-439a-81c8-d29e47890b7f">
+Once the direct mapped cache design is verified, I proceeded to work with my teammate Gurjan to implement it to the top file for the pipelined RISC-V Design, I provided him with the expected behaviour of the cache from a top level view.
+
 ### Two Way Set Associative Cache
-Recognizing the limitations of the direct-mapped approach, my contributions extended to the development of a more sophisticated Two-Way Set Associative Cache, designed to optimize memory access by providing a compromise between the simplicity of a direct-mapped cache and the flexibility of a fully associative cache. This cache design reduces conflicts by allowing multiple lines in a set, improving overall cache performance.
-![direct_mapped_cache](images/2_way_cache.png)
+Upon completing the direct mapped cache and a verified version of the pipelined RISC-V with data memory cache, recognizing the limitations of the direct-mapped cache, I moved on to develop a more sophisticated two way set associative cache. The two way set associative cache is designed to optimize memory access by providing a compromise between the simplicity of a direct-mapped cache and the flexibility of a fully associative cache. This cache design reduces conflicts by allowing multiple lines in a set, improving overall cache performance.
+![2_way_cache](images/2_way_cache.png)
+
 #### Cache Organization
 Unlike the Direct Mapped Cache, the Two-Way Set Associative Cache employs a set-associative organization, dividing the cache into multiple sets, each containing two cache lines. This departure from the direct-mapped approach allows for multiple addresses to map to the same set, reducing conflicts and enhancing cache utilization.
+
 ```System Verilog
 logic V_0 [CACHE_WIDTH-1:0];
 logic [TAG_WIDTH-1:0] tag_0 [CACHE_WIDTH-1:0];
@@ -159,7 +163,7 @@ logic [DATA_WIDTH-1:0] data_1 [CACHE_WIDTH-1:0];
 #### Address Mapping
 In the Two-Way Set Associative Cache, the memory address is still used to determine the set and tag components. However, with two cache lines per set, the potential for conflicts is mitigated, and multiple addresses can coexist in the same set without causing unnecessary cache misses. 
 
-#### Cache Hit and Miss Handling
+#### Cache Hit
 The module retains the concepts of cache hits and misses, but with the added sophistication of associativity. A cache hit occurs when the presented memory address matches the stored tag in either of the two cache lines within the selected set. 
 ```System Verilog
 assign cache_hit = cache_hit_0 || cache_hit_1;
@@ -171,8 +175,45 @@ if(cache_hit) begin
         else cache_data = data_0[data_set];
     end
 ```
-This expanded flexibility allows for more concurrent accesses to the cache, increasing the likelihood of cache hits and reducing the impact of cache misses.
-
+#### Cache Miss
+Different from the direct mapped cache, this module handles the 2 types of misses seperately:
+1. Compulsory Miss
+In the event of a compulsory miss, the module updates the tag, data, and valid bit, sets the dirty bit (D_0), and set the LRU counter (lru_counter_0) of the way that does not contain valid data:
+```System Verilog
+//compulsory miss
+    if(!V_0[data_set]) begin
+        tag_0[data_set] <= data_tag;
+        data_0[data_set] <= data;
+        V_0[data_set] <= 1'b1;
+        D_0[data_set] <= 1'b0;
+        lru_counter_0[data_set] <= 0;
+    end
+    else if (!V_1[data_set]) begin
+        tag_1[data_set] <= data_tag;
+        data_1[data_set] <= data;
+        V_1[data_set] <= 1'b1;
+        D_1[data_set] <= 1'b0;
+        lru_counter_1[data_set] <= 0;
+    end
+```
+2. Capacity Miss
+In the event of a capacity miss, the module compares the LRU counters of the two cache ways for the given set to evict the least recently used data and write in the new data, if the dirty bit of the evicted data is set, it writes back to the main memory, updating the data.
+```System Verilog
+//capacity miss -> LRU eviction policy
+else if (V_1[data_set] && V_0[data_set]) begin
+    if (lru_counter_0[data_set] < lru_counter_1[data_set]) begin
+        if(D_0[data_set]) begin //write back to main mem
+            write_back_data <= data_0[data_set];
+            write_back_address <= {tag_0[data_set], data_set, {OFFSET_WIDTH{1'b0}}};
+            write_back_enable <= 1'b1;
+            D_0[data_set] <= 1'b0;
+        end
+        //evict and fill
+        tag_0[data_set] <= data_tag;
+        data_0[data_set] <= data;
+        lru_counter_0[data_set] <= 0;
+    end
+```
 #### Conflict Resolution and Overwrite
 In the Two-Way Set Associative Cache, the overwrite mechanism remains intact. When enabled, and a cache miss occurs, the module follows a Least Recently Used (LRU) eviction policy within the set to determine which cache line to update, prioritizing the least recently used way for eviction. This contrasts with the Direct Mapped Cache, where conflicts might lead to more frequent cache misses and potential performance bottlenecks.
 
