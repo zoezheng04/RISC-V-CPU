@@ -19,13 +19,13 @@ source ./pdf.sh
 
 ```
 ## Testing Evidence
-### F1 Program (v2.0-Pipeline)
+### F1 Program (v2.0-Directed Mapping Cache)
 
-https://github.com/zoezheng04/Team-8/assets/77071320/fd6822dc-5333-4c37-a1f4-6c229a29222f
+https://github.com/zoezheng04/Team-8/assets/147711636/53857389-3ced-4123-9d85-0abe4dc64423
 
-### PDF Program (v2.0-Pipeline)
+### PDF Program (v3.0-Directed Mapping Cache)
 
-https://github.com/zoezheng04/Team-8/assets/77071320/125d735b-eac5-423f-b6af-26eb5b7fdf0b
+https://github.com/zoezheng04/Team-8/assets/147711636/4e12416f-69f2-4485-a892-d9c9677ccea4
 
-Vbuddy is plotting every 8th value, making the waveform look like this.
->>>>>>> v2.0-Pipeline
+Vbuddy is plotting every 8th value, making the waveform a smoother and more distinguishable curve
+> The lag in the video is caused by the compression of the video to display it on the readme. To get a better visual, please run the programme using the instructions provided.
