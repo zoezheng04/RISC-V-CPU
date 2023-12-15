@@ -58,15 +58,17 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 **Single Cycle**
 | Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
 |--------------------------------------------|----------|----------|--------|------------|--------|
-| Repo Setup                                 |          |          |        |            |x
-| F1 Program                                 |          |          |        |            |
-| Program Counter & Instruction Memory       |          |          |        |            |
-| Control Unit                               |          |    x     |        |            |
+| Repo Setup                                 |          |          |        |p           |x
+| F1 Program                                 |          |          |        |x           |
+| Program Counter                            |          |          |        |x           |
+| Instruction Memory                         |          |          |        |            |
+| Control Unit                               |          |    x     |        |p           |
 | Sign Extend                                |          |          |        |            |
-| ALU                                        |          |          |        |            |x
+| ALU                                        |          |          |        |p           |x
 | Register File                              |          |          |        |            |x
-| Data Memory                                |          |          |        |            |
-| Top files and Testing                        |          |          |        |            |
+| Data Memory                                |          |          |        |x           |
+| Top files                                  |          |          |        |p           |
+| Testing                                    |          |          |        |x           |
 | README.md                                  |          |    p     |        |            |p
 
 **Pipeline** 
@@ -96,8 +98,8 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 |-------------------------|---------------|
 | Instruction Memory Size |       |
 | Instruction Width       |       |
-| Data Memory Size        |       |
-| Data Width              |    32 bits      |
+| Data Memory Size        |   2^17 bits   |
+| Data Width              |    8-bit      |
 | Data Cache Size         |   128 bytes   |
 | Data Cache Sets         |       8      |
 | Data Cache Ways         |     1         |
