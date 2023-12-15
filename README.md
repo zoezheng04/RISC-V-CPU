@@ -1,11 +1,22 @@
 ## Quick Start
-Highlight the key features
+### Step 1: Clone the Repo
+### Step 2: Configure vbuddy.cfg
+Connect Vbuddy to your computer's USB port using a USB cable provided. Find out the name of the USB device used, and configure vbuddy.cfg (which contains the device name as the only line (terminated with CR))
 
-Provide step-by-step instructions on testing
+### Step 3: Execute Shell Script
+
+#### F1 Program
 
 ```bash
-# Example installation commands
-npm install
+source ./f1.sh
+
+```
+
+#### PDF Program
+
+```bash
+source ./pdf.sh
+
 ```
 
 ## Testing Evidence
