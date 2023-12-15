@@ -98,9 +98,13 @@ always_comb begin
 end
 ```
 
-The data memory reads bytes in sequence, starting three addresses higher than the base word address and progressing downward. This ensures that ReadData (RD) represents the required 32-bit word in little-endian format, as seen in the waveform trace below. Note that the base word address is set to be 0x10000 as given in the brief.
+The data memory reads bytes in sequence, starting three addresses higher than the base word address and progressing downward. This ensures that ReadData (RD) represents the required 32-bit word in little-endian format, as seen in the waveform trace below. Note that the base word address is set to be 0x10000 as given in the brief and the sine.mem data file is read into the data memory.
 
 <p align="center"> <img src="images/data_memory_test.png" /> </p>
+
+<p align="center"> <img src="images/sine_data.png" /> </p>
+
+> The data memory reads 4 bytes (32 bits) at a time, and while the expected data is retrieved successfully, it is observed to be in reversed order which is the little-endian format.
 
 Writing:
 ```systemverilog
@@ -210,7 +214,14 @@ To enhance my understanding of the CPU's overall operation, I meticulously revie
 
 I initiated the debugging process by employing the ALU testbench created by my teammate Zoe. While the Add instruction was executed correctly, I identified certain ALU operations that required correction. The subsequent section outlines the modifications I made:
 
-[Insert code]
+```systemverilog
+always_comb begin
+    case (ALUControl)
+        4'b0001: ALUResult = (SrcA ^ SrcB); //BNE
+        4'b0010: ALUResult = SrcB; //JAL
+        4'b0100: ALUResult = {SrcB[31:12], 12'b0}; //LUI
+        4'b1101: ALUResult = SrcA - SrcB; //BEQ
+```
 
 #### Control Unit:
 
