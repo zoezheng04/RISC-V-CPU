@@ -147,21 +147,37 @@ Once the direct mapped cache design is verified, I proceeded to work with my tea
 Upon completing the direct mapped cache and a verified version of the pipelined RISC-V with data memory cache, recognizing the limitations of the direct-mapped cache, I moved on to develop a more sophisticated two way set associative cache. The two way set associative cache is designed to optimize memory access by providing a compromise between the simplicity of a direct-mapped cache and the flexibility of a fully associative cache. This cache design reduces conflicts by allowing multiple lines in a set, improving overall cache performance.
 ![2_way_cache](images/2_way_cache.png)
 
+#### Address Mapping
+In the Two-Way Set Associative Cache, the memory address is still used to determine the set and tag components. However, with two cache lines per set, the potential for conflicts is mitigated, and multiple addresses can coexist in the same set without causing unnecessary cache misses.
+
+#### Write Policy
+In my Two-Way Set Associative Cache design, I chose to implement a write-back cache which stores modifications only in the cache initially, and writes back to the main memory with the updated data during eviction. The reason being that a write-back cache reduces memory traffic and enhances overall performance through the delayed and optimized updating of modified data to the main memory.
+
+In order to implement a write back cache, in addtion to the valid bit, tag and data, I've also added a dirty bit (D_0/D_1), which is set when the data is modified in the cache locally, and is used as a signal to write back to the main memory during eviction.
+
+#### Eviction Policy
+In a Two-Way Set Associative Cache, since there are 2 ways in a set, in the event of a capacity miss, we need to decide which way to evict. Therefore it is necessary to include an  eviction policy. I chose to use the LRU (Least Recently Used) eviction policy by keeping a counter on each cache way to track their use, and during the event of a capacity miss, the cache checks the counter and evicts the least recently used way.
+```System Verilog
+// LRU counter
+logic lru_counter_0 [CACHE_LENGTH-1:0];
+logic lru_counter_1 [CACHE_LENGTH-1:0];
+``` 
+
 #### Cache Organization
 Unlike the Direct Mapped Cache, the Two-Way Set Associative Cache employs a set-associative organization, dividing the cache into multiple sets, each containing two cache lines. This departure from the direct-mapped approach allows for multiple addresses to map to the same set, reducing conflicts and enhancing cache utilization.
 
 ```System Verilog
-logic V_0 [CACHE_WIDTH-1:0];
-logic [TAG_WIDTH-1:0] tag_0 [CACHE_WIDTH-1:0];
-logic [DATA_WIDTH-1:0] data_0 [CACHE_WIDTH-1:0];
+//cache array
+logic                   V_0     [CACHE_LENGTH-1:0];
+logic                   D_0     [CACHE_LENGTH-1:0]; //dirty bit
+logic [TAG_WIDTH-1:0]   tag_0   [CACHE_LENGTH-1:0];
+logic [DATA_WIDTH-1:0]  data_0  [CACHE_LENGTH-1:0];
 
-logic V_1 [CACHE_WIDTH-1:0];
-logic [TAG_WIDTH-1:0] tag_1 [CACHE_WIDTH-1:0];
-logic [DATA_WIDTH-1:0] data_1 [CACHE_WIDTH-1:0];
-```
-
-#### Address Mapping
-In the Two-Way Set Associative Cache, the memory address is still used to determine the set and tag components. However, with two cache lines per set, the potential for conflicts is mitigated, and multiple addresses can coexist in the same set without causing unnecessary cache misses. 
+logic                   V_1     [CACHE_LENGTH-1:0];
+logic                   D_1     [CACHE_LENGTH-1:0];
+logic [TAG_WIDTH-1:0]   tag_1   [CACHE_LENGTH-1:0];
+logic [DATA_WIDTH-1:0]  data_1  [CACHE_LENGTH-1:0];
+``` 
 
 #### Cache Hit
 The module retains the concepts of cache hits and misses, but with the added sophistication of associativity. A cache hit occurs when the presented memory address matches the stored tag in either of the two cache lines within the selected set. 
@@ -214,7 +230,5 @@ else if (V_1[data_set] && V_0[data_set]) begin
         lru_counter_0[data_set] <= 0;
     end
 ```
-#### Conflict Resolution and Overwrite
-In the Two-Way Set Associative Cache, the overwrite mechanism remains intact. When enabled, and a cache miss occurs, the module follows a Least Recently Used (LRU) eviction policy within the set to determine which cache line to update, prioritizing the least recently used way for eviction. This contrasts with the Direct Mapped Cache, where conflicts might lead to more frequent cache misses and potential performance bottlenecks.
 
 ## Reflection
