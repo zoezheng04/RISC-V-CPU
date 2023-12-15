@@ -31,7 +31,7 @@ Highlight the key features
 Provide step-by-step instructions on testing
 
 ```bash
-# Example installation commands
+# Example testing commands
 npm install
 ```
 
@@ -81,18 +81,18 @@ npm install
 | Instruction Memory Size |       |
 | Instruction Width       |       |
 | Data Memory Size        |       |
-| Data Width              |          |
-| Data Cache Size         |      |
-| Data Cache Sets         |             |
-| Data Cache Ways         |              |
-| Data Cache Block Size    |     |
+| Data Width              |    32 bits      |
+| Data Cache Size         |   128 bytes   |
+| Data Cache Sets         |       8      |
+| Data Cache Ways         |     1         |
+| Data Cache Block Size    |  4*32 bits   |
 
 ### Instructions Implemented
 | Type | Instructions         |
 |------|-----------------------|
-| R    |               |
-| B    |                  |
-| I    | |
-| S    |                |
-| U    |                    |
-| J    |              |
+| R    |ADD, SUB, XOR, OR, AND, SLL, SRL           |
+| SB    |   BEQ, BNE               |
+| I    |LBU, JALR  |
+| S    |  SB              |
+| U    |  LUI                  |
+| J    |      JAL        |
