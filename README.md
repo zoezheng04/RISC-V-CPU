@@ -88,7 +88,7 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 | Top files and Testing                      |          |          |  x     |            | p
 
 **Legend:**
- "x" - full responsibility
+ "x" - main contributor
  "p" - partial contribution
 
 ---
