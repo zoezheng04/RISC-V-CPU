@@ -12,8 +12,8 @@ int main(int argc, char** argv) {
 
     for (int control = 0; control < 14; control++) {
         // Apply inputs for each instruction
-        top->SrcA = 1;
-        top->SrcB = 1;
+        top->SrcA = 3;
+        top->SrcB = 5;
         top->ALUControl = control;
 
         // Evaluate the module
