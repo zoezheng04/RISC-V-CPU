@@ -223,3 +223,14 @@ else if (V_1[data_set] && V_0[data_set]) begin
 Upon completing the design of a Two-Way Set Associative Cache, I attempted to test and implement it to the RISC-V CPU along with my teammate Gurjan. However, we did not have enough time to fully implement the Two-Way Set Associative Cache, therefore our final version of the pipelined RISC-V CPU with data cache uses our initial design of a direct-mapped cache.
 
 ## Reflection
+### What I learend...
+#### 1. Github
+Throughout this project, I gained valuable insights into efficient Git usage. I learned how to adeptly manage repositories, execute push and pull operations, and leverage various features to streamline project management and collaboration.
+#### 2. System Verilog
+The project provided a deep dive into System Verilog and hardware design. From designing, translating schematics to HDL, I acquired a comprehensive understanding of hardware design principles and their implementation.
+#### 3. Testing and Debugging
+Testing and debugging became a central part of my workflow. I honed my skills in writing effective testbenches, addressing corner cases, and meticulously verifying functionality. The substantial debugging process also enhanced my problem-solving abilities.
+#### 4. Collaboration
+Collaboration skills were a key takeaway. I learned how to efficiently organize workloads, distribute tasks, and collaborate effectively when encountering challenges. Utilizing Github as a collaboration tool and cross-checking each other's code became integral to our collaborative success.
+### What I would do differently...
+Reflecting on the project, I realize the importance of a more structured testing approach. When working on the two way set associative cahce, I continued making the design more complex without testing, and it became difficult to test and debug at the end. In the future, I would prioritize testing individual components before introducing new features. Striking a balance between testing and implementation would be key, as this approach proves crucial when dealing with larger codebases, making debugging more manageable.
