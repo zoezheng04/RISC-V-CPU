@@ -14,7 +14,7 @@ logic [DATA_WIDTH-1:0] DataMemory_array [32'h1ffff : 32'h0]; // according to mem
 
 initial begin
      $display ("Loading DataMemory.");
-     $readmemh("gaussian.mem", DataMemory_array, 32'h10000);
+     //$readmemh("test/noisy.mem", DataMemory_array, 32'h10000);
      $display ("DataMemory loaded");
  end;
 

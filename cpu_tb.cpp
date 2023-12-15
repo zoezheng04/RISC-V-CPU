@@ -36,20 +36,20 @@ int main(int argc, char **argv, char **env){
         }
 
         //f1 lights and display:
-        // top->trigger = vbdFlag();
-        // vbdBar(top->a0 & 0xFF);
-        // vbdHex(4, (int(top->a0) >> 16) & 0xF);
-        // vbdHex(3, (int(top->a0) >> 8) & 0xF);
-        // vbdHex(2, (int(top->a0) >> 4) & 0xF);
-        // vbdHex(1, int(top->a0) & 0xF);
-        // vbdCycle(i+1);
+        top->trigger = vbdFlag();
+        vbdBar(top->a0 & 0xFF);
+        vbdHex(4, (int(top->a0) >> 16) & 0xF);
+        vbdHex(3, (int(top->a0) >> 8) & 0xF);
+        vbdHex(2, (int(top->a0) >> 4) & 0xF);
+        vbdHex(1, int(top->a0) & 0xF);
+        vbdCycle(i+1);
         
-        //pdf plot:
-        top->trigger = 1;
-        if(i > 330000){
-            vbdPlot(int(top->a0), 0, 255);
-            vbdCycle(i+1);
-        }
+        // // pdf plot:
+        // top->trigger = 1;
+        // if(i > 330000){
+        //     vbdPlot(int(top->a0), 0, 255);
+        //     vbdCycle(i+1);
+        // }
 
         if ((Verilated::gotFinish()) || (vbdGetkey()=='q'))
             exit(0);
