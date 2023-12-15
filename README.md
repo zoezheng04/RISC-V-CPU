@@ -1,18 +1,21 @@
 ## Quick Start
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Step 1: Clone Repo
 ### Step 2: Execute Shell Script
+=======
+>>>>>>> b64afa592d566187ea339417a73bffea038bb2ec
 
 #### F1 Program
 
 ```bash
-source ./f1.sh
+
 ```
 
 #### PDF Program
 
 ```bash
-source ./pdf.sh
+
 ```
 ## Testing Evidence
 ### F1 Program
