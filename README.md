@@ -66,9 +66,10 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 | Sign Extend                                |          |          |  x     |            |
 | ALU                                        |          |          |  p     |p           |x
 | Register File                              |          |          |  p     |            |x
-| Data Memory                                |          |          |        |x           |
+| Data Memory                                |          |          |  p     |x           |
 | Top files                                  |          |          |  x     |p           |
 | Testing                                    |          |          |  x     |x           |
+| Debugging                                  |          |          |  x     |x           |
 | README.md                                  |          |    p     |        |            |p
 
 **Pipeline** 
