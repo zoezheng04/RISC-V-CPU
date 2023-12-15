@@ -2,7 +2,7 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "vbuddy.cpp"
-#define MAX_SIM_CYC 400000
+#define MAX_SIM_CYC 1000000
 
 int main(int argc, char **argv, char **env){
 
@@ -40,7 +40,7 @@ int main(int argc, char **argv, char **env){
         //pdf plot:
         top->trigger = 1;
 
-        if(i > 330000 && (i % 8 == 0)){
+        if(i > 800000 && (i % 1 == 0)){
             vbdPlot(int(top->a0), 0, 255);
             vbdCycle(i+1);
         }
