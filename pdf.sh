@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-sed -i 's/f1.mem/pdf.hex/' rom.sv
-=======
 sed -i 's/f1.mem/pdf.hex/' rtl/rom.sv
->>>>>>> v2.0-Pipeline
 
 rm -rf obj_dir
 rm -f  Vtop.vcd
