@@ -1,52 +1,59 @@
-module dircet_mapped_cache #(
+module direct_mapped_cache #(
     parameter DATA_WIDTH = 32,
               TAG_WIDTH = 27,
               SET_WIDTH = 3,
               OFFSET_WIDTH = 2,
-              CACHE_WIDTH = 8
+              CACHE_SIZE = 8
 )(
-    input logic clk;
-    input logic [DATA_WIDTH-1:0] address;
-    input logic [DATA_WIDTH-1:0] data;
-    input logic overwrite;
-    output logic cache_hit;
-    output logic [DATA_WIDTH-1:0] cache_data;
+    input logic clk,
+    input logic overwrite,
+    input logic [DATA_WIDTH-1:0] address,
+    input logic [DATA_WIDTH-1:0] wr_data,
+    output logic [DATA_WIDTH-1:0] cache_data,
+    output logic cache_hit
 );
 
-//cache array
-logic V [CACHE_WIDTH-1:0];
-logic [TAG_WIDTH-1:0] tag [CACHE_WIDTH-1:0];
-logic [DATA_WIDTH-1:0] data [CACHE_WIDTH-1:0];
+    // Define the cache arrays
+    logic [DATA_WIDTH-1:0] data [CACHE_SIZE-1:0];
+    logic [TAG_WIDTH-1:0] tag [CACHE_SIZE-1:0];
+    logic V [CACHE_SIZE-1:0]; // Valid bits
 
-//tag and set
-logic [SET_WIDTH-1:0] data_set;
-logic [TAG_WIDTH-1:0] data_tag;
+    // Extract the index and tag from the address
+    logic [SET_WIDTH-1:0] data_set;
+    logic [TAG_WIDTH-1:0] data_tag;
+    assign data_set = address[SET_WIDTH-1:0];
+    assign data_tag = address[31:SET_WIDTH];
 
-assign data_set = address[4:2];
-assign data_tag = address[32:5];
-assign cache_hit = ((tag == data_tag) && V);
+    // Compute the cache hit signal
+    assign cache_hit = V[data_set] && (tag[data_set] == data_tag);
 
-//cache hit
-always_comb begin
-    if (cache_hit) cache_data = data[data_set];
-end
-
-always_ff @(negedge clk) begin
-    //cache miss
-    if(data_tag != tag[data_set]) begin
-        tag[data_set] <= data_tag;
-        data[data_set] <= data;
-        V[data_set] <= 1'b1;
-    end
-    //overwrite
-    if(overwrite) begin
-        if(data_tag == tag[data_set]) begin
-            tag[data_set] <= data_tag;
-            data[data_set] <= data;
+    // Initialize the valid bits
+    initial begin
+        for (int i = 0; i < CACHE_SIZE; i++) begin
+            V[i] = 0;
         end
     end
-end
+
+    // Perform read and write operations
+    always_ff @(posedge clk) begin
+        if (overwrite) begin
+            // Write operation
+            V[data_set] <= 1;
+            tag[data_set] <= data_tag;
+            data[data_set] <= wr_data;
+        end else begin
+            // Read operation
+            if (cache_hit) begin
+                cache_data <= data[data_set];
+            end else begin
+                // Handle cache miss 
+                cache_data <= '0; //default value
+            end
+        end
+    end
+
 endmodule
+
 
 
 
