@@ -68,19 +68,53 @@ However, as the design progressed, it became clear that the original data memory
 The data memory has an 8-bit width to handle individual bytes for load and store byte instructions. To distinguish between word and byte addressing instructions, a MemType output logic was added to the control unit. MemType is set to high for byte-addressing instructions (e.g., SB and LBU) and low for other word-addressing instructions. See the code snippets below:
 
 Changes to the control unit:
+```systemverilog
+output logic                    MemType     // Memory address type - byte addressing or word addressing
 
+...
+
+Type_S: begin
+            ImmSrc = 3'b010;
+            ALUctrl = 4'b0110; // Store Byte
+            MemType = 1'b1;
+        end
+
+        Type_U_LUI: begin
+            ImmSrc = 3'b100;
+            ALUctrl = 4'b0100; // Load Upper Immediate
+            MemType = 1'b0;
+        end
+```
 
 For writing bytes to memory, the bottom 8 bits of the write data are selected, as the store byte instruction consistently stores the least significant byte in the register to memory.
 
 Reading:
-[Insert data memory code]
+```systemverilog
+always_comb begin
+    if (MemType == 1'b1) // byte addressing
+    RD = {24'b0, DataMemory_array[A]};
+    else // word addressing
+    RD = {DataMemory_array[A + 3], DataMemory_array[A + 2], DataMemory_array[A + 1], DataMemory_array[A]};
+end
+```
 
 The data memory reads bytes in sequence, starting three addresses higher than the base word address and progressing downward. This ensures that ReadData (RD) represents the required 32-bit word in little-endian format, as seen in the waveform trace below. Note that the base word address is set to be 0x10000 as given in the brief.
 
 <p align="center"> <img src="images/data_memory_test.png" /> </p>
 
 Writing:
-[Insert data memory code]
+```systemverilog
+always_ff @ (posedge clk) begin
+    if(WE == 1'b1 && MemType == 1'b1)
+        DataMemory_array[A] <= WD[7:0];
+    else if(WE == 1'b1 && MemType == 1'b0) begin
+        DataMemory_array[A] <= WD[7:0];
+        DataMemory_array[A + 1] <= WD[15:8];
+        DataMemory_array[A + 2] <= WD[23:16];
+        DataMemory_array[A + 3] <= WD[31:24];
+    end
+end
+```
 
 The writing process is similar to the reading procedure. Bytes are selected from the WriteData (WD) from least to most significant bits and are stored in the base word address and the next three higher addresses respectively. This ensures that the word is stored in memory in little-endian format.
 
@@ -95,7 +129,49 @@ The writing process is similar to the reading procedure. Bytes are selected from
 
 Before developing the F1 starting light program, my teammate Gurjan and I devised a method to illuminate lights sequentially using the Shift Left Logical Immediate (SLLI) and Add Immediate (ADDI) instructions. I extended this concept to create the assembly program, incorporating constant delays between each light and introducing a random delay before turning all lights on and off. The final assembly program for the single-cycle processor is provided below:
 
-[Insert code]
+```assembly
+main:
+    addi    t1, zero, 0xff          # load t1 with 255
+    addi    t2, zero, 0x1           # load t2 with 1
+    addi    a0, zero, 0x0           # a0 is output, initialise with 0
+    addi    a2, zero, 0x8           # load a2 with 8 - a2 is the seed of the lfsr
+
+mloop:
+    addi    a1, zero, 0x0           # a1 is the f1 sequence
+    addi    a0, a1, 0x0             # load a0 with a1
+
+iloop:
+    jal     ra, light               # ra - return address
+    addi    a0, a1, 0x0             # load a0 with a1
+    beq     a1, t1, lfsr            # if a1 = 255, branch to lfsr
+    bne     t1, zero, iloop         # else always branch to iloop
+
+light:
+    slli    a1, a1, 0x1             # left shift by 1
+    addi    a1, a1, 0x1             # add 1
+    addi    t3, zero, 0x1           # load t3 with 1
+
+delay:
+    sub     t3, t3, t2              # t3 = t3 - 1
+    bne     t3, zero, delay         # if t3 does not equal 0, branch to delay
+    jalr    zero, 0(ra)             # jump to stored return address
+
+lfsr:
+    srli    a3, a2, 0x2             # shift bit at position 3 to the first bit
+    srli    a4, a2, 0x6             # shift bit at position 7 to the first bit
+    xor     a5, a4, a3              # XOR bits at positions 3 and 7 - taps
+    andi    a5, a5, 0x1             # extract the feedback bit
+    slli    a6, a2, 0x1             # shift seed to the left for 1 bit
+    or      a6, a6, a5              # add the feedback bit
+    andi    a6, a6, 0x7f            # make sure that number generated is 7-bit long (h7f = d127 = b1111111)
+    addi    a2, a6, 0x0             # store the random number in a2
+    addi    t4, a2, 0x0             # load t4 with a2 (the random number)
+
+countdown:
+    sub     t4, t4, t2              # t4 = t4 - 1
+    bne     t4, zero, countdown     # keep subtracting until t4 = 0
+    beq     t4, zero, mloop         # if t4 = 0, branch to mloop
+```
 
 I will now dive into the specific details of the delays, as they present the most challenging aspects of our algorithm.
 
@@ -181,7 +257,15 @@ In creating the testbench to evaluate our CPU with the reference program, my fir
 After discussing the issue with my teammates as well as another team, we found a more efficient solution: initiating both printing and plotting only after reaching the desired clock cycle. Another error I made was setting the trigger based on the vbdFlag() function. Unlike the F1 program, the trigger should be consistently high, allowing the function to build the distribution over multiple clock cycles.
 
 The output section of the testbench is as follows:
-[Insert code]
+
+```cpp
+  //pdf plot:
+  top->trigger = 1;
+  if(i > 330000){
+    vbdPlot(int(top->a0), 0, 255);
+    vbdCycle(i+1);
+  }
+```
               
 See “v1.0-Single-Cycle” branch for the result graphs.
 
