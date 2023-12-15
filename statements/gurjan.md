@@ -108,7 +108,7 @@ ImmSrc = 4:
 
 ## Testing Control Unit
 
-After Arjan had finished making the Control Unit, I, with the aid of Arjan, tested it using a Programme Counter and a ROM file containg the reference programme. We used the reference programme since it contained all types of instructions, so we could test the control unit rigorously. I created a top file containing the Control Unit alongside the PC and ROM. All the signals of the Control Unit were set as the outputs. I checked the waveform to see if the corresponding opcode supplied by the ROM was given the correct signals as outputs, which can be seen below.([commit](393afede862866801644593bc12f0e32e1fb5a0f))
+After Arjan had finished making the Control Unit, I, with the aid of Arjan, tested it using a Programme Counter and a ROM file containg the reference programme. We used the reference programme since it contained all types of instructions, so we could test the control unit rigorously. I created a top file containing the Control Unit alongside the PC and ROM. All the signals of the Control Unit were set as the outputs. I checked the waveform to see if the corresponding opcode supplied by the ROM was given the correct signals as outputs, which can be seen below.([commit](https://github.com/zoezheng04/Team-8/commit/393afede862866801644593bc12f0e32e1fb5a0f))
 
 ![](images/control_unit_waveform.png)
 
@@ -132,7 +132,7 @@ For the trigger, I added it so that it functions like a overridde start and rese
 
 At first I tested the cpu with the counter from lab 4 since we knew that the counter machine code was working from the previous lab.
 
-When testing the cpu, there was an error which would cause Verilator to abort due to there not being a 'dc convergence'. This was the first time I had gotten such an error and was unsure on how to debug this. After discussing with the team, I broke down the top file into 4 different top files for various stages and then created another top file to put them all together. This allowed me to test the 3 different stages independently for errors and to help solve the problem.([commit](a59c95c0c4fb2b720fcfe34eb5130a01b0c0bc4d))
+When testing the cpu, there was an error which would cause Verilator to abort due to there not being a 'dc convergence'. This was the first time I had gotten such an error and was unsure on how to debug this. After discussing with the team, I broke down the top file into 4 different top files for various stages and then created another top file to put them all together. This allowed me to test the 3 different stages independently for errors and to help solve the problem.([commit](https://github.com/zoezheng04/Team-8/commit/a59c95c0c4fb2b720fcfe34eb5130a01b0c0bc4d))
 
 ![](images/altered_single_cycle.png)
 
@@ -147,7 +147,7 @@ When testing the f1 machine code, there was a problem with the jump instructions
 
 A solution to this could’ve been to store the return address of the main instruction in a register. However when looking at the machine code, there was no need to have a nested subroutine as the jump was to the next line in the machine code so the pc would automatically go to that line anyway. Therfore I just removed the unnecessary jumps which fixed that error.
 
-There were also a few small errors in the machine code as well, such as using bne instead of beq, which were easy fixes. ([commit](2da7dd0318fe400977b4cc3f78c983215cb208e7))
+There were also a few small errors in the machine code as well, such as using bne instead of beq, which were easy fixes. ([commit](https://github.com/zoezheng04/Team-8/commit/2da7dd0318fe400977b4cc3f78c983215cb208e7))
 
 For the random delay after the all the lights were on, we used a lfsr using xor's to make it random.
 ```
@@ -170,7 +170,7 @@ After fixing the issues with the machine code, the f1 lights were working as exp
 
 ### Register File
 
-When testing the reference programme, a problem that occurred was that when we wrote to the zero register, it actually stored the value rather than setting it back to zero. Therefore the property of the zero register wouldn’t hold and RET instructions couldn't be execucted properly. To solve this problem, I changed the register file so that it always writes 0 to the zero register. After I made this change, the zero register functioned as expected allowing us to use RET properly. ([commit](2da7dd0318fe400977b4cc3f78c983215cb208e7))
+When testing the reference programme, a problem that occurred was that when we wrote to the zero register, it actually stored the value rather than setting it back to zero. Therefore the property of the zero register wouldn’t hold and RET instructions couldn't be execucted properly. To solve this problem, I changed the register file so that it always writes 0 to the zero register. After I made this change, the zero register functioned as expected allowing us to use RET properly. ([commit](https://github.com/zoezheng04/Team-8/commit/2da7dd0318fe400977b4cc3f78c983215cb208e7))
 
 ```System Verilog
 always_ff @(posedge clk) begin
@@ -186,14 +186,14 @@ There was a problem with the LBU instruction. The address of the Data Memory, wh
 
 ![](images/alu-problem.png)
 
-After checking the ALU file, I saw the error was that the addressing for the data memory was wrong which I then ammended. ([commit](21f294281fd50dee8bbaded092bf4d8e6ee10b21))
+After checking the ALU file, I saw the error was that the addressing for the data memory was wrong which I then ammended. ([commit](https://github.com/zoezheng04/Team-8/commit/21f294281fd50dee8bbaded092bf4d8e6ee10b21))
 
 The issue was that the alu was zero extending the address, instead of the actual data being zero extended. To fix this I simply changed the address to be the sum of the 2 inputs so that the alu gave us the address with an offset. The rest of the changes were made to the [Data Memory](#data-memory)
 
-Alongside this I also made a few changes to the bne and beq instructions, since they were outputting single bits when a 32 bit signal was expected causing a warning ([commit](98a181ebcc0473b54c38a991b15bdcf80a8a0cfc)). To fix this, I changed the bne and beq instructions to use xor since xor has the property of =, this made me realise that the alu could be significantly optimised, since most of the instructions use the same fundamental operations. This would be a good improvment that I would've implemented if I was to do a project like this again.
+Alongside this I also made a few changes to the bne and beq instructions, since they were outputting single bits when a 32 bit signal was expected causing a warning ([commit](https://github.com/zoezheng04/Team-8/commit/98a181ebcc0473b54c38a991b15bdcf80a8a0cfc)). To fix this, I changed the bne and beq instructions to use xor since xor has the property of =, this made me realise that the alu could be significantly optimised, since most of the instructions use the same fundamental operations. This would be a good improvment that I would've implemented if I was to do a project like this again.
 
 ### Data Memory
-The reference programme uses load byte instructions for which we had no hardware implemented. Natalie made the changes needed in the Data Memory and I then added these changes to the relevant top file. ([commit](98a181ebcc0473b54c38a991b15bdcf80a8a0cfc))
+The reference programme uses load byte instructions for which we had no hardware implemented. Natalie made the changes needed in the Data Memory and I then added these changes to the relevant top file. ([commit](https://github.com/zoezheng04/Team-8/commit/98a181ebcc0473b54c38a991b15bdcf80a8a0cfc))
 
 ### Working CPU
 
@@ -231,7 +231,7 @@ Implementimng the direct mapping cache wasn't too complex. I first created a dia
 
 ![](images/direct_cache.png)
 
-After drawing the diagram, I created the top file to implementing the cache. ([commit](37275f94e7ba441b0a5b1b33ca261f8477e418b6)) I then tested the cache and it worked! Evidence of it working can be viewed in the main READme file.
+After drawing the diagram, I created the top file to implementing the cache. ([commit](https://github.com/zoezheng04/Team-8/commit/37275f94e7ba441b0a5b1b33ca261f8477e418b6)) I then tested the cache and it worked! Evidence of it working can be viewed in the main READme file.
 
 ### Two-way Associative Cache
 
@@ -243,9 +243,9 @@ When testing the two way associative cache, there was a 'DIDNOTCONVERGE' error w
 Lru_counter_0[data_set] = lru_counter_0[data_set] + 1
 ``````
 
-To fix this, I made the whole block sequential so that the cache will output on a positive clock cycle. ([commit](2fe475d16562c7747c06f51c4551463826c2297f))
+To fix this, I made the whole block sequential so that the cache will output on a positive clock cycle. ([commit](https://github.com/zoezheng04/Team-8/commit/2fe475d16562c7747c06f51c4551463826c2297f))
 
-After that, I drew out a diagram to implement the cache into the memory. I then wrote up the top file. ([commit](7bc86815073b0c0cfd2a241a234e2e260f85d5bf))
+After that, I drew out a diagram to implement the cache into the memory. I then wrote up the top file. ([commit](https://github.com/zoezheng04/Team-8/commit/7bc86815073b0c0cfd2a241a234e2e260f85d5bf))
 
 ## Reflection
 
