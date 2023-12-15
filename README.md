@@ -59,16 +59,16 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 | Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
 |--------------------------------------------|----------|----------|--------|------------|--------|
 | Repo Setup                                 |          |          |        |p           |x
-| F1 Program                                 |          |          |        |x           |
+| F1 Program                                 |          |          |  p     |x           |
 | Program Counter                            |          |          |        |x           |
-| Instruction Memory                         |          |          |        |            |
-| Control Unit                               |          |    x     |        |p           |
-| Sign Extend                                |          |          |        |            |
-| ALU                                        |          |          |        |p           |x
-| Register File                              |          |          |        |            |x
+| Instruction Memory                         |          |          |  x     |            |
+| Control Unit                               |          |    x     |  p     |p           |
+| Sign Extend                                |          |          |  x     |            |
+| ALU                                        |          |          |  p     |p           |x
+| Register File                              |          |          |  p     |            |x
 | Data Memory                                |          |          |        |x           |
-| Top files                                  |          |          |        |p           |
-| Testing                                    |          |          |        |x           |
+| Top files                                  |          |          |  x     |p           |
+| Testing                                    |          |          |  x     |x           |
 | README.md                                  |          |    p     |        |            |p
 
 **Pipeline** 
@@ -77,14 +77,14 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 | Pipelining Register Files                  |          |    x     |        |            |
 | Hazard Unit                                |          |    x     |        |            |
 | Branch Prediction                          |          |    x     |        |            |
-| Top files and Testing                      |          |    x     |        |            |
+| Top files and Testing                      |          |    x     |   p    |            |
 
 **Cache**
 | Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
 |--------------------------------------------|----------|----------|--------|------------|--------|
-| Direct Mapped Cache                                           |          |          |        |            | x
-| Two Way Set Associative Cache              |          |         |        |            | x
-| Top files and Testing                      |          |          |        |            | p
+| Direct Mapped Cache                        |          |          |  p     |            | x
+| Two Way Set Associative Cache              |          |          |  p     |            | x
+| Top files and Testing                      |          |          |  x     |            | p
 
 **Legend:**
  "x" - full responsibility
