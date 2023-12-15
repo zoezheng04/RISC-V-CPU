@@ -8,6 +8,7 @@
       -[Data Hazards](#Data-Hazards)
       -[Load Hazards](#Load-Hazards)
       -[Control Hazards](#Control-Hazards)
+- [Performance](#Performance)    
 - [Top file and Testing](#Top-file-and-Testing)
 - [Minor Changes and optimisations](#Minor-Changes-and-optimisations)   
 - [Reflection](#reflection)
@@ -120,7 +121,7 @@ Here is my implementation of hazard prevention.
 Data Hazards are caused by multiple instructions attempting to access/perform calulations on the same data at the same time, an example of this is two sequential addi instructions to a single register a0.
 Let's say the value at a0 is 10, the first addi would add one to a0 in the execute stage making a0 = 11 but when it passes to the memory stage the second addi instruction adds one to the initial value making a0 = 11 still. What should happen is a0 should be incremented twice to equal 12 but its not, this is a data hazard and is fixed by forwarding the value of a0 calculated in the execute stage to the next instruction that depends on it.
 
-![](images/ForwardingDataHazard.PNG)
+<p align="center"> <img src="images/ForwardingDataHazard.PNG" /> </p><BR>
 
 ```System Verilog
 always_comb begin
@@ -146,7 +147,7 @@ Forwarding data incurrs no clock cycle penalty so the cpu is running optimally.
 #### Load Hazards
 Load hazards occur whenever there is a data dependancy on a value that has not yet been read from memory, you are not able to forward the value until the memory stage, otherwise you will be forwarding the memory address and not the actually value. Instead we must stall the pipeline one cycle and flush register D as to not carry out the next instruction twice. Then we are able to forward the correct value read from memory.
 
-![](images/lwstall.PNG)
+<p align="center"> <img src="images/lwstall.PNG" /> </p><BR>
 
 ```System Verilog
  ...lwstall = (RegWriteE && ResultSrcE); // Stall when load instruction is detected in execute stage (E)
@@ -156,6 +157,7 @@ Load hazards occur whenever there is a data dependancy on a value that has not y
 ```
 With load hazards there is not much room to improve, whenever there is a data dependancy we must stall, there is no prediction and no optimizations.
 #### Control Hazards
+
 Control hazards occur when branch instructions are involved. It occurs because at a branch the next instruction is only calculated after the branch condition is calculated at the execute stage. I made major structural changes to the design of this by moving the PCBranch and PCSrc to the decode stage. I then compare the two registers that are involved in the instruction and depending on which branch it is (BEQ) or (BNE) I set PCNext accordingly. This way I avoid the flushing penalty of flushing the fetch and decode, instead I am able to at most lose one clock cycle to a branch.
 In doing it that way there is a possibility of a data hazard where the previous instruction could be altering the same register in the execute stage. In that case I stall the cpu for one cycle and forward the data back to the decode stage with 'ForwardAD & ForwardBD'
 For every branch instruction if there is no data dependancy then the next instruction can be fetched immediately and we're never hit with branch misprediction penalty. The only optimisation can be done when predicting branches with data dependancies.
@@ -198,7 +200,30 @@ logic [31:0]  BranchReturnE;  // This value is passed through from decode stage 
 endcase
 assign BranchReturnE = BranchReturnD; // Passed from decode stage through pipeline register (D)
 ```
-This simple logic allows us to predict and correct branch predictions. Now when there is a branch dependancy we can predict the branch to avoid miss prediction penalties, and if we get the prediction wrong we incurr only a 1 clock cycle penalty. While testing the branch prediction i saw that it made the reference programme extremely effiecient, having a 95+% success rate, but for the f1 programme the success rate was closer to 60%, this was due to the programme not having as many backwards branches that was frequently taken. Even considering this we were able to predict most of the branchstalls and incurr 60-95% less clock cycle delay. This means our Risc-v cpu is super fast and efficient.
+This simple logic allows us to predict and correct branch predictions. Now when there is a branch dependancy we can predict the branch to avoid miss prediction penalties, and if we get the prediction wrong we incurr only a 1 clock cycle penalty. While testing the branch prediction i saw that it made the reference programme extremely effiecient, having a 99+% success rate, and for the f1 programme the success rate was 65%, this was due to the programme not having as many backwards branches that was frequently taken. Even considering this we were able to predict most of the branchstalls and streamline the cpu.
+
+## Performance
+At the end of this what was there to gain? How much performance have we squeezed out of the cpu? Here I outline the performance gains of my design of the pipelined cpu.
+
+### F1 Programme
+I tested the performance gains of the branch prediction algorithm by taking the total number of predictions and diving by the total miss-predictions.
+
+<p align="center"> <img src="images/F1SR.png" /> </p><BR>
+
+With a 65% success rate I was able to save 76,061 clock cycles and due to the way I designed the branch logic I incurr only one clock cycle penalty for each miss-prediction so in total 39,908 clock cycle penalties. If we didn't have branch prediction and if the branch was determined at the execute stage we would have incurred 231,938 clock cycle delays, compared to only 39,908. That's a 581% increase in performance.
+
+### pdf Programme
+With the pdf programme I tested both the branch prediction success rate and the number of cycles it took for the waveform to appear. This was tested for 300,000 clock cycles.
+
+<p align="center"> <img src="images/BranchpredictionSR (1).png" /> </p><BR>
+
+The CPU during the pdf programme performed almost perfectly with a 99.6% success rate. This was due to the programme having many backwards branches (loops). With the pipeline optimisations we incurred only 282 clock cycle delays. For an un-optimised cpu we would have incurred 144,486 clock cycle delays. That's a performance boost of 51,236%!
+
+I then found that it took only 155,000 clock cycles to start plotting the waveform. Nearly half the time of the Single cycle!
+
+https://github.com/zoezheng04/Team-8/assets/77071320/ef2bfc8c-96d8-48fa-b283-8f7fd78e7791
+
+The Risc-v CPU performed superbly when tested with these programs, pipelining and branch prediction has made a significant impact to performance.
 
 ## Top file and Testing
 ### Top file
