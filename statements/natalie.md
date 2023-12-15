@@ -8,6 +8,8 @@
 - [PC](#PC)
 - [Data Memory](#Data-Memory)
 - [F1 Program](#F1-Program)
+  - [Constant Delay](#Constant-Delay)
+  - [Random Delay](#Random-Delay)
 - [Single-cycle Debug](#Single-cycle-Debug)
   - [ALU](#ALU)
   - [Control Unit](#Control-Unit)
@@ -93,13 +95,13 @@ Before developing the F1 starting light program, my teammate Gurjan and I devise
 
 I will now dive into the specific details of the delays, as they present the most challenging aspects of our algorithm.
 
-### Constant delay:
+#### Constant Delay:
 
 Refer to the “delay” label for the implementation. After illuminating a light, the program enters the “delay” label, counting down from a set value. The program will jump to the stored return address after the countdown gets to 0 to turn on the next light. The initial countdown value of 1 provides a flash rate close to 60 bpm (from Lab 3), as evident in the video below.
 
 [Insert video] 
 
-### Random delay:
+#### Random Delay:
 
 To generate a random number, the linear feedback shift register (LFSR) was implemented. The following figure aims to make my explanation of the logic behind my code easier to understand.
 
@@ -118,19 +120,19 @@ After generating the random number, the program proceeds to the “countdown” 
 -	[Modified control unit and data memory](https://github.com/zoezheng04/Team-8/commit/d50f3c1006d134147fd2a4b43b8031da8d45295d)
 -	[Got the single-cycle to work with both the F1 program and the reference program](https://github.com/zoezheng04/Team-8/commit/faad8892f6dbe1836bd8b3c14d01cd34e5eb7f50)
 
-### Approach:
+#### Approach:
 
 The initial testing of the single-cycle CPU was undertaken by my teammate Gurjan. As previously mentioned, our single-cycle implementation only functioned with our F1 program. The problem was traced to line 15 of the reference program – ADDI  a1, a1, -1. By analysing the waveform, we observed that a1 was incremented, rather than decremented. Despite spending several days on debugging, the issue remained unresolved. Due to time constraints, debugging responsibilities were then transitioned to me, while Gurjan shifted his focus to pipelining and adding cache functionality.
 
 To enhance my understanding of the CPU's overall operation, I meticulously reviewed all the code, cross-referencing it with the lecture slides. Additionally, I addressed syntax errors and warnings to ensure the proper functioning of the CPU.
 
-### ALU:
+#### ALU:
 
 I initiated the debugging process by employing the ALU testbench created by my teammate Zoe. While the Add instruction was executed correctly, I identified certain ALU operations that required correction. The subsequent section outlines the modifications I made:
 
 [Insert code]
 
-### Control Unit:
+#### Control Unit:
 
 Knowing that the issue did not stem from the ALU, I proceeded to test the sign extension unit, which operated flawlessly. Considering my teammate Gurjan's successful substitution of the line with a SUB instruction, achieving the desired plots, I narrowed down the problem to either the control unit or the top file.
 
@@ -145,7 +147,7 @@ The solution was straightforward – I introduced a 2-bit logic named opfunct7, 
 
 [Insert code]
 
-### Testing:
+#### Testing:
 
 In creating the testbench to evaluate our CPU with the reference program, my first mistake was printing the number of cycles, despite having set the condition for plotting not to start until clock cycle 330000. My intention was to confirm Vbuddy was running, but printing every cycle proved time-consuming, taking over an hour to reach just 40000 cycles, with much more to go.
 
