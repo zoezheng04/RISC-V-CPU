@@ -97,18 +97,23 @@ I tested the sign extend component by creating a ROM, which contained a few 32 b
 Pictures of each waveform for it's corresponding ImmSrc value:
 
 ImmSrc = 0:
+
 ![](images/SignExtend0.png)
 
 ImmSrc = 1:
+
 ![](images/SignExtend1.png)
 
 ImmSrc = 2:
+
 ![](images/SignExtend2.png)
 
 ImmSrc = 3:
+
 ![](images/SignExtend3.png)
 
 ImmSrc = 4:
+
 ![](images/SignExtend4.png)
 
 ## Testing Control Unit
