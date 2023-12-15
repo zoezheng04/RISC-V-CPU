@@ -4,16 +4,15 @@
 ---
 
 ## Overview
-- Repo Structure 
-- PC
-- Data Memory
-- F1 Program
-- Single cycle debugging
-  - ALU
-  - Control Unit
-  - Data Memory
-  - Testing results
-- Reflection
+- [Repo Structure](#Repo-Structure) 
+- [PC](#PC)
+- [Data Memory](#Data-Memory)
+- [F1 Program](#F1-Program)
+- [Single-cycle Debug](#Single-cycle-Debug)
+  - [ALU](#ALU)
+  - [Control Unit](#Control-Unit)
+  - [Testing](#Testing)
+- [Reflection](#Reflection)
 
 ---
 
@@ -112,7 +111,7 @@ After generating the random number, the program proceeds to the “countdown” 
 
 ---
 
-## Single-cycle debugging
+## Single-cycle Debug
 
 ***Relevant commits:***
 -	[Testing with the reference program](https://github.com/zoezheng04/Team-8/commit/ac8c1165d04dc2822a37a17eae1a639328f71e3e)
@@ -120,6 +119,7 @@ After generating the random number, the program proceeds to the “countdown” 
 -	[Got the single-cycle to work with both the F1 program and the reference program](https://github.com/zoezheng04/Team-8/commit/faad8892f6dbe1836bd8b3c14d01cd34e5eb7f50)
 
 **Approach:**
+
 The initial testing of the single-cycle CPU was undertaken by my teammate Gurjan. As previously mentioned, our single-cycle implementation only functioned with our F1 program. The problem was traced to line 15 of the reference program – ADDI  a1, a1, -1. By analysing the waveform, we observed that a1 was incremented, rather than decremented. Despite spending several days on debugging, the issue remained unresolved. Due to time constraints, debugging responsibilities were then transitioned to me, while Gurjan shifted his focus to pipelining and adding cache functionality.
 
 To enhance my understanding of the CPU's overall operation, I meticulously reviewed all the code, cross-referencing it with the lecture slides. Additionally, I addressed syntax errors and warnings to ensure the proper functioning of the CPU.
