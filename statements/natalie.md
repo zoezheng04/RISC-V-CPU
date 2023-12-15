@@ -68,7 +68,7 @@ However, as the design progressed, it became clear that the original data memory
 The data memory has an 8-bit width to handle individual bytes for load and store byte instructions. To distinguish between word and byte addressing instructions, a MemType output logic was added to the control unit. MemType is set to high for byte-addressing instructions (e.g., SB and LBU) and low for other word-addressing instructions. See the code snippets below:
 
 Changes to the control unit:
-[Insert control unit code]
+
 
 For writing bytes to memory, the bottom 8 bits of the write data are selected, as the store byte instruction consistently stores the least significant byte in the register to memory.
 
@@ -143,13 +143,36 @@ Knowing that the issue did not stem from the ALU, I proceeded to test the sign e
 After numerous trial-and-error attempts, I pinpointed the root cause to be the ALUCtrl control signal. It was erroneously outputting the signal for an SUB operation instead of an ADD operation, as depicted in the waveform below. 
 
 <p align="center"> <img src="images/control_unit_debug.png" /> </p>
-Note that the binary representation of 8 (1000) corresponds to our SUB operation in the ALU.
+
+>Note that the binary representation of 8 (1000) corresponds to our SUB operation in the ALU.
 
 To rectify the issue, I scrutinised the machine code. Upon reviewing the table below, I recognised that distinguishing between an ADD and an SUB operation with signed numbers required consideration of not only funct7 (bit 30 of the machine code) but also the opcode, specifically opcode[5]. It became evident that opcode[5] was the sole bit differentiating between them.
 
 The solution was straightforward – I introduced a 2-bit logic named opfunct7, factoring in both opcode[5] and funct7. For our processor, designed exclusively for our F1 program and the reference program, it now implements an SUB operation only when both opcode[5] and funct7 are high. The modification is illustrated below:
 
-[Insert code]
+```systemverilog
+logic [1:0] opfunct7;
+
+assign opfunct7 = {opcode[5], funct7};
+
+...
+
+case (Type_O)
+        Type_R, Type_I_ALU:
+            case(funct3)
+                3'b000: begin
+                    if(opfunct7 == 2'b11) begin
+                        ImmSrc = 3'b000;
+                        ALUctrl = 4'b1000; // SUB
+                        MemType = 1'b0;
+                    end 
+                    else begin
+                        ALUctrl = 4'b0000; // ADD
+                        ImmSrc = 3'b000;
+                        MemType = 1'b0;
+                    end
+                end
+```
 
 #### Testing:
 
