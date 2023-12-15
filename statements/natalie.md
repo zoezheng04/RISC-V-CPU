@@ -179,7 +179,7 @@ I will now dive into the specific details of the delays, as they present the mos
 
 Refer to the “delay” label for the implementation. After illuminating a light, the program enters the “delay” label, counting down from a set value. The program will jump to the stored return address after the countdown gets to 0 to turn on the next light. The initial countdown value of 1 provides a flash rate close to 60 bpm (from Lab 3), as evident in the video below.
 
-https://github.com/zoezheng04/Team-8/blob/d6ecef0ded5bb25712fbfacc1745dac9d43d6b36/statements/videos/single-cycle_f1.mp4
+https://github.com/zoezheng04/Team-8/assets/147674445/6ffda6d7-ccf6-4d8e-bccf-b58c25ef1f0e
 
 #### Random Delay:
 
