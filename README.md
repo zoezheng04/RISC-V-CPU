@@ -62,12 +62,12 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 | F1 Program                                 |          |          |        |            |
 | Program Counter & Instruction Memory       |          |          |        |            |
 | Control Unit                               |          |    x     |        |            |
-| Sign Extend                                |          |          |        |            |x
+| Sign Extend                                |          |          |        |            |
 | ALU                                        |          |          |        |            |x
-| Register File                              |          |          |        |            |
+| Register File                              |          |          |        |            |x
 | Data Memory                                |          |          |        |            |
-| Top files and Testing                        |          |          |        |            |x
-| README.md                                  |          |    p     |        |            |
+| Top files and Testing                        |          |          |        |            |
+| README.md                                  |          |    p     |        |            |p
 
 **Pipeline** 
 | Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
