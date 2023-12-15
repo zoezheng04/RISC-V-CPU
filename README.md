@@ -1,20 +1,21 @@
 ## Quick Start
-<<<<<<< HEAD
-<<<<<<< HEAD
-### Step 1: Clone Repo
-### Step 2: Execute Shell Script
-=======
->>>>>>> b64afa592d566187ea339417a73bffea038bb2ec
+### Step 1: Clone the Repo
+### Step 2: Configure vbuddy.cfg
+Connect Vbuddy to your computer's USB port using a USB cable provided. Find out the name of the USB device used, and configure vbuddy.cfg (which contains the device name as the only line (terminated with CR))
+
+### Step 3: Execute Shell Script
 
 #### F1 Program
 
 ```bash
+source ./f1.sh
 
 ```
 
 #### PDF Program
 
 ```bash
+source ./pdf.sh
 
 ```
 ## Testing Evidence
