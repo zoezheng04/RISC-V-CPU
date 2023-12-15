@@ -31,7 +31,7 @@ int main(int argc, char **argv, char **env){
 
     for (i=0; i<MAX_SIM_CYC; i++){
         
-        //top->trigger = vbdFlag();
+        // top->trigger = vbdFlag();
 
         for (clk = 0; clk < 2; clk++){
             tfp->dump (2*i+clk);
