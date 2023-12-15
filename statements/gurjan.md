@@ -116,6 +116,8 @@ After Arjan had finished making the Control Unit, I, with the aid of Arjan, test
 
 I was responsible for creating, testing and debugging the Single Cycle CPU, which was a crucial part of this project. It was essential that the Single Cycle CPU fully functioned as intended, allowing us to attempt the stretched goals.
 
+I did most of the debugging alone which was challenging as it required me to go over all the components made by everyone and make any necessary changes. I had the same role in Lab 4 which helped, as I was famiilar with all the different components.
+
 ### Design
 
 Before creating the top file, I drew out a schematic diagram for the single cycle CPU. It was quite similar to the diagram shown in lectures however included various muxes to implement the jump instructions and include the trigger.
