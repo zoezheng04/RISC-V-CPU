@@ -6,17 +6,17 @@
 </center>
 
 ## Overview
-- [Repo Structure](#Repo-Structure) 
-- [PC](#PC)
-- [Data Memory](#Data-Memory)
-- [F1 Program](#F1-Program)
-  - [Constant Delay](#Constant-Delay)
-  - [Random Delay](#Random-Delay)
-- [Single-cycle Debug](#Single-cycle-Debug)
-  - [ALU](#ALU)
-  - [Control Unit](#Control-Unit)
-  - [Testing](#Testing)
-- [Reflection](#Reflection)
+- [Repo Structure](#repo-structure) 
+- [PC](#pc)
+- [Data Memory](#data-memory)
+- [F1 Program](#f1-program)
+  - [Constant Delay](#constant-delay)
+  - [Random Delay](#random-delay)
+- [Single-cycle Debug](#single-cycle-debug)
+  - [ALU](#alu)
+  - [Control Unit](#control-unit)
+  - [Testing](#testing)
+- [Reflection](#reflection)
 
 ---
 
@@ -31,7 +31,7 @@ My central focus during the project was the implementation of the single-cycle R
 ***Relevant commit:***
 - [Update README.md](https://github.com/zoezheng04/Team-8/commit/2c574e15d412650dbae81de8892b47307a979cdf)
 
-Drawing from the lessons learned in Lab 4, disorganization emerged as a significant challenge. All team members pushed untested files to the same branch, resulting in an unwieldy list of files that made locating specific files for debugging both time-consuming and challenging. Additionally, communication gaps led to the creation of duplicate files – for example, we each created a multiplexer for the component we were responsible for when the same multiplexer could essentially be used for multiple purposes.
+Drawing from the lessons learned in Lab 4, disorganisation emerged as a significant challenge. All team members pushed untested files to the same branch, resulting in an unwieldy list of files that made locating specific files for debugging both time-consuming and challenging. Additionally, communication gaps led to the creation of duplicate files – for example, we each created a multiplexer for the component we were responsible for when the same multiplexer could essentially be used for multiple purposes.
 
 In response, my teammate Zoe and I established a set of guidelines before initiating the current project to proactively address these issues:
 
@@ -86,8 +86,6 @@ Type_S: begin
         end
 ```
 
-For writing bytes to memory, the bottom 8 bits of the write data are selected, as the store byte instruction consistently stores the least significant byte in the register to memory.
-
 Reading:
 ```systemverilog
 always_comb begin
@@ -119,6 +117,8 @@ always_ff @ (posedge clk) begin
     end
 end
 ```
+
+For writing bytes to memory, the bottom 8 bits of the write data are selected, as the store byte instruction consistently stores the least significant byte in the register to memory.
 
 The writing process is similar to the reading procedure. Bytes are selected from the WriteData (WD) from least to most significant bits and are stored in the base word address and the next three higher addresses respectively. This ensures that the word is stored in memory in little-endian format.
 
@@ -231,7 +231,7 @@ After numerous trial-and-error attempts, I pinpointed the root cause to be the A
 
 <p align="center"> <img src="images/control_unit_debug.png" /> </p>
 
->Note that the binary representation of 8 (1000) corresponds to our SUB operation in the ALU.
+>Note that the binary representation of 8 (1000) of the ALUCtrl corresponds to our SUB operation in the ALU.
 
 To rectify the issue, I scrutinised the machine code. Upon reviewing the table below, I recognised that distinguishing between an ADD and an SUB operation with signed numbers required consideration of not only funct7 (bit 30 of the machine code) but also the opcode, specifically opcode[5]. 
 
@@ -284,7 +284,7 @@ The output section of the testbench is as follows:
   }
 ```
               
-See “v1.0-Single-Cycle” branch for the result graphs.
+Please go to “v1.0-Single-Cycle” branch for the result graphs.
 
 ---
 
@@ -292,6 +292,6 @@ See “v1.0-Single-Cycle” branch for the result graphs.
 
 To conclude, I enjoyed my time working on this project. It provided me with a more profound and robust understanding of CPU operations compared to individual labs. The exposure to RISC-V, SystemVerilog, and general hardware design added valuable layers to my knowledge. Additionally, the opportunity to write in Markdown through the documentation phase was a valuable aspect of the experience.
 
-Given more time, I would opt for a smaller ALU. During debugging, I noticed that certain instructions shared identical ALU operations. For instance, ADD, JALR, and LBU could all be executed using the addition of two operands. This insight suggests the potential to streamline the ALU by using a common ALUCtrl control signal for multiple instructions, minimising redundant operations.
+Given more time, I would opt for a smaller ALU. During debugging, I noticed that certain instructions shared identical ALU operations. For instance, ADD, JALR, and LBU could all be executed using the addition of two operands. This insight suggests the potential to streamline the ALU by using a common ALUCtrl control signal for multiple instructions, minimising redundant operations. I would also like to be involved in adding cache memory or other features.
 
 Looking back, I would allocate more time to thorough planning, particularly for the changes made and our respective responsibilities. This would allow us to complete the single-cycle stage earlier, instead of concurrently tackling single-cycle, pipelining, and cache memory in the final week of the project. Not only does this approach enhance debugging efficiency, but it also affords more time to explore additional features.
