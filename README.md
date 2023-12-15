@@ -71,36 +71,36 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 ## Contribution Table
 
 **Single Cycle**
-| Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
-|--------------------------------------------|----------|----------|--------|------------|--------|
-| Repo Setup                                 |          |          |        |p           |x
-| F1 Program                                 |          |          |  p     |x           |
-| Program Counter                            |          |          |        |x           |
-| Instruction Memory                         |          |          |  x     |            |
-| Control Unit                               |          |    x     |  p     |p           |
-| Sign Extend                                |          |          |  x     |            |
-| ALU                                        |          |          |  p     |p           |x
-| Register File                              |          |          |  p     |            |x
-| Data Memory                                |          |          |  p     |x           |
-| Top files                                  |          |          |  x     |p           |
-| Testing                                    |          |          |  x     |x           |
-| Debugging                                  |          |          |  x     |x           |
-| README.md                                  |          |    p     |        |p           |x
+| Task                                       | Arjan    | Gurjan | Natalie    | Zoe    |
+|--------------------------------------------|----------|--------|------------|--------|
+| Repo Setup                                 |          |        |p           |x
+| F1 Program                                 |          |  p     |x           |
+| Program Counter                            |          |        |x           |
+| Instruction Memory                         |          |  x     |            |
+| Control Unit                               |    x     |  p     |p           |
+| Sign Extend                                |          |  x     |            |
+| ALU                                        |          |  p     |p           |x
+| Register File                              |          |  p     |            |x
+| Data Memory                                |          |  p     |x           |
+| Top files                                  |          |  x     |p           |
+| Testing                                    |          |  x     |x           |
+| Debugging                                  |          |  x     |x           |
+| README.md                                  |    p     |        |p           |x
 
 **Pipeline** 
-| Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
-|--------------------------------------------|----------|----------|--------|------------|--------|
-| Pipelining Register Files                  |          |    x     |        |            |
-| Hazard Unit                                |          |    x     |        |            |
-| Branch Prediction                          |          |    x     |        |            |
-| Top files and Testing                      |          |    x     |   p    |            |
+| Task                                       | Arjan    | Gurjan | Natalie    | Zoe    |
+|--------------------------------------------|----------|--------|------------|--------|
+| Pipelining Register Files                  |    x     |        |            |
+| Hazard Unit                                |    x     |        |            |
+| Branch Prediction                          |    x     |        |            |
+| Top files and Testing                      |    x     |   p    |            |
 
 **Cache**
-| Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
-|--------------------------------------------|----------|----------|--------|------------|--------|
-| Direct Mapped Cache                        |          |          |  p     |            | x
-| Two Way Set Associative Cache              |          |          |  p     |            | x
-| Top files and Testing                      |          |          |  x     |            | p
+| Task                                       | Arjan    | Gurjan | Natalie    | Zoe    |
+|--------------------------------------------|----------|--------|------------|--------|
+| Direct Mapped Cache                        |          |  p     |            | x
+| Two Way Set Associative Cache              |          |  p     |            | x
+| Top files and Testing                      |          |  x     |            | p
 
 **Legend:**
  "x" - main contributor
