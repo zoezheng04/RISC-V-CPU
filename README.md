@@ -70,7 +70,7 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 | Top files                                  |          |          |  x     |p           |
 | Testing                                    |          |          |  x     |x           |
 | Debugging                                  |          |          |  x     |x           |
-| README.md                                  |          |    p     |        |            |p
+| README.md                                  |          |    p     |        |            |x
 
 **Pipeline** 
 | Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
