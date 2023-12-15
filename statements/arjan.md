@@ -243,8 +243,6 @@ With the pdf programme I tested both the branch prediction success rate and the 
 
 The CPU during the pdf programme performed almost perfectly with a 99.6% success rate. This was due to the programme having many backwards branches (loops). With the pipeline optimisations we incurred only 282 clock cycle delays. For an un-optimised cpu we would have incurred 144,486 clock cycle delays. That's a performance boost of 51,236%!
 
-I then found that it took only 155,000 clock cycles to start plotting the waveform. Nearly half the time of the Single cycle!
-
 https://github.com/zoezheng04/Team-8/assets/77071320/ef2bfc8c-96d8-48fa-b283-8f7fd78e7791
 
 The Risc-v CPU performed superbly when tested with these programs, pipelining and branch prediction has made a significant impact to performance.
@@ -354,6 +352,10 @@ To accommodate the pipelined cpu I made some changes to a few modules to help wi
 * pdf_tb.cpp
 * f1.sh
 * pdf.sh
+* gaussian.sh
+* sine.sh
+* noisy.sh
+* triangle.sh
 
 
 ## Reflection
