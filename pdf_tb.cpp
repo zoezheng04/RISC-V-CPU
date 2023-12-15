@@ -40,7 +40,7 @@ int main(int argc, char **argv, char **env){
         //pdf plot:
         top->trigger = 1;
 
-        if(i > 300000 && (i % 8 == 0)){
+        if(i > 330000 && (i % 8 == 0)){
             vbdPlot(int(top->a0), 0, 255);
             vbdCycle(i+1);
         }

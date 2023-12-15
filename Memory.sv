@@ -20,7 +20,7 @@ logic   [31:0]           RD_wire;
 
 /////////// Instantiate Modules ///////////
 
-cached_memory memory(
+dir_cached_memory memory(
     ///////// Inputs ////////
     .clk(clk),
     .WE(MemWriteM),
