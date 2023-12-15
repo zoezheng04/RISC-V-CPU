@@ -2,7 +2,6 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "vbuddy.cpp"
-#include "iostream"
 #define MAX_SIM_CYC 20000
 
 int main(int argc, char **argv, char **env){
@@ -23,15 +22,15 @@ int main(int argc, char **argv, char **env){
     if(vbdOpen()!=1) return(-1);
     vbdHeader(" f1 ");
 
-    vbdSetMode(1);
+    vbdSetMode(0);
     
     top->reset = 0;
-    top->trigger = 1;
+    top->trigger = 0;
     
 
     for (i=0; i<MAX_SIM_CYC; i++){
         
-        //top->trigger = vbdFlag();
+        top->trigger = vbdFlag();
 
         for (clk = 0; clk < 2; clk++){
             tfp->dump (2*i+clk);
@@ -49,10 +48,16 @@ int main(int argc, char **argv, char **env){
         vbdCycle(i);
 
         
-        if ((Verilated::gotFinish()) || (vbdGetkey()=='q')) exit(0);
-        
+        if ((Verilated::gotFinish()) || (vbdGetkey()=='q')) {
+            vbdClear();
+            vbdBar(0);
+            vbdClose();
+            tfp->close();
+            exit(0);
+        }
     }
-
+    vbdClear();
+    vbdBar(0);
     vbdClose();
     tfp->close();
     exit(0);
