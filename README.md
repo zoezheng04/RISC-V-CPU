@@ -1,13 +1,18 @@
 ## Quick Start
-Highlight the key features
+### Clone Repo
+### Execute Shell Script
 
-Provide step-by-step instructions on testing
+#### F1 Program
 
 ```bash
-# Example installation commands
-npm install
+source ./f1.sh
 ```
 
+#### PDF Program
+
+```bash
+source ./pdf.sh
+```
 ## Testing Evidence
 ### F1 Program
 ### PDF Program
