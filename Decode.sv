@@ -1,5 +1,6 @@
 module Decode (
     input logic             clk,
+    input logic             Branchstall,
     input logic             FlushD,
     input logic [31:0]      InstrD,
     input logic [31:0]      PCPlus4D,
@@ -26,6 +27,8 @@ module Decode (
     output logic  [31:0]    ExtImmE,
     output logic  [31:0]    PCBranchD,
     output logic            BranchD,
+    output logic  [31:0]    BranchReturnD,
+    output logic            BranchTakenD,
     output logic            MemTypeE,
     output logic  [31:0]    a0
 );
@@ -43,7 +46,8 @@ logic                       JRetSrc_wire;
 logic                       BEQ_wire;
 logic                       BNE_wire;
 logic                       MemType_wire;
-
+logic  [31:0]               BranchReturn_wire;
+logic                       BranchTaken_wire;
 //////////// Register File Wires //////////
 logic   [31:0]              RD1D_wire;
 logic   [31:0]              RD2D_wire;
@@ -53,24 +57,48 @@ logic   [31:0]              ExtImmD_wire;
 logic   [31:0]              ExtImmDReg_wire;
 
 //////////// Assign and MUXs //////////////
-// Forwarding Logic
+/////////// Forwarding Logic //////////////
 logic  [31:0]               ForwardAD_MUX, ForwardBD_MUX;
+logic  [31:0]               PCD;
+
+assign PCD = PCPlus4D - 4;
 assign ForwardAD_MUX = ForwardAD ? ALUOutM : RD1D_wire;
 assign ForwardBD_MUX = ForwardBD ? ALUOutM : RD2D_wire;
-// Programme Counter logic (Jumps and Branches)
-assign PCBranchD = JRetSrc_wire ? RD1D_wire : ((ExtImmD_wire) + (PCPlus4D - 4));    
 assign BranchD = (BEQ_wire || BNE_wire);
 assign ExtImmDReg_wire = JumpSrc_wire ? (PCPlus4D) : ExtImmD_wire; 
-    
+
+////////////// Branch Prediction ////////////
 always_comb begin
-    if(BNE_wire) begin
-        PCSrcD = (ForwardAD_MUX != ForwardBD_MUX);
-    end else if (BEQ_wire) begin
-        PCSrcD = (ForwardAD_MUX == ForwardBD_MUX);
+    if (Branchstall == 0) begin
+        if(JumpSrc_wire) begin
+            assign PCSrcD = 1'b1;
+            assign PCBranchD = ((ExtImmD_wire) + (PCD));
+            assign BranchTaken_wire = PCSrcD;
+        end else if(JRetSrc_wire) begin
+            assign PCSrcD = 1'b1;
+            assign PCBranchD = RD1D_wire;
+            assign BranchTaken_wire = PCSrcD;
+        end else if (BNE_wire) begin
+            assign PCSrcD = (ForwardAD_MUX != ForwardBD_MUX);
+            assign PCBranchD =  PCSrcD ? (ExtImmD_wire + PCD) : PCPlus4D;
+            assign BranchTaken_wire = PCSrcD;
+        end else if (BEQ_wire) begin
+            assign PCSrcD = (ForwardAD_MUX == ForwardBD_MUX);
+            assign PCBranchD =  PCSrcD ? (ExtImmD_wire + PCD) : PCPlus4D;
+            assign BranchTaken_wire = PCSrcD;
+        end else begin
+            assign PCSrcD = 0;
+            assign PCBranchD = 0;
+            assign BranchTaken_wire = 0;
+        end
     end else begin
-        PCSrcD = (JumpSrc_wire || JRetSrc_wire);
-    end   
+        assign PCBranchD = ((PCD) > (ExtImmD_wire + PCD)) ? (ExtImmD_wire + PCD) : PCPlus4D;
+        assign PCSrcD = (PCBranchD != PCPlus4D);
+        assign BranchReturn_wire = (PCBranchD == PCPlus4D) ? (ExtImmD_wire + PCD) : PCPlus4D;
+        assign BranchTaken_wire  = PCSrcD;
+    end
 end
+
 assign Rs1D = InstrD[19:15];
 assign Rs2D = InstrD[24:20];
 
@@ -131,6 +159,8 @@ RegD Pipeline_RegisterD(
     .clk(clk),
     .FlushD(FlushD),
     .MemTypeD(MemType_wire),
+    .BranchReturnD(BranchReturn_wire),
+    .BranchTakenD(BranchTaken_wire),
     /////// Outputs ////////
     .RegWriteE(RegWriteE),
     .ResultSrcE(ResultSrcE),
@@ -143,7 +173,9 @@ RegD Pipeline_RegisterD(
     .Rs2E(Rs2E),
     .RdE(RdE),
     .ExtImmE(ExtImmE),
-    .MemTypeE(MemTypeE)
+    .MemTypeE(MemTypeE),
+    .BranchReturn(BranchReturnD),
+    .BranchTaken(BranchTakenD)
 );
 
 endmodule
