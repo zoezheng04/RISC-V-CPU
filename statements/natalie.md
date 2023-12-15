@@ -77,6 +77,8 @@ Reading:
 
 The data memory reads bytes in sequence, starting three addresses higher than the base word address and progressing downward. This ensures that ReadData (RD) represents the required 32-bit word in little-endian format, as seen in the waveform trace below. Note that the base word address is set to be 0x10000 as given in the brief.
 
+<p align="center"> <img src="images/data_memory_test.png" /> </p>
+
 Writing:
 [Insert data memory code]
 
@@ -140,7 +142,7 @@ Knowing that the issue did not stem from the ALU, I proceeded to test the sign e
 
 After numerous trial-and-error attempts, I pinpointed the root cause to be the ALUCtrl control signal. It was erroneously outputting the signal for an SUB operation instead of an ADD operation, as depicted in the waveform below. 
 
-[Insert waveform]
+<p align="center"> <img src="images/control_unit_debug.png" /> </p>
 Note that the binary representation of 8 (1000) corresponds to our SUB operation in the ALU.
 
 To rectify the issue, I scrutinised the machine code. Upon reviewing the table below, I recognised that distinguishing between an ADD and an SUB operation with signed numbers required consideration of not only funct7 (bit 30 of the machine code) but also the opcode, specifically opcode[5]. It became evident that opcode[5] was the sole bit differentiating between them.
