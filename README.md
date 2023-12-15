@@ -17,12 +17,12 @@ Provide a brief introduction to the project.
 
 ## Individual Statements
 
-| Name           | CID      | GitHub   | Email                     | Link to Individual Statements|
-|----------------|----------|----------|---------------------------|--------------|
-| Arjan Hayre   | xxxxxxxx | **The-Asgardian**  | xxxx@imperial.ac.uk   &nbsp; &nbsp; &nbsp; &nbsp;   | [Arjan's Statement](statements/arjan.md)
-| Gurjan Samra  | xxxxxxxx | **Gurjan-Singh-Samra** | xxxx@imperial.ac.uk     | [Gurjan's Statement](statements/gurjan.md)
-| Natalie Lin | 02203331 | **natalietklin** | nkl22@imperial.ac.uk | [Natalie's Statement](statements/natalie.md)
-| Zoe Zheng  | 02083556 | **zoezheng04**  | zz4221@imperial.ac.uk  | [Zoe's Statement](statements/zoe.md)
+| Name           | CID      | GitHub                 | Email                                                | Link to Individual Statements                |
+|----------------|----------|------------------------|------------------------------------------------------|----------------------------------------------|
+| Arjan Hayre    | xxxxxxxx | **The-Asgardian**      | ah321@imperial.ac.uk   &nbsp; &nbsp; &nbsp; &nbsp;   | [Arjan's Statement](statements/arjan.md)
+| Gurjan Samra   | xxxxxxxx | **Gurjan-Singh-Samra** | xxxx@imperial.ac.uk                                  | [Gurjan's Statement](statements/gurjan.md)
+| Natalie Lin    | 02203331 | **natalietklin**       | nkl22@imperial.ac.uk                                 | [Natalie's Statement](statements/natalie.md)
+| Zoe Zheng      | 02083556 | **zoezheng04**         | zz4221@imperial.ac.uk                                | [Zoe's Statement](statements/zoe.md)
 
 ---
 ## Quick Start
