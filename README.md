@@ -38,10 +38,10 @@ npm install
 ## Versions
 | Version name                  | Explanation | 
 | ------------------------------|-------------|
-| [`v1.0-Single-Cycle`](https://github.com/zoezheng04/Team-8/tree/v1.0-Single-Cycle)           | Full implementation of single cycle CPU
-| [`v2.0-Pipeline`](https://github.com/zoezheng04/Team-8/tree/v2.0-Pipeline)               | Full implementation of pipelining with hazard prevention and branch prediction
-| [`v3.0-Direct-Mapping-Cache`](https://github.com/zoezheng04/Team-8/tree/v3.0-Direct-Mapping-Cache)   | Full implementation and integration of direct-mapped cache
-| [`v3.1-2-Way-Associative-Cache`](https://github.com/zoezheng04/Team-8/tree/v3.1-2-Way-Associative-Cache)| Attempted implementing 2-way set-associative cache
+| [`v1.0-Single-Cycle`](https://github.com/zoezheng04/Team-8/tree/v1.0-Single-Cycle)           | Verified full implementation of single cycle RISC-V
+| [`v2.0-Pipeline`](https://github.com/zoezheng04/Team-8/tree/v2.0-Pipeline)               | Verified full implementation of a pipelined RISC-V with hazard prevention and branch prediction
+| [`v3.0-Direct-Mapping-Cache`](https://github.com/zoezheng04/Team-8/tree/v3.0-Direct-Mapping-Cache)   | Verified full implementation of a pipelined RISC-V with hazard prevention and branch prediction and a direct-mapped data cache
+| [`v3.1-2-Way-Associative-Cache`](https://github.com/zoezheng04/Team-8/tree/v3.1-2-Way-Associative-Cache)| Attempted implementation of a RISC-V with a 2-way set-associative data cache
 ## Testing Evidence
 
 ### F1 Program (v2.0-Pipeline)
