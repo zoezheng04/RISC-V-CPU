@@ -1,14 +1,14 @@
-module PC #(
-    parameter WIDTH = 32
-)(
+module PC(
     input   logic              clk,
     input   logic              rst,
-    input   logic [WIDTH-1:0]  PCNext,
+    input   logic [31:0]       PCNext,
     input   logic              Stall,
-    output  logic [WIDTH-1:0]  PC
+    input   logic              MissPredictionE,
+
+    output  logic [31:0]       PC
 );
 
-    always_ff @ (posedge clk) begin
+    always_ff @ (posedge clk or posedge MissPredictionE) begin
  
         if (~Stall) begin
             if (rst)

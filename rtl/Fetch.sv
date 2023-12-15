@@ -5,8 +5,9 @@ module Fetch (
     input logic             StallPC,
     input logic             StallF,
     input logic [31:0]      PCBranchD,
-    input logic             BranchD,
     input logic             PCSrcD,
+    input logic [31:0]      BranchReturnE,
+    input logic             MissPredictionE,
 
     output logic [31:0]     InstrD,
     output logic [31:0]     PCPlus4D         
@@ -17,10 +18,15 @@ logic  [31:0]            PCF_wire;
 logic  [31:0]            PCNext_wire;
 logic  [31:0]            PCPlus4F_wire;
 logic  [31:0]            InstrF_wire;
+logic                    MissPredictionE_wire;
 
 //////////////// Assignments /////////////////
 assign PCPlus4F_wire = PCF_wire + 4;
-assign PCNext_wire = trigger ? (PCSrcD ? PCBranchD : PCPlus4F_wire) : 32'h0;
+assign PCNext_wire = (trigger ? (MissPredictionE ? BranchReturnE : ((PCSrcD ? PCBranchD : PCPlus4F_wire))) : 32'hBFC00000);
+assign MissPredictionE_wire = MissPredictionE;
+always_ff @(posedge clk) begin
+        MissPredictionE_wire = 0;
+end
 //////////// Instantiating Modules ///////////
 PC ProgramCounter(
     //////// INPUTS ////////
@@ -28,6 +34,7 @@ PC ProgramCounter(
     .rst(reset),
     .Stall(StallPC),
     .PCNext(PCNext_wire),
+    .MissPredictionE(MissPredictionE),
     //////// OUTPUTS ///////
     .PC(PCF_wire)
 );
@@ -45,6 +52,7 @@ RegF Pipeline_RegisterF(
     .PCPlus4F(PCPlus4F_wire),
     .clk(clk),
     .Stall(StallF),
+    .Flush(MissPredictionE_wire),
     //////// OUTPUTS ///////
     .InstrD(InstrD),
     .PCPlus4D(PCPlus4D)

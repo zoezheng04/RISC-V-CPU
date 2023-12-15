@@ -13,6 +13,8 @@ module Execute (
     input logic  [1:0]     ForwardBE,
     input logic  [31:0]    ResultW,
     input logic            MemTypeE,
+    input logic            BranchTakenD,
+    input logic  [31:0]    BranchReturnD,
 
     output logic           RegWriteM,
     output logic           ResultSrcM,
@@ -20,6 +22,8 @@ module Execute (
     output logic [31:0]    ALUResultM,
     output logic [31:0]    WriteDataM,
     output logic [4:0]     RdM,
+    output logic [31:0]    BranchReturnE,
+    output logic           MissPredictionE,
     output logic           MemTypeM
 );
 
@@ -29,8 +33,10 @@ logic   [31:0]    SrcAE_wire;
 logic   [31:0]    SrcBE_wire;
 logic   [31:0]    SrcBE_Forwarding_wire;
 logic   [31:0]    Result_wire;
+logic             ALUResult;
 
-//////////// Forwarding MUXs /////////////    
+//////////// Forwarding MUXs /////////////  
+
 always_comb begin
 case (ForwardAE)
     2'b00: assign SrcAE_wire = RD1E;
@@ -45,6 +51,15 @@ case (ForwardBE)
     default: assign SrcBE_Forwarding_wire = RD2E;
 endcase
 assign SrcBE_wire = ALUsrcE ? ExtImmE : SrcBE_Forwarding_wire;
+
+/////////////// Branch Miss prediction logic /////////////
+assign ALUResult = (Result_wire == 32'b1);
+case (ALUctrlE)
+    4'b0001: assign MissPredictionE = ((BranchTakenD != ALUResult));
+    4'b1101: assign MissPredictionE = ((BranchTakenD != ALUResult));
+    default: assign MissPredictionE = 0;
+endcase
+assign BranchReturnE = BranchReturnD;
 end
 /////////// Instantiate Modules ///////////
 
