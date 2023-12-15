@@ -8,6 +8,7 @@
       -[Data Hazards](#Data-Hazards)
       -[Load Hazards](#Load-Hazards)
       -[Control Hazards](#Control-Hazards)
+- [Branch-Prediction-Algorithm](#Branch-Prediction-Algorithm)
 - [Performance](#Performance)    
 - [Top file and Testing](#Top-file-and-Testing)
 - [Minor Changes and optimisations](#Minor-Changes-and-optimisations)   
@@ -18,6 +19,11 @@ This statement gives an overview of my contributions to the project. All design 
 * Full responsibility of writing, designing and testing the [Control Unit](path/to/Control-Unit) for single cycle and pipelining.
 * Full responsibility of writing, designing and testing the [Pipelined CPU](path/to/Pipelined-CPU).
 * [Minor changes](#Minor-Changes-and-optimisations) to the Register File, Programme Counter and Control Unit to accommodate the Pipelined CPU. 
+
+
+
+
+
 
 ## Control Unit
 ### Module Description
@@ -73,6 +79,13 @@ case (Type_O) // Instruction Type
                     end ........
 ```
 Designing and implementing the control unit was the simplest of my tasks, it was straightforward and worked instantly, not all instructions of the Risc-v ISA were implemented, only those specified in the project brief.
+
+
+
+
+
+
+
 
 ## Pipelined CPU
 ### The Challenge
@@ -173,10 +186,16 @@ For every branch instruction if there is no data dependancy then the next instru
     StallF = (lwstall || BranchStall);       // Stall register (F) and (PC) for load and branch hazards
 ```
 This solves the data dependancy and control hazards nicely.
-#### Branch prediction Algorithm
+
+
+
+
+
+
+## Branch prediction Algorithm
 We could improve the efficiency of the cpu even further by adding a branch prediction algorithm. A branch predictor is a digital circuit that aims to guess the outcome of a branch before it is definitively known. Technically we already have branch prediction, it currently always predicts that a branch is not taken and fetches the next sequential instruction, this is called static branch prediction! For a cpu with a maximum of one clock cycle delay per branch misprediction it is not all that necessary however there are a few simple tricks that can increase prediction success rates significantly.
 
-#### Branch prediction optimisations
+### Branch prediction optimisations
 Static branch prediction is the simplest prediction technique because it doesn't rely on information about the history of the programme being executed, this is the one currently implemented. As mentioned before there are tricks to increase the prediction success rate.
 One trick is to always predict that backwards branches will always be taken and forward branches will not. This is simply done by subtracting the target address from the current one and if it is greater than 0 we predict a jump! This especially helps with for loops where you are likely to jump back multiple times and leave the loop only once.
 Ofcourse this prediction logic will only be executed during a branchstall, this would mean that whever there is a data dependancy that doesn't allow us to immediately calculate PCBranchD in the decode stage we can predict. This method means we need to add some logic to our cpu.
@@ -202,6 +221,11 @@ assign BranchReturnE = BranchReturnD; // Passed from decode stage through pipeli
 ```
 This simple logic allows us to predict and correct branch predictions. Now when there is a branch dependancy we can predict the branch to avoid miss prediction penalties, and if we get the prediction wrong we incurr only a 1 clock cycle penalty. While testing the branch prediction i saw that it made the reference programme extremely effiecient, having a 99+% success rate, and for the f1 programme the success rate was 65%, this was due to the programme not having as many backwards branches that was frequently taken. Even considering this we were able to predict most of the branchstalls and streamline the cpu.
 
+
+
+
+
+
 ## Performance
 At the end of this what was there to gain? How much performance have we squeezed out of the cpu? Here I outline the performance gains of my design of the pipelined cpu.
 
@@ -224,6 +248,12 @@ I then found that it took only 155,000 clock cycles to start plotting the wavefo
 https://github.com/zoezheng04/Team-8/assets/77071320/ef2bfc8c-96d8-48fa-b283-8f7fd78e7791
 
 The Risc-v CPU performed superbly when tested with these programs, pipelining and branch prediction has made a significant impact to performance.
+
+
+
+
+
+
 
 ## Top file and Testing
 ### Top file
@@ -292,12 +322,22 @@ https://github.com/zoezheng04/Team-8/assets/77071320/125d735b-eac5-423f-b6af-26e
 
 Vbuddy is plotting every 8th value, making the waveform look like this.
 
+
+
+
+
+
 ## Minor Changes and optimisations
 To accommodate the pipelined cpu I made some changes to a few modules to help with performance, efficiency and compatibility.
  * I changed the register write from synchronous to asynchronous. This allowed me to avoid hazards with data updating to the registers too late due to dependancies so as soon as a value is passed to the write-back stage it is almost instantly written( Only if the write enable is true of course).
  * I changed the PC counter to be able to Stall whenever a hazard required it to stall.
  * I optimized the decode stage so that JAL and JALR instructions are computed instantly and incurr no data dependancy or stall delay.
  * I optimized the branch instruction so that the maximum penalty occured is only 1 clock cycle.
+
+
+
+
+
 
 ## Reflection
 I feel as though I have contributed significantly to this project and have made alot of progress in my SystemVerilog skills as well as computer architecture and git knowledge. If time permitted I would have liked to implement all the instructions of the ISA and test the cpu with more programs, nevertheless I am very satisfied with what my team and I were able to accomplish. Here is a list of what we completed:
