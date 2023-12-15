@@ -65,6 +65,8 @@ case (ALUControl)
             ALUResult = 0;
     endcase;
 ```
+
+
 ### Zero Flag
 The Zero flag is set to 1 if the ALUResult is zero, providing a status indicator for conditional branching in the RISC-V processor.
 ```System Verilog
@@ -77,7 +79,8 @@ case (ALUResult)
 Upon completion of the ALU design, I wrote a testbench for verification. The testbench sets the input SrcA and SrcB to certain values, loops through all 14 instructions and outputs the ALUResult and Zero Flag
 The output I got from the testbench verifies my ALU design. Below is the output when SrcA is set to 3 and SrcB is set to 5:
 
-<img width="165" alt="Screenshot 2023-12-15 at 6 21 41 PM" src="https://github.com/zoezheng04/Team-8/assets/137006967/5a2d1f1c-6a7e-46cc-9f0c-c16f952c0dc1">
+<img width="175" alt="Screenshot 2023-12-15 at 7 18 03 PM" src="https://github.com/zoezheng04/Team-8/assets/137006967/15e8ceda-2f93-44da-93de-4c7a2e7a0578">
+
 
 
 ## Cache
