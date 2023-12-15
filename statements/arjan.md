@@ -13,14 +13,14 @@
 - [Reflection](#reflection)
   
 ## Overview
-This statement gives an overview of my contributions to the project. All design decisions, modules, files abd any relevant structural or minor changes are detailed in the sections below:
+This statement gives an overview of my contributions to the project. All design decisions, modules, files and any relevant structural or minor changes are detailed in the sections below:
 * Full responsibility of writing, designing and testing the [Control Unit](path/to/Control-Unit) for single cycle and pipelining.
 * Full responsibility of writing, designing and testing the [Pipelined CPU](path/to/Pipelined-CPU).
-* Minor changes to the Register File, Programme Counter and Control Unit to accommodate the Pipelined CPU. 
+* [Minor changes](#Minor-Changes-and-optimisations) to the Register File, Programme Counter and Control Unit to accommodate the Pipelined CPU. 
 
 ## Control Unit
 ### Module Description
-The Control Unit handles decoding of an instruction and identifies the type of instruction, enables register and memory write access, and generation of control signals, its role is pivotal in a Risc-v cpu.
+The Control Unit handles decoding of an instruction, it identifies instruction type, enables register and memory write access, and generates control signals, its role is pivotal in a Risc-v cpu.
 ### Control Signal Generation
 I first started with making an enum to represent all the different instruction types so that it was clear what each opcode represented.
 
@@ -92,66 +92,23 @@ Here is of one of the pipeline registers:
 module RegD (
     input logic                 RegWriteD,
     input logic                 ResultSrcD,
-    input logic                 MemWriteD,
-    input logic  [3:0]          ALUctrlD,
-    input logic                 ALUsrcD,
-    input logic  [31:0]         RD1D,
-    input logic  [31:0]         RD2D,
-    input logic  [4:0]          Rs1D,
-    input logic  [4:0]          Rs2D,
-    input logic  [4:0]          RdD,
-    input logic  [31:0]         ExtImmD,
-    input logic                 clk,
-    input logic                 FlushD,
-    input logic                 MemTypeD,
+    input logic                 MemWriteD,....
 
-    output logic                 RegWriteE,
+ ...output logic                 RegWriteE,
     output logic                 ResultSrcE,
-    output logic                 MemWriteE,
-    output logic  [3:0]          ALUctrlE,
-    output logic                 ALUsrcE,
-    output logic  [31:0]         RD1E,
-    output logic  [31:0]         RD2E,
-    output logic  [4:0]          Rs1E,
-    output logic  [4:0]          Rs2E,
-    output logic  [4:0]          RdE,
-    output logic  [31:0]         ExtImmE,
-    output logic                 MemTypeE
-
-);
+    output logic                 MemWriteE,....
     
-    always_ff @( negedge clk) begin
+... always_ff @( negedge clk) begin
         
         if (FlushD) begin 
             RegWriteE   <= 0;
             ResultSrcE  <= 0;
-            MemWriteE   <= 0;
-            ALUctrlE    <= 0;
-            ALUsrcE     <= 0;
-            RD1E        <= 0;
-            RD2E        <= 0;
-            Rs1E        <= 0;
-            Rs2E        <= 0;
-            RdE         <= 0;
-            ExtImmE     <= 0;
-            MemTypeE    <= 0;
-        end else begin
+            MemWriteE   <= 0;.....
+    ....end else begin
             RegWriteE   <= RegWriteD;
             ResultSrcE  <= ResultSrcD;
-            MemWriteE   <= MemWriteD;
-            ALUctrlE    <= ALUctrlD;
-            ALUsrcE     <= ALUsrcD;
-            RD1E        <= RD1D;
-            RD2E        <= RD2D;
-            Rs1E        <= Rs1D;
-            Rs2E        <= Rs2D;
-            RdE         <= RdD;
-            ExtImmE     <= ExtImmD;
-            MemTypeE    <= MemTypeD;
-        end
-    end
+            MemWriteE   <= MemWriteD;.....
 
-endmodule
 ```
 Pipelining promises a faster, more efficient cpu and the pipeline registers were easy to implement, however pipelining causes problems that we must address...
 
@@ -184,10 +141,10 @@ always_comb begin
             ForwardBE = 2'b10; // Forward data from memory stage (M) to execute stage (E) for RD2E
 end
 ```
-Forwarding data incurrs no cycle penalty so the cpu is running most efficiently.
+Forwarding data incurrs no clock cycle penalty so the cpu is running optimally.
 
 #### Load Hazards
-Load hazards occur whenever there is a data dependancy on a value that has not yet been read from memory, you are not able to forward the value after the execute stage as it will be the address that is forwarded, not the actually value. Instead we must stall the pipeline one cycle and flush register D as to not carry out the next instruction twice. Then we are able to forward the correct value read from memory.
+Load hazards occur whenever there is a data dependancy on a value that has not yet been read from memory, you are not able to forward the value until the memory stage, otherwise you will be forwarding the memory address and not the actually value. Instead we must stall the pipeline one cycle and flush register D as to not carry out the next instruction twice. Then we are able to forward the correct value read from memory.
 
 ![](images/lwstall.PNG)
 
@@ -197,7 +154,7 @@ Load hazards occur whenever there is a data dependancy on a value that has not y
     StallF  = (lwstall || BranchStall);  // Stall registers (F) and (D) for load and branch hazards
     FlushD  = (lwstall);                 // Flush register (E) for load hazards.........
 ```
-
+With load hazards there is not much room to improve, whenever there is a data dependancy we must stall, there is no prediction and no optimizations.
 #### Control Hazards
 Control hazards occur when branch instructions are involved. It occurs because at a branch the next instruction is only calculated after the branch condition is calculated at the execute stage. I made major structural changes to the design of this by moving the PCBranch and PCSrc to the decode stage. I then compare the two registers that are involved in the instruction and depending on which branch it is (BEQ) or (BNE) I set PCNext accordingly. This way I avoid the flushing penalty of flushing the fetch and decode, instead I am able to at most lose one clock cycle to a branch.
 In doing it that way there is a possibility of a data hazard where the previous instruction could be altering the same register in the execute stage. In that case I stall the cpu for one cycle and forward the data back to the decode stage with 'ForwardAD & ForwardBD'
@@ -223,25 +180,29 @@ One trick is to always predict that backwards branches will always be taken and 
 Ofcourse this prediction logic will only be executed during a branchstall, this would mean that whever there is a data dependancy that doesn't allow us to immediately calculate PCBranchD in the decode stage we can predict. This method means we need to add some logic to our cpu.
 
 ```System Verilog
-    if(BranchD && Branchstall) // If instruction is a branch and there is data dependancy (we dont actually stall)
-        PCBranchD = (PCD > (ExtImmD_wire + PCD)) ? (ExtImmD_wire + PCD) : PCPlus4D; // If target address is less than current programme counter, predict that we take the branch, else set Branch to next instruction.
+        assign PCBranchD = ((PCD) > (ExtImmD_wire + PCD)) ? (ExtImmD_wire + PCD) : PCPlus4D; // Sets PC
+        assign PCSrcD = (PCBranchD != PCPlus4D);
+        assign BranchReturn_wire = (PCBranchD == PCPlus4D) ? (ExtImmD_wire + PCD) : PCPlus4D;
+        assign BranchTaken_wire  = PCSrcD;
 ```
 This let's us ignore the branchstall (for now) as we have predicted the next instruction. However we must check the result of the execution stage in the next clock cycle, with the updated data now available we can check if we made a correct prediction.
 
 ```System Verilog
 logic         MissPrediction; // This value would be set by the ALU when the branch is calculated
-logic [31:0]  BranchE;        // This value is passed through from decode stage in case of branch miss prediction
+logic [31:0]  BranchReturnE;  // This value is passed through from decode stage in case of branch miss prediction
 
-    if(BranchE) begin   // Branch is now in execute stage
-        FlushF = (MissPrediction); // Flush Reg F if we miss predicted the branch
-        PCBranchE = (MissPrediction) ? (BranchE) : 32'b0; // We make pass through to the programme counter the correct PC. We then must also pass through the MissPrediction flag to let it know to use PCBranchE
-    end..........
+    case (ALUctrlE)
+    4'b0001: assign MissPredictionE = ((BranchTakenD != ALUResult)); // BNE
+    4'b1101: assign MissPredictionE = ((BranchTakenD != ALUResult)); // BEQ
+    default: assign MissPredictionE = 0;
+endcase
+assign BranchReturnE = BranchReturnD; // Passed from decode stage through pipeline register (D)
 ```
-This simple logic allows us to predict and correct branch predictions. Now when there is a branch dependancy we can predict the branch to avoid miss prediction penalties, and if we get the prediction wrong we incurr only a 1 clock cycle penalty. This means our Risc-v cpu is super fast and efficient.
+This simple logic allows us to predict and correct branch predictions. Now when there is a branch dependancy we can predict the branch to avoid miss prediction penalties, and if we get the prediction wrong we incurr only a 1 clock cycle penalty. While testing the branch prediction i saw that it made the reference programme extremely effiecient, having a 95+% success rate, but for the f1 programme the success rate was closer to 60%, this was due to the programme not having as many backwards branches that was frequently taken. Even considering this we were able to predict most of the branchstalls and incurr 60-95% less clock cycle delay. This means our Risc-v cpu is super fast and efficient.
 
 ## Top file and Testing
 ### Top file
-For the pipelined cpu I made 6 separate top files, one for each stage: Fetch, Decode, Execute, Memory & Write-back and one top file that combines them all along with the hazard unit. This allowed me to easily test and debug the cpu as well as make changes where neccessary. Here is the top file below: 
+For the pipelined cpu I made 6 separate top files, one for each stage: Fetch, Decode, Execute, Memory & Write-back and one top file that combines them all along with the hazard unit. This allowed me to easily test and debug the cpu as well as make changes where neccessary. Here is the structure of my top file:
 ```System Verilog
 module top (
     input logic             clk,
@@ -252,150 +213,47 @@ module top (
 );
 
 //////////////////// WIRES /////////////////////
-logic [31:0]        InstrD_wire, ExtImmE_wire, ALUResultM_wire, ALUResultW_wire, ResultW_wire;
-logic [31:0]        PCBranchD_wire, ReadDataW_wire;
-logic [31:0]        PCPlus4D_wire, WriteDataM_wire, RD1E_wire, RD2E_wire;
-logic [3:0]         ALUctrlE_wire;
-logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, StallF_wire, StallPC_wire;
-logic [1:0]         ForwardAE_wire, ForwardBE_wire;
-logic               MemWriteE_wire, MemWriteM_wire, ForwardAD_wire, ForwardBD_wire;
-logic               PCSrcD_wire, ALUsrcE_wire, MemTypeE_wire, MemTypeM_wire;
-logic [4:0]         Rs1E_wire, Rs2E_wire, RdE_wire, RdM_wire, RdW_wire, Rs1D_wire, Rs2D_wire;
-logic               ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, BranchD_wire, FlushD_wire;
+logic [31:0]        InstrD_wire, ExtImmE_wire, ALUResultM_wire, ALUResultW_wire, ResultW_wire;.......
+
 //////////////////// FETCH /////////////////////
 Fetch Fetch_Stage(
     /////// INPUTS ////////
-    .clk(clk),
-    .reset(reset),
-    .trigger(trigger), 
-    .StallPC(StallPC_wire),
-    .StallF(StallF_wire),
-    .PCBranchD(PCBranchD_wire),
-    .PCSrcD(PCSrcD_wire),
-    .BranchD(BranchD_wire),
-    /////// OUTPUTS ///////
-    .InstrD(InstrD_wire),
-    .PCPlus4D(PCPlus4D_wire) 
+.............
 );
 
 //////////////////// DECODE /////////////////////
 Decode Decode_Stage(
     /////// INPUTS ////////
-    .clk(clk),
-    .FlushD(FlushD_wire),
-    .InstrD(InstrD_wire),
-    .PCPlus4D(PCPlus4D_wire),
-    .RegWriteW(RegWriteW_wire),
-    .RdW(RdW_wire),
-    .ResultW(ResultW_wire),
-    .ALUOutM(ALUResultM_wire),
-    .ForwardAD(ForwardAD_wire),
-    .ForwardBD(ForwardBD_wire),
-    /////// OUTPUTS ///////
-    .RegWriteE(RegWriteE_wire),
-    .ResultSrcE(ResultSrcE_wire),
-    .MemWriteE(MemWriteE_wire),
-    .PCSrcD(PCSrcD_wire),
-    .ALUctrlE(ALUctrlE_wire),
-    .ALUsrcE(ALUsrcE_wire),
-    .RD1E(RD1E_wire),
-    .RD2E(RD2E_wire),
-    .Rs1E(Rs1E_wire),
-    .Rs2E(Rs2E_wire),
-    .Rs1D(Rs1D_wire),
-    .Rs2D(Rs2D_wire),
-    .RdE(RdE_wire),
-    .ExtImmE(ExtImmE_wire),
-    .PCBranchD(PCBranchD_wire),
-    .BranchD(BranchD_wire),
-    .MemTypeE(MemTypeE_wire),
-    .a0(a0)
+.............
 );
 
 //////////////////// EXECUTE ////////////////////
 Execute Execute_Stage(
     /////// INPUTS ////////
-    .clk(clk),
-    .RegWriteE(RegWriteE_wire),
-    .ResultSrcE(ResultSrcE_wire),
-    .MemWriteE(MemWriteE_wire),
-    .ALUctrlE(ALUctrlE_wire),
-    .ALUsrcE(ALUsrcE_wire),
-    .RD1E(RD1E_wire),
-    .RD2E(RD2E_wire),
-    .RdE(RdE_wire),
-    .ExtImmE(ExtImmE_wire),
-    .ForwardAE(ForwardAE_wire),
-    .ForwardBE(ForwardBE_wire),
-    .ResultW(ResultW_wire),
-    .MemTypeE(MemTypeE_wire),
-    /////// OUTPUTS ///////
-    .RegWriteM(RegWriteM_wire),
-    .ResultSrcM(ResultSrcM_wire),
-    .MemWriteM(MemWriteM_wire),
-    .ALUResultM(ALUResultM_wire),
-    .WriteDataM(WriteDataM_wire),
-    .RdM(RdM_wire),
-    .MemTypeM(MemTypeM_wire)
+..............
 );
 
 //////////////////// MEMORY /////////////////////
 Memory Memory_Stage(
     /////// INPUTS ////////
-    .clk(clk),
-    .RegWriteM(RegWriteM_wire),
-    .ResultSrcM(ResultSrcM_wire),
-    .MemWriteM(MemWriteM_wire),
-    .ALUResultM(ALUResultM_wire),
-    .WriteDataM(WriteDataM_wire),
-    .RdM(RdM_wire),
-    .MemTypeM(MemTypeM_wire),
-    /////// OUTPUTS ///////
-    .RegWriteW(RegWriteW_wire),
-    .ResultSrcW(ResultSrcW_wire),
-    .ALUResultW(ALUResultW_wire),
-    .ReadDataW(ReadDataW_wire),
-    .RdW(RdW_wire)
+...................
 );
 
 //////////////////// WRITE BACK /////////////////
 WriteBack WriteBack_Stage(
     /////// INPUTS ////////
-    .ResultSrcW(ResultSrcW_wire),
-    .ALUResultW(ALUResultW_wire),
-    .ReadDataW(ReadDataW_wire),
-    /////// OUTPUTS ///////
-    .ResultW(ResultW_wire)
-);
+ ................
+};
 
 //////////////////// HAZARD UNIT/////////////////
 HazardUnit HazardUnit(
     /////// INPUTS ////////
-    .Rs1E(Rs1E_wire),
-    .Rs2E(Rs2E_wire),
-    .Rs1D(Rs1D_wire),
-    .Rs2D(Rs2D_wire),
-    .BranchD(BranchD_wire),
-    .RegWriteE(RegWriteE_wire),
-    .ResultSrcE(ResultSrcE_wire),
-    .ResultSrcM(ResultSrcM_wire),
-    .WriteRegE(RdE_wire),
-    .RdM(RdM_wire),
-    .RegWriteM(RegWriteM_wire),
-    .RdW(RdW_wire),
-    .RegWriteW(RegWriteW_wire),
-    /////// OUTPUTS ///////
-    .ForwardAE(ForwardAE_wire),  
-    .ForwardBE(ForwardBE_wire),  
-    .ForwardAD(ForwardAD_wire),
-    .ForwardBD(ForwardBD_wire),
-    .StallF(StallF_wire),
-    .StallPC(StallPC_wire),
-    .FlushD(FlushD_wire)
+.................
 );
 
 endmodule
 ```
+
 
 ### Testing 
 I spent a lot of time rigorously testing and debugging the cpu trying to find potential bugs and optimisations. I have included the f1 lights and the gaussian pdf below.
@@ -411,28 +269,16 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 
 ## Minor Changes and optimisations
 To accommodate the pipelined cpu I made some changes to a few modules to help with performance, efficiency and compatibility.
- * I changed the register write from synchronous to asynchronous. This allowed me to avoid hazards with data updating to the registers too late due to dependancies so as soon as a value is passed to the write-back stage it is almost instantly written( Only if the write enable is true ofcourse).
+ * I changed the register write from synchronous to asynchronous. This allowed me to avoid hazards with data updating to the registers too late due to dependancies so as soon as a value is passed to the write-back stage it is almost instantly written( Only if the write enable is true of course).
  * I changed the PC counter to be able to Stall whenever a hazard required it to stall.
  * I optimized the decode stage so that JAL and JALR instructions are computed instantly and incurr no data dependancy or stall delay.
  * I optimized the branch instruction so that the maximum penalty occured is only 1 clock cycle.
 
 ## Reflection
-I feel as though I have contributed significantly to this project and have made alot of progress in my SystemVerilog skills as well as computer architecture and git knowledge. If time permitted I would have liked to implement all the instructions of the ISA and test the cpu with more programs, however I am very satisfied with what my team and I were able to accomplish. Here is a list of what we completed:
+I feel as though I have contributed significantly to this project and have made alot of progress in my SystemVerilog skills as well as computer architecture and git knowledge. If time permitted I would have liked to implement all the instructions of the ISA and test the cpu with more programs, nevertheless I am very satisfied with what my team and I were able to accomplish. Here is a list of what we completed:
 
 * Fully working Single cycle cpu.
 * Fully working Pipelined cpu.
 * Fully working Hazard prevention.
 * Fully working Branch prediction.
-* Fully working Cache integrated into the pipelined cpu.
-
-
-
-
-
-
-
-
-
-
-
-
+* Fully integrated Direct mapped Cache into the pipelined cpu.
