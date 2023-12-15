@@ -13,7 +13,7 @@
 
 ## Introduction
 
-Team 8 was able to complete and test a fully pipelined Risc-v RV32I with hazard prevention, branch prediction and direct mapped cache. 
+Team 8 was able to complete and test a fully pipelined RISC-V RV32I with hazard prevention, branch prediction and direct mapped cache. 
 
 ## Individual Statements
 
