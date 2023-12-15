@@ -22,7 +22,11 @@ always_comb begin
         4'b1010: ALUResult = SrcA ^ SrcB; //XOR
         4'b1011: ALUResult = SrcA | SrcB; //OR
         4'b1100: ALUResult = SrcA & SrcB; //AND
+<<<<<<< HEAD
         4'b1101: ALUResult = (SrcA ^ SrcB); //BEQ
+=======
+        4'b1101: ALUResult = 32'(SrcA == SrcB); //BEQ
+>>>>>>> v2.0-Pipeline
         default:
             ALUResult = 0;
     endcase

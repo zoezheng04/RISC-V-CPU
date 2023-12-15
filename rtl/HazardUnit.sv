@@ -20,9 +20,9 @@ module HazardUnit (
     output logic            ForwardBD,  
     output logic            StallF,
     output logic            StallPC,
+    output logic            Branchstall,
     output logic            FlushD
 );
-logic                BranchStall;
 logic                lwstall;
     
 always_comb begin
@@ -33,13 +33,15 @@ always_comb begin
     ForwardAD = ((Rs1D != 0) && (Rs1D == RdM) && RegWriteM); // Forward data from memory stage (M) to decode stage (D) for RD1D
     ForwardBD = ((Rs2D != 0) && (Rs2D == RdM) && RegWriteM); // Forward data from memory stage (M) to decode stage (D) for RD2D
 
-    // Stall registers for branch instructions in the decode stage (D) and there are data dependencies in execute (E) or memory (M) stages
-    BranchStall = (BranchD && RegWriteE && ((WriteRegE == Rs1D) || (WriteRegE == Rs2D))) || (BranchD && ResultSrcM && ((RdM == Rs1D) || (RdM == Rs2D)));
-    lwstall   = ((RegWriteE && ResultSrcE)); // Stall when Load instruction is detected in execute stage (E)
+    // Stall registers for branch instructions in the decode stage (D) and there are data dependancies in execute (E) or memory (M) stages
+    Branchstall = (BranchD && RegWriteE && ((WriteRegE == Rs1D) || (WriteRegE == Rs2D))) || (BranchD && ResultSrcM && ((RdM == Rs1D) || (RdM == Rs2D)));
+    // Stall when Load instruction is detected in execute stage (E) and there are data dependancies in decode stage (D)
+    lwstall   = ((RegWriteE && ResultSrcE)); 
 
-    StallPC = (lwstall || BranchStall);      // Stall registers (F) and (D) for load and branch hazards
-    StallF = (lwstall || BranchStall);      // Stall registers (F) and (D) for load and branch hazards
-    FlushD = (lwstall);                     // Flush register (E) for load hazards
+    StallPC = (lwstall);     // Stall registers (F) and (D) for load and branch hazards
+    StallF  = (lwstall);     // Stall registers (F) and (D) for load and branch hazards
+    FlushD  = (lwstall);     // Flush register (D) for load hazards
+    
     
         if ((Rs1E != 0) && RegWriteW && (RdW == Rs1E)) 
             ForwardAE = 2'b01; // Forward data from write-back stage (W) to execute stage (E) for RD1E

@@ -13,6 +13,8 @@ module RegD (
     input logic                 clk,
     input logic                 FlushD,
     input logic                 MemTypeD,
+    input logic  [31:0]         BranchReturnD,
+    input logic                 BranchTakenD,
 
     output logic                 RegWriteE,
     output logic                 ResultSrcE,
@@ -25,7 +27,9 @@ module RegD (
     output logic  [4:0]          Rs2E,
     output logic  [4:0]          RdE,
     output logic  [31:0]         ExtImmE,
-    output logic                 MemTypeE
+    output logic                 MemTypeE,
+    output logic  [31:0]         BranchReturn,
+    output logic                 BranchTaken
 
 );
     
@@ -44,6 +48,8 @@ module RegD (
             RdE         <= 0;
             ExtImmE     <= 0;
             MemTypeE    <= 0;
+            BranchReturn <= 0;
+            BranchTaken <= 0;
         end else begin
             RegWriteE   <= RegWriteD;
             ResultSrcE  <= ResultSrcD;
@@ -57,6 +63,8 @@ module RegD (
             RdE         <= RdD;
             ExtImmE     <= ExtImmD;
             MemTypeE    <= MemTypeD;
+            BranchReturn <= BranchReturnD;
+            BranchTaken <= BranchTakenD;
         end
     end
 
