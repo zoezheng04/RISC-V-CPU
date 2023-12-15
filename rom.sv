@@ -18,8 +18,6 @@ always_comb begin
             rom_array[addr + 2],        // bits 23:16
             rom_array[addr + 1],        // bits 15:8
             rom_array[addr]};           // bits 7:0   
-            if(dout == 0) 
-                dout = 32'h00000013;
 end     // need little endian byte addressing
 
 endmodule
