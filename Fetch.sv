@@ -22,7 +22,7 @@ logic                    MissPredictionE_wire;
 
 //////////////// Assignments /////////////////
 assign PCPlus4F_wire = PCF_wire + 4;
-assign PCNext_wire = (trigger ? (MissPredictionE ? BranchReturnE : ((PCSrcD ? PCBranchD : PCPlus4F_wire))) : 32'h0);
+assign PCNext_wire = (trigger ? (MissPredictionE ? BranchReturnE : ((PCSrcD ? PCBranchD : PCPlus4F_wire))) : 32'hBFC00000);
 assign MissPredictionE_wire = MissPredictionE;
 always_ff @(posedge clk) begin
         MissPredictionE_wire = 0;
