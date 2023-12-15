@@ -30,6 +30,8 @@ source ./pdf.sh
 
 ```
 
+To test the PDF Program with different dataset, please go to rtl/DataMemory.sv and change line 17 manually.
+
 ## Testing Evidence
 ### F1 Program
 
