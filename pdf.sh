@@ -1,3 +1,5 @@
+sed -i 's/f1.mem/pdf.hex/' rom.sv
+
 rm -rf obj_dir
 rm -f  Vtop.vcd
 
