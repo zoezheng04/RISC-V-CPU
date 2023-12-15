@@ -3,6 +3,8 @@
 
 ---
 
+</center>
+
 ## Overview
 - [Repo Structure](#Repo-Structure) 
 - [PC](#PC)
@@ -105,7 +107,7 @@ Refer to the “delay” label for the implementation. After illuminating a ligh
 
 To generate a random number, the linear feedback shift register (LFSR) was implemented. The following figure aims to make my explanation of the logic behind my code easier to understand.
 
-[Insert image]
+<p align="center"> <img src="images/lfsr.png" /> </p>
 
 Refer to the “lfsr” label for this section. This 7-bit PRBS generator (from Lab 3 Task 4), with taps at positions 3 and 7, employed the 7th order primitive polynomial to provide maximal length. We initialised it with a value of 8 to ensure noticeable changes in delay. Utilising the Shift Right Logical Immediate (SRLI) instruction, we determined the bits at positions 3 and 7. XORing these 'taps' with the shifted sequences yielded the feedback bit which was then extracted using the AND Immediate (ANDI) instruction. Finally, the seed underwent a left shift by 1 bit, incorporating the extracted feedback bit at position 1. This process accurately replicated manual LFSR operations.
 
