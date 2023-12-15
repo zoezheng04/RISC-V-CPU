@@ -231,7 +231,7 @@ After numerous trial-and-error attempts, I pinpointed the root cause to be the A
 
 <p align="center"> <img src="images/control_unit_debug.png" /> </p>
 
->Note that the binary representation of 8 (1000) of the ALUCtrl corresponds to our SUB operation in the ALU.
+>Note that the binary representation of 8 (1000) of the ALUCtrl corresponds to our SUB operation in the ALU. Register 11 is a1 and Imm_o is the output of the sign extension unit.
 
 To rectify the issue, I scrutinised the machine code. Upon reviewing the table below, I recognised that distinguishing between an ADD and an SUB operation with signed numbers required consideration of not only funct7 (bit 30 of the machine code) but also the opcode, specifically opcode[5]. 
 
