@@ -27,7 +27,6 @@ Fetch Fetch_Stage(
     .StallF(StallF_wire),
     .PCBranchD(PCBranchD_wire),
     .PCSrcD(PCSrcD_wire),
-    .BranchD(BranchD_wire),
     .BranchReturnE(BranchReturnE_wire),
     .MissPredictionE(MissPredictionE_wire),
     /////// OUTPUTS ///////
@@ -91,7 +90,6 @@ Execute Execute_Stage(
     .BranchReturnD(BranchReturnD_wire),
     .BranchTakenD(BranchTakenD_wire),
     .MemTypeE(MemTypeE_wire),
-    .Branchstall(Branchstall_wire),
     /////// OUTPUTS ///////
     .RegWriteM(RegWriteM_wire),
     .ResultSrcM(ResultSrcM_wire),
@@ -149,7 +147,6 @@ HazardUnit HazardUnit(
     .RegWriteM(RegWriteM_wire),
     .RdW(RdW_wire),
     .RegWriteW(RegWriteW_wire),
-    .MissPredictionE(MissPredictionE_wire),
     /////// OUTPUTS ///////
     .ForwardAE(ForwardAE_wire),  
     .ForwardBE(ForwardBE_wire),  
