@@ -97,8 +97,8 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 
 | Property                | Value         |
 |-------------------------|---------------|
-| Instruction Memory Size |       |
-| Instruction Width       |       |
+| Instruction Memory Size |   2^12 bits    |
+| Instruction Width       |   32 bits    |
 | Data Memory Size        |   2^17 bits   |
 | Data Width              |    8-bit      |
 | Data Cache Size         |   128 bytes   |
