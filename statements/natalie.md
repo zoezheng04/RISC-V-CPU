@@ -1,5 +1,5 @@
 # Personal Statement of Contributions
-*Natalie Lin*
+***Natalie Lin***
 
 ---
 
@@ -25,7 +25,7 @@ My central focus during the project was the implementation of the single-cycle R
 
 ## Repo Structure
 
-**Relevant commit:**
+***Relevant commit:***
 - [Update README.md](https://github.com/zoezheng04/Team-8/commit/2c574e15d412650dbae81de8892b47307a979cdf)
 
 Drawing from the lessons learned in Lab 4, disorganization emerged as a significant challenge. All team members pushed untested files to the same branch, resulting in an unwieldy list of files that made locating specific files for debugging both time-consuming and challenging. Additionally, communication gaps led to the creation of duplicate files – for example, we each created a multiplexer for the component we were responsible for when the same multiplexer could essentially be used for multiple purposes.
@@ -42,9 +42,9 @@ These guidelines were documented in the readme file of the main repository, serv
 
 ## PC
 
-**Relevant commits:**
--	PC from Lab 4
--	Fixed syntax error
+***Relevant commits:***
+-	[PC from Lab 4](https://github.com/zoezheng04/Team-8/commit/e458d80482b54d69b6ba4e547c9ada7abce21c9b)
+-	[Fixed syntax error](https://github.com/zoezheng04/Team-8/commit/f2258b94609fd81dff4fe54cd2358634274634d8)
 
 The PC unit remains largely unchanged from Lab 4, maintaining a straightforward design as a synchronous counter responsible for providing the address of the current instruction in execution. What made it slightly different from Lab 4 is its interconnection with other CPU components. Instead of directly linking it to a multiplexer to determine what PCNext should be (PC + 4 or PC + Imm for branch instructions) within the PC branch, we opted to handle this connection in the top file.
 
@@ -54,9 +54,9 @@ This strategic decision aims to improve the organisation within the rtl folder, 
 
 ## Data Memory
 
-**Relevant commits:**
--	Created and tested DataMemory
--	Updated DataMemory for the reference program
+***Relevant commits:***
+-	[Created and tested DataMemory](https://github.com/zoezheng04/Team-8/commit/564cdbc8983a444d5dfedb559152d6db85fa3b94)
+-	[Updated DataMemory for the reference program](https://github.com/zoezheng04/Team-8/commit/d50f3c1006d134147fd2a4b43b8031da8d45295d)
 
 When initially creating the data memory, the data memory was a memory file very similar to the instruction memory but as a RAM, allowing write operations with a high WriteEnable (WE) control signal. This setup successfully executed our F1 program, which only used load and store word instructions.
 
@@ -83,10 +83,10 @@ The writing process is similar to the reading procedure. Bytes are selected from
 
 ## F1 Program
 
-**Relevant commit:**
--	Created f1.s
--	Created f1.mem
--	Converted from big-endian to little-endian
+***Relevant commit:***
+-	[Created f1.s](https://github.com/zoezheng04/Team-8/commit/2431459a0c7ba1751d2bfd6c522b0d281dac6ea2)
+-	[Created f1.mem](https://github.com/zoezheng04/Team-8/commit/877adb57f58872f954b2615668b628da70f32f66)
+-	[Converted from big-endian to little-endian](https://github.com/zoezheng04/Team-8/commit/71c0ad3ffa4cf795af146b50890959eb7951351a)
 
 Before developing the F1 starting light program, my teammate Gurjan and I devised a method to illuminate lights sequentially using the Shift Left Logical Immediate (SLLI) and Add Immediate (ADDI) instructions. I extended this concept to create the assembly program, incorporating constant delays between each light and introducing a random delay before turning all lights on and off. The final assembly program for the single-cycle processor is provided below:
 
@@ -114,10 +114,10 @@ After generating the random number, the program proceeds to the “countdown” 
 
 ## Single-cycle debugging
 
-**Relevant commits:**
--	Testing with the reference program
--	Modified control unit and data memory
--	Got the single-cycle to work with both the F1 program and the reference program
+***Relevant commits:***
+-	[Testing with the reference program](https://github.com/zoezheng04/Team-8/commit/ac8c1165d04dc2822a37a17eae1a639328f71e3e)
+-	[Modified control unit and data memory](https://github.com/zoezheng04/Team-8/commit/d50f3c1006d134147fd2a4b43b8031da8d45295d)
+-	[Got the single-cycle to work with both the F1 program and the reference program](https://github.com/zoezheng04/Team-8/commit/faad8892f6dbe1836bd8b3c14d01cd34e5eb7f50)
 
 **Approach:**
 The initial testing of the single-cycle CPU was undertaken by my teammate Gurjan. As previously mentioned, our single-cycle implementation only functioned with our F1 program. The problem was traced to line 15 of the reference program – ADDI  a1, a1, -1. By analysing the waveform, we observed that a1 was incremented, rather than decremented. Despite spending several days on debugging, the issue remained unresolved. Due to time constraints, debugging responsibilities were then transitioned to me, while Gurjan shifted his focus to pipelining and adding cache functionality.
@@ -125,11 +125,13 @@ The initial testing of the single-cycle CPU was undertaken by my teammate Gurjan
 To enhance my understanding of the CPU's overall operation, I meticulously reviewed all the code, cross-referencing it with the lecture slides. Additionally, I addressed syntax errors and warnings to ensure the proper functioning of the CPU.
 
 **ALU:**
+
 I initiated the debugging process by employing the ALU testbench created by my teammate Zoe. While the Add instruction was executed correctly, I identified certain ALU operations that required correction. The subsequent section outlines the modifications I made:
 
 [Insert code]
 
-Control Unit:
+**Control Unit:**
+
 Knowing that the issue did not stem from the ALU, I proceeded to test the sign extension unit, which operated flawlessly. Considering my teammate Gurjan's successful substitution of the line with a SUB instruction, achieving the desired plots, I narrowed down the problem to either the control unit or the top file.
 
 After numerous trial-and-error attempts, I pinpointed the root cause to be the ALUCtrl control signal. It was erroneously outputting the signal for an SUB operation instead of an ADD operation, as depicted in the waveform below. 
