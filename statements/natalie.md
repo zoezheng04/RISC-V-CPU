@@ -102,7 +102,7 @@ The data memory reads bytes in sequence, starting three addresses higher than th
 
 <p align="center"> <img src="images/data_memory_test.png" /> </p>
 
-<p align="center"> <img src="images/sine_data.png" /> </p>
+<p align="center"> <img src="images/sine_data.png" width = "400"> </p>
 
 > The data memory reads 4 bytes (32 bits) at a time, and while the expected data is retrieved successfully, it is observed to be in reversed order which is the little-endian format.
 
@@ -233,7 +233,13 @@ After numerous trial-and-error attempts, I pinpointed the root cause to be the A
 
 >Note that the binary representation of 8 (1000) corresponds to our SUB operation in the ALU.
 
-To rectify the issue, I scrutinised the machine code. Upon reviewing the table below, I recognised that distinguishing between an ADD and an SUB operation with signed numbers required consideration of not only funct7 (bit 30 of the machine code) but also the opcode, specifically opcode[5]. It became evident that opcode[5] was the sole bit differentiating between them.
+To rectify the issue, I scrutinised the machine code. Upon reviewing the table below, I recognised that distinguishing between an ADD and an SUB operation with signed numbers required consideration of not only funct7 (bit 30 of the machine code) but also the opcode, specifically opcode[5]. 
+
+<p align="center"> <img src="images/sub_instruction.png" width = "700"> </p>
+
+<p align="center"> <img src="images/addi_instruction.png" width = "700"> </p>
+
+>It became evident that opcode[5] was the sole bit differentiating between them, other than funct7.
 
 The solution was straightforward – I introduced a 2-bit logic named opfunct7, factoring in both opcode[5] and funct7. For our processor, designed exclusively for our F1 program and the reference program, it now implements an SUB operation only when both opcode[5] and funct7 are high. The modification is illustrated below:
 
