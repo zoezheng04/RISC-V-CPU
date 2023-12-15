@@ -8,13 +8,13 @@ module top (
 
 //////////////////// WIRES /////////////////////
 logic [31:0]        InstrD_wire, ExtImmE_wire, ALUResultM_wire, ALUResultW_wire, ResultW_wire;
-logic [31:0]        PCBranchD_wire, ReadDataW_wire;
+logic [31:0]        PCBranchD_wire, ReadDataW_wire, BranchReturnE_wire, BranchReturnD_wire;
 logic [31:0]        PCPlus4D_wire, WriteDataM_wire, RD1E_wire, RD2E_wire;
 logic [3:0]         ALUctrlE_wire;
 logic               RegWriteE_wire, RegWriteM_wire, RegWriteW_wire, StallF_wire, StallPC_wire;
 logic [1:0]         ForwardAE_wire, ForwardBE_wire;
-logic               MemWriteE_wire, MemWriteM_wire, ForwardAD_wire, ForwardBD_wire;
-logic               PCSrcD_wire, ALUsrcE_wire, MemTypeE_wire, MemTypeM_wire;
+logic               MemWriteE_wire, MemWriteM_wire, ForwardAD_wire, ForwardBD_wire, Branchstall_wire;
+logic               PCSrcD_wire, ALUsrcE_wire, MemTypeE_wire, MemTypeM_wire , MissPredictionE_wire, BranchTakenD_wire;
 logic [4:0]         Rs1E_wire, Rs2E_wire, RdE_wire, RdM_wire, RdW_wire, Rs1D_wire, Rs2D_wire;
 logic               ResultSrcE_wire, ResultSrcM_wire, ResultSrcW_wire, BranchD_wire, FlushD_wire;
 //////////////////// FETCH /////////////////////
@@ -28,6 +28,8 @@ Fetch Fetch_Stage(
     .PCBranchD(PCBranchD_wire),
     .PCSrcD(PCSrcD_wire),
     .BranchD(BranchD_wire),
+    .BranchReturnE(BranchReturnE_wire),
+    .MissPredictionE(MissPredictionE_wire),
     /////// OUTPUTS ///////
     .InstrD(InstrD_wire),
     .PCPlus4D(PCPlus4D_wire) 
@@ -46,6 +48,7 @@ Decode Decode_Stage(
     .ALUOutM(ALUResultM_wire),
     .ForwardAD(ForwardAD_wire),
     .ForwardBD(ForwardBD_wire),
+    .Branchstall(Branchstall_wire),
     /////// OUTPUTS ///////
     .RegWriteE(RegWriteE_wire),
     .ResultSrcE(ResultSrcE_wire),
@@ -63,6 +66,8 @@ Decode Decode_Stage(
     .ExtImmE(ExtImmE_wire),
     .PCBranchD(PCBranchD_wire),
     .BranchD(BranchD_wire),
+    .BranchReturnD(BranchReturnD_wire),
+    .BranchTakenD(BranchTakenD_wire),
     .MemTypeE(MemTypeE_wire),
     .a0(a0)
 );
@@ -83,7 +88,10 @@ Execute Execute_Stage(
     .ForwardAE(ForwardAE_wire),
     .ForwardBE(ForwardBE_wire),
     .ResultW(ResultW_wire),
+    .BranchReturnD(BranchReturnD_wire),
+    .BranchTakenD(BranchTakenD_wire),
     .MemTypeE(MemTypeE_wire),
+    .Branchstall(Branchstall_wire),
     /////// OUTPUTS ///////
     .RegWriteM(RegWriteM_wire),
     .ResultSrcM(ResultSrcM_wire),
@@ -91,6 +99,8 @@ Execute Execute_Stage(
     .ALUResultM(ALUResultM_wire),
     .WriteDataM(WriteDataM_wire),
     .RdM(RdM_wire),
+    .BranchReturnE(BranchReturnE_wire),
+    .MissPredictionE(MissPredictionE_wire),
     .MemTypeM(MemTypeM_wire)
 );
 
@@ -139,11 +149,13 @@ HazardUnit HazardUnit(
     .RegWriteM(RegWriteM_wire),
     .RdW(RdW_wire),
     .RegWriteW(RegWriteW_wire),
+    .MissPredictionE(MissPredictionE_wire),
     /////// OUTPUTS ///////
     .ForwardAE(ForwardAE_wire),  
     .ForwardBE(ForwardBE_wire),  
     .ForwardAD(ForwardAD_wire),
     .ForwardBD(ForwardBD_wire),
+    .Branchstall(Branchstall_wire),
     .StallF(StallF_wire),
     .StallPC(StallPC_wire),
     .FlushD(FlushD_wire)
