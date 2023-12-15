@@ -13,13 +13,13 @@
 
 ## Introduction
 
-Provide a brief introduction to the project.
+Team 8 was able to complete and test a fully pipelined Risc-v RV32I with hazard prevention, branch prediction and direct mapped cache. 
 
 ## Individual Statements
 
 | Name           | CID      | GitHub                 | Email                                                | Link to Individual Statements                |
 |----------------|----------|------------------------|------------------------------------------------------|----------------------------------------------|
-| Arjan Hayre    | xxxxxxxx | **The-Asgardian**      | ah321@imperial.ac.uk   &nbsp; &nbsp; &nbsp; &nbsp;   | [Arjan's Statement](statements/arjan.md)
+| Arjan Hayre    | 02137475 | **The-Asgardian**      | ah321@imperial.ac.uk   &nbsp; &nbsp; &nbsp; &nbsp;   | [Arjan's Statement](statements/arjan.md)
 | Gurjan Samra   | xxxxxxxx | **Gurjan-Singh-Samra** | xxxx@imperial.ac.uk                                  | [Gurjan's Statement](statements/gurjan.md)
 | Natalie Lin    | 02203331 | **natalietklin**       | nkl22@imperial.ac.uk                                 | [Natalie's Statement](statements/natalie.md)
 | Zoe Zheng      | 02083556 | **zoezheng04**         | zz4221@imperial.ac.uk                                | [Zoe's Statement](statements/zoe.md)
@@ -36,37 +36,48 @@ npm install
 ```
 
 ## Versions
-| Version name | Explanation | 
-| -----------------|-------------|
-| `v1.0-Single-Cycle` | 
-| `v2.0-Pipeline` | 
-| `v3.0-Data-Cache` |
+| Version name                  | Explanation | 
+| ------------------------------|-------------|
+| `v1.0-Single-Cycle`           | Full implementation of single cycle cpu
+| `v2.0-Pipeline`               | Full implementation of pipelining with hazard prevention and branch prediction
+| `v3.0-Cache`                  | Full integration of simple cache to pipelined cpu
+| `v3.0-Direct-Mapping-Cache`   | Full implementation and integration of Direct mapped cache
+| `v3.1-2-Way-Associative-Cache`| Attempted implementing 2 way associative cache
 ## Testing Evidence
-### F1 Program
-### PDF Program
+
+### F1 Program (v2.0-Pipeline)
+
+https://github.com/zoezheng04/Team-8/assets/77071320/fd6822dc-5333-4c37-a1f4-6c229a29222f
+
+### PDF Program (v2.0-Pipeline)
+
+https://github.com/zoezheng04/Team-8/assets/77071320/125d735b-eac5-423f-b6af-26eb5b7fdf0b
+
+Vbuddy is plotting every 8th value, making the waveform look like this.
 ## Contribution Table
 
-| Task                                       | Files    | Arjan | Gurjan | Natalie | Zoe |
+| Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
 |--------------------------------------------|----------|----------|--------|------------|--------|
-| **Single Cycle**                           |          |          |        |            |        |
-| Repo Setup                                 | |  | | |
-| F1 Program                                 | |  | | |
-| Program Counter & Instruction Memory        | |  | | |
-| Control Unit                               | |  | | |
-| Sign Extend                             | |  | | |
-| ALU                                        | |  | | |
-| Register File                           | |  | | |
-| Data Memory                                | |  | | |
-| Top Level Debugging                             | |  | | |
-| README.md                                  |  | | | |
-| **Pipeline**                               |          |          |        |            |        |
-|                                 |  | | | |
-|                                 |  | | | |
-|                                 |  | | | |
-| **Cache**                               |          |          |        |            |        |
-|                                 |  | | | |
-|                                 |  | | | |
-|                                 |  | | | |
+| **Single Cycle**                           |          |   p      |        |            |        |
+| Repo Setup                                 |          |          |        |            |
+| F1 Program                                 |          |          |        |            |
+| Program Counter & Instruction Memory       |          |          |        |            |
+| Control Unit                               |          |    x     |        |            |
+| Sign Extend                                |          |          |        |            |
+| ALU                                        |          |          |        |            |
+| Register File                              |          |          |        |            |
+| Data Memory                                |          |          |        |            |
+| Top Level Debugging                        |          |          |        |            |
+| README.md                                  |          |    p     |        |            |
+| **Pipeline**                               |          |    x     |        |            |        |
+| Pipelining Register Files                  |          |    x     |        |            |
+| Hazard Unit                                |          |    x     |        |            |
+| Branch Prediction                          |          |    x     |        |            |
+| Top files and Testing                      |          |    x     |        |            |
+| **Cache**                                  |          |          |        |            |        |
+|                                            |          |          |        |            |
+|                                            |          |          |        |            |
+|                                            |          |          |        |            |
 
 **Legend:**
  "x" - full responsibility
@@ -91,8 +102,16 @@ npm install
 | Type | Instructions         |
 |------|-----------------------|
 | R    |ADD, SUB, XOR, OR, AND, SLL, SRL           |
-| SB    |   BEQ, BNE               |
+| SB   |   BEQ, BNE               |
 | I    |LBU, JALR  |
 | S    |  SB              |
 | U    |  LUI                  |
 | J    |      JAL        |
+
+
+
+
+
+
+
+
