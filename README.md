@@ -13,7 +13,7 @@
 
 ## Introduction
 
-Team 8 was able to complete and test a fully pipelined Risc-v RV32I with hazard prevention, branch prediction and direct mapped cache. 
+Team 8 was able to complete and test a fully pipelined RISC-V RV32I with hazard prevention, branch prediction and direct mapped cache. 
 
 ## Individual Statements
 
@@ -38,11 +38,10 @@ npm install
 ## Versions
 | Version name                  | Explanation | 
 | ------------------------------|-------------|
-| `v1.0-Single-Cycle`           | Full implementation of single cycle cpu
-| `v2.0-Pipeline`               | Full implementation of pipelining with hazard prevention and branch prediction
-| `v3.0-Cache`                  | Full integration of simple cache to pipelined cpu
-| `v3.0-Direct-Mapping-Cache`   | Full implementation and integration of Direct mapped cache
-| `v3.1-2-Way-Associative-Cache`| Attempted implementing 2 way associative cache
+| [`v1.0-Single-Cycle`](https://github.com/zoezheng04/Team-8/tree/v1.0-Single-Cycle)           | Verified full implementation of single cycle RISC-V
+| [`v2.0-Pipeline`](https://github.com/zoezheng04/Team-8/tree/v2.0-Pipeline)               | Verified full implementation of a pipelined RISC-V with hazard prevention and branch prediction
+| [`v3.0-Direct-Mapping-Cache`](https://github.com/zoezheng04/Team-8/tree/v3.0-Direct-Mapping-Cache)   | Verified full implementation of a pipelined RISC-V with hazard prevention and branch prediction and a direct-mapped data cache
+| [`v3.1-2-Way-Associative-Cache`](https://github.com/zoezheng04/Team-8/tree/v3.1-2-Way-Associative-Cache)| Attempted implementation of a RISC-V with a 2-way set-associative data cache
 ## Testing Evidence
 
 ### F1 Program (v2.0-Pipeline)
@@ -56,28 +55,36 @@ https://github.com/zoezheng04/Team-8/assets/77071320/125d735b-eac5-423f-b6af-26e
 Vbuddy is plotting every 8th value, making the waveform look like this.
 ## Contribution Table
 
+**Single Cycle**
 | Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
 |--------------------------------------------|----------|----------|--------|------------|--------|
-| **Single Cycle**                           |          |   p      |        |            |        |
-| Repo Setup                                 |          |          |        |            |
-| F1 Program                                 |          |          |        |            |
-| Program Counter & Instruction Memory       |          |          |        |            |
-| Control Unit                               |          |    x     |        |            |
+| Repo Setup                                 |          |          |        |p           |x
+| F1 Program                                 |          |          |        |x           |
+| Program Counter                            |          |          |        |x           |
+| Instruction Memory                         |          |          |        |            |
+| Control Unit                               |          |    x     |        |p           |
 | Sign Extend                                |          |          |        |            |
-| ALU                                        |          |          |        |            |
-| Register File                              |          |          |        |            |
-| Data Memory                                |          |          |        |            |
-| Top Level Debugging                        |          |          |        |            |
-| README.md                                  |          |    p     |        |            |
-| **Pipeline**                               |          |    x     |        |            |        |
+| ALU                                        |          |          |        |p           |x
+| Register File                              |          |          |        |            |x
+| Data Memory                                |          |          |        |x           |
+| Top files                                  |          |          |        |p           |
+| Testing                                    |          |          |        |x           |
+| README.md                                  |          |    p     |        |            |p
+
+**Pipeline** 
+| Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
+|--------------------------------------------|----------|----------|--------|------------|--------|
 | Pipelining Register Files                  |          |    x     |        |            |
 | Hazard Unit                                |          |    x     |        |            |
 | Branch Prediction                          |          |    x     |        |            |
 | Top files and Testing                      |          |    x     |        |            |
-| **Cache**                                  |          |          |        |            |        |
-|                                            |          |          |        |            |
-|                                            |          |          |        |            |
-|                                            |          |          |        |            |
+
+**Cache**
+| Task                                       | Files    | Arjan    | Gurjan | Natalie    | Zoe    |
+|--------------------------------------------|----------|----------|--------|------------|--------|
+| Direct Mapped Cache                                           |          |          |        |            | x
+| Two Way Set Associative Cache              |          |         |        |            | x
+| Top files and Testing                      |          |          |        |            | p
 
 **Legend:**
  "x" - full responsibility
@@ -91,8 +98,8 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 |-------------------------|---------------|
 | Instruction Memory Size |       |
 | Instruction Width       |       |
-| Data Memory Size        |       |
-| Data Width              |    32 bits      |
+| Data Memory Size        |   2^17 bits   |
+| Data Width              |    8-bit      |
 | Data Cache Size         |   128 bytes   |
 | Data Cache Sets         |       8      |
 | Data Cache Ways         |     1         |
