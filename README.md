@@ -3,6 +3,8 @@
 ### Step 2: Configure vbuddy.cfg
 Connect Vbuddy to your computer's USB port using a USB cable provided. Find out the name of the USB device used, and configure vbuddy.cfg (which contains the device name as the only line (terminated with CR))
 
+Currently all the vbuddy.cfg files have the port number set as USB0. If this is not the case for yours, please change it accordingly!
+
 ### Step 3: Execute Shell Script
 
 #### F1 Program
@@ -18,6 +20,8 @@ source ./f1.sh
 source ./pdf.sh
 
 ```
+
+To test the PDF Program with different dataset, please go to rtl/DataMemory.sv and change line 17 manually.
 
 ## Testing Evidence
 ### F1 Program (v2.0-Pipeline)
