@@ -19,7 +19,7 @@ The following are my contributions:
 
 ## Register File
 ### Module Description
-The Register File module consists of an array of registers, each capable of holding data of the specified width of 5 bits. In the context of the project, this register file supports 32 registers.
+I first started making the register file. The Register File module consists of an array of registers, each capable of holding data of the specified width of 5 bits. In the context of the project, this register file supports 32 registers.
 
 ### Read and Write Operations
 To support read operations, the Register File module dynamically selects the read addresses based on the instruction's encoding. 
@@ -42,7 +42,7 @@ end
 
 ## ALU
 ### Module Description
-The ALU module I designed is parameterized to accommodate different data widths, providing flexibility for integration into the broader RISC-V architecture. The module takes two source operands, SrcA and SrcB, along with a 4-bit ALUControl signal from the Control Unit. It produces the ALUResult as the output, representing the result of the specified operation, and a Zero flag indicating whether the result is zero.
+Upon completing the register file, I started implementing the ALU. The ALU takes two source operands, SrcA and SrcB, along with a 4-bit ALUControl signal from the Control Unit. It produces the ALUResult as the output, representing the result of the specified operation, and a Zero flag indicating whether the result is zero.
 ### Supported Instructions
 The supported instructions of the ALU were determined based on the instructions used in the reference program as well as f1 program we wrote. The ALUControl signal selects one of the instructions to be executed, there are a total of  14 supported instructions required, so we chose the ALUControl signal to be 4 bits to accomodate this.
 ```System Verilog
@@ -225,12 +225,12 @@ Upon completing the design of a Two-Way Set Associative Cache, I attempted to te
 ## Reflection
 ### What I learend...
 #### 1. Github
-Throughout this project, I gained valuable insights into efficient Git usage. I learned how to adeptly manage repositories, execute push and pull operations, and leverage various features to streamline project management and collaboration.
+Throughout this project, I gained valuable insights into efficient Git usage. I learned how to adeptly manage repositories, execute push and pull operations. As the master of the github repo, I monitored the repo and worked on the README.md file, through this I learned how to use markdown and gained valuable skills leveraging various features to streamline project management and collaboration. 
 #### 2. System Verilog
 The project provided a deep dive into System Verilog and hardware design. From designing, translating schematics to HDL, I acquired a comprehensive understanding of hardware design principles and their implementation.
 #### 3. Testing and Debugging
-Testing and debugging became a central part of my workflow. I honed my skills in writing effective testbenches, addressing corner cases, and meticulously verifying functionality. The substantial debugging process also enhanced my problem-solving abilities.
+Testing and debugging became a central part of my workflow for this project. I honed my skills in writing effective testbenches, addressing corner cases, and meticulously verifying functionality. The substantial debugging process also enhanced my problem-solving abilities.
 #### 4. Collaboration
-Collaboration skills were a key takeaway. I learned how to efficiently organize workloads, distribute tasks, and collaborate effectively when encountering challenges. Utilizing Github as a collaboration tool and cross-checking each other's code became integral to our collaborative success.
+Collaboration skills were a key takeaway of this project. I learned how to efficiently organize workloads, distribute tasks, and collaborate effectively when encountering challenges. Utilizing Github as a collaboration tool and cross-checking other team member's code became integral to our collaborative success.
 ### What I would do differently...
 Reflecting on the project, I realize the importance of a more structured testing approach. When working on the two way set associative cache, I continued making the design more complex without testing, and it became difficult to test and debug at the end. In the future, I would prioritize testing individual components before introducing new features. Striking a balance between testing and implementation would be key, as this approach proves crucial when dealing with larger codebases, making debugging more manageable.
