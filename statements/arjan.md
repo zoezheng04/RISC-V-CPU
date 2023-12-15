@@ -141,10 +141,10 @@ always_comb begin
             ForwardBE = 2'b10; // Forward data from memory stage (M) to execute stage (E) for RD2E
 end
 ```
-Forwarding data incurrs no cycle penalty so the cpu is running most efficiently.
+Forwarding data incurrs no clock cycle penalty so the cpu is running optimally.
 
 #### Load Hazards
-Load hazards occur whenever there is a data dependancy on a value that has not yet been read from memory, you are not able to forward the value after the execute stage as it will be the address that is forwarded, not the actually value. Instead we must stall the pipeline one cycle and flush register D as to not carry out the next instruction twice. Then we are able to forward the correct value read from memory.
+Load hazards occur whenever there is a data dependancy on a value that has not yet been read from memory, you are not able to forward the value until the memory stage, otherwise you will be forwarding the memory address and not the actually value. Instead we must stall the pipeline one cycle and flush register D as to not carry out the next instruction twice. Then we are able to forward the correct value read from memory.
 
 ![](images/lwstall.PNG)
 
@@ -154,7 +154,7 @@ Load hazards occur whenever there is a data dependancy on a value that has not y
     StallF  = (lwstall || BranchStall);  // Stall registers (F) and (D) for load and branch hazards
     FlushD  = (lwstall);                 // Flush register (E) for load hazards.........
 ```
-
+With load hazards there is not much room to improve, whenever there is a data dependancy we must stall, there is no prediction and no optimizations.
 #### Control Hazards
 Control hazards occur when branch instructions are involved. It occurs because at a branch the next instruction is only calculated after the branch condition is calculated at the execute stage. I made major structural changes to the design of this by moving the PCBranch and PCSrc to the decode stage. I then compare the two registers that are involved in the instruction and depending on which branch it is (BEQ) or (BNE) I set PCNext accordingly. This way I avoid the flushing penalty of flushing the fetch and decode, instead I am able to at most lose one clock cycle to a branch.
 In doing it that way there is a possibility of a data hazard where the previous instruction could be altering the same register in the execute stage. In that case I stall the cpu for one cycle and forward the data back to the decode stage with 'ForwardAD & ForwardBD'
@@ -198,7 +198,7 @@ logic [31:0]  BranchReturnE;  // This value is passed through from decode stage 
 endcase
 assign BranchReturnE = BranchReturnD; // Passed from decode stage through pipeline register (D)
 ```
-This simple logic allows us to predict and correct branch predictions. Now when there is a branch dependancy we can predict the branch to avoid miss prediction penalties, and if we get the prediction wrong we incurr only a 1 clock cycle penalty. This means our Risc-v cpu is super fast and efficient.
+This simple logic allows us to predict and correct branch predictions. Now when there is a branch dependancy we can predict the branch to avoid miss prediction penalties, and if we get the prediction wrong we incurr only a 1 clock cycle penalty. While testing the branch prediction i saw that it made the reference programme extremely effiecient, having a 95+% success rate, but for the f1 programme the success rate was closer to 60%, this was due to the programme not having as many backwards branches that was frequently taken. Even considering this we were able to predict most of the branchstalls and incurr 60-95% less clock cycle delay. This means our Risc-v cpu is super fast and efficient.
 
 ## Top file and Testing
 ### Top file
