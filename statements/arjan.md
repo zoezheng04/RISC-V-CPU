@@ -13,7 +13,7 @@
 - [Reflection](#reflection)
   
 ## Overview
-This statement gives an overview of my contributions to the project. All design decisions, modules, files abd any relevant structural or minor changes are detailed in the sections below:
+This statement gives an overview of my contributions to the project. All design decisions, modules, files and any relevant structural or minor changes are detailed in the sections below:
 * Full responsibility of writing, designing and testing the [Control Unit](path/to/Control-Unit) for single cycle and pipelining.
 * Full responsibility of writing, designing and testing the [Pipelined CPU](path/to/Pipelined-CPU).
 * [Minor changes](#Minor-Changes-and-optimisations) to the Register File, Programme Counter and Control Unit to accommodate the Pipelined CPU. 
