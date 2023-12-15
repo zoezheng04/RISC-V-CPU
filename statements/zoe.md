@@ -141,6 +141,7 @@ While the direct mapped cache design simplifies the mapping of memory addresses 
 Upon completing the desing of the direct mapped cache, I proceeded verify its functionality. I wrote a testbench that first wrote some data to the cache, and performs read operations on the cache and prints out the cache outputs, and it functioned as expected: when there is a cache hit, the cache outputs the data, when there is a cache miss, the output data is set to 0, and the cache miss signal promps the cache to fetch the data from the main memory so to prevent cache miss when this data is accessed again in the future.
 
 <img width="277" alt="Screenshot 2023-12-15 at 5 12 38 PM" src="https://github.com/zoezheng04/Team-8/assets/137006967/eba72882-bb33-439a-81c8-d29e47890b7f">
+
 Once the direct mapped cache design is verified, I proceeded to work with my teammate Gurjan to implement it to the top file for the pipelined RISC-V Design, I provided him with the expected behaviour of the cache from a top level view.
 
 ### Two Way Set Associative Cache
