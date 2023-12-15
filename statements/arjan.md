@@ -11,7 +11,7 @@
 - [Branch-Prediction-Algorithm](#Branch-Prediction-Algorithm)
 - [Performance](#Performance)    
 - [Top file and Testing](#Top-file-and-Testing)
-- [Minor Changes and optimisations](#Minor-Changes-and-optimisations)   
+- [Module Changes and optimisations](#Module-Changes-and-optimisations)   
 - [Reflection](#reflection)
   
 ## Overview
@@ -327,16 +327,33 @@ Vbuddy is plotting every 8th value, making the waveform look like this.
 
 
 
-## Minor Changes and optimisations
+## Module Changes and optimisations
 To accommodate the pipelined cpu I made some changes to a few modules to help with performance, efficiency and compatibility.
  * I changed the register write from synchronous to asynchronous. This allowed me to avoid hazards with data updating to the registers too late due to dependancies so as soon as a value is passed to the write-back stage it is almost instantly written( Only if the write enable is true of course).
  * I changed the PC counter to be able to Stall whenever a hazard required it to stall.
  * I optimized the decode stage so that JAL and JALR instructions are computed instantly and incurr no data dependancy or stall delay.
  * I optimized the branch instruction so that the maximum penalty occured is only 1 clock cycle.
 
-
-
-
+### Here is a list of files that I worked on:
+* ControlUnit.sv
+* Fetch.sv
+* Decode.sv
+* Execute.sv
+* Memory.sv
+* WriteBack.sv
+* HazardUnit.sv
+* PC.sv
+* RegD.sv
+* RegF.sv
+* RegE.sv
+* RegM.sv
+* alu.sv
+* regfile.sv
+* top.sv
+* f1_tb.cpp
+* pdf_tb.cpp
+* f1.sh
+* pdf.sh
 
 
 ## Reflection
@@ -347,3 +364,20 @@ I feel as though I have contributed significantly to this project and have made 
 * Fully working Hazard prevention.
 * Fully working Branch prediction.
 * Fully integrated Direct mapped Cache into the pipelined cpu.
+
+
+## Commits
+https://github.com/zoezheng04/Team-8/commit/9584a5faccbbda03d1e6376896e737fe537005e2
+
+https://github.com/zoezheng04/Team-8/commit/039c5517a97e4cee1bd8a77174e36017a00deff2
+
+https://github.com/zoezheng04/Team-8/commit/db40c440dd42634ccd60e0db113cf090c3e4b4b2
+
+https://github.com/zoezheng04/Team-8/commit/3a69a39cb0aa80324efbc3bacd8abc3c2d1f96af
+
+https://github.com/zoezheng04/Team-8/commit/f296866342363989f49343947652cda4712c2fcd
+
+https://github.com/zoezheng04/Team-8/commit/5ccc1ccdbe0ecd5f4afaf5f3c98b0101b5c7177b
+
+https://github.com/zoezheng04/Team-8/commit/6d1d1363a500a5361be078a39307b2553b898179
+
