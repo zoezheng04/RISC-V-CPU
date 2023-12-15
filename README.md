@@ -20,7 +20,7 @@ Team 8 was able to complete and verify a fully pipelined RISC-V RV32I with hazar
 | Name           | CID      | GitHub                 | Email                                                | Link to Individual Statements                |
 |----------------|----------|------------------------|------------------------------------------------------|----------------------------------------------|
 | Arjan Hayre    | 02137475 | **The-Asgardian**      | ah321@imperial.ac.uk   &nbsp; &nbsp; &nbsp; &nbsp;   | [Arjan's Statement](statements/arjan.md)
-| Gurjan Samra   | xxxxxxxx | **Gurjan-Singh-Samra** | xxxx@imperial.ac.uk                                  | [Gurjan's Statement](statements/gurjan.md)
+| Gurjan Samra   | 02288570 | **Gurjan-Singh-Samra** | gss22@imperial.ac.uk                                 | [Gurjan's Statement](statements/gurjan.md)
 | Natalie Lin    | 02203331 | **natalietklin**       | nkl22@imperial.ac.uk                                 | [Natalie's Statement](statements/natalie.md)
 | Zoe Zheng      | 02083556 | **zoezheng04**         | zz4221@imperial.ac.uk                                | [Zoe's Statement](statements/zoe.md)
 
