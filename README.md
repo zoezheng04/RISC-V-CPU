@@ -21,8 +21,27 @@ source ./pdf.sh
 
 ```
 
-To test the PDF Program with different dataset, please go to rtl/DataMemory.sv and change line 17 manually.
+#### Gaussian PDF
 
+```bash
+source ./gaussian.sh
+
+```
+#### Sine PDF
+```bash
+source ./sine.sh
+
+```
+#### Triangle PDF
+```bash
+source ./triangle.sh
+
+```
+#### Noisy PDF
+```bash
+source ./noisy.sh
+
+```
 ## Testing Evidence
 ### F1 Program (v3.0-Directed Mapping Cache)
 
