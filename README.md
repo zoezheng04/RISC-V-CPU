@@ -40,8 +40,8 @@ npm install
 | ------------------------------|-------------|
 | `v1.0-Single-Cycle`           | Full implementation of single cycle cpu
 | `v2.0-Pipeline`               | Full implementation of pipelining with hazard prevention and branch prediction
-| `v3.0-Direct-Mapping-Cache`   | Full implementation and integration of Direct mapped cache
-| `v3.1-2-Way-Associative-Cache`| Attempted implementing 2 way associative cache
+| `v3.0-Direct-Mapping-Cache`   | Full implementation and integration of direct mapped cache
+| `v3.1-2-Way-Associative-Cache`| Attempted implementing 2 way set associative cache
 ## Testing Evidence
 
 ### F1 Program (v2.0-Pipeline)
