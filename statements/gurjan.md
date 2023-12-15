@@ -139,7 +139,9 @@ When testing the cpu, there was an error which would cause Verilator to abort du
 After making this change and testing all the top files individually, the cpu worked for the counter!
 
 Here's a video of the counter working:
-<video src="videos/counter.mp4" controls title="Title"></video>
+
+https://github.com/zoezheng04/Team-8/assets/147711636/d6376b9e-e7d6-40d7-9c28-c5cd889fde58
+
 
 ### Machine Code for F1
 
@@ -166,7 +168,8 @@ The final machine code can be viewed in the main.
 
 After fixing the issues with the machine code, the f1 lights were working as expected.
 
-<video src="videos/single_cycle_f1.mp4" controls title="Title"></video>
+https://github.com/zoezheng04/Team-8/assets/147711636/2e7c8578-c589-4292-a6c6-87f39a073d9f
+
 
 ### Register File
 
@@ -203,15 +206,34 @@ Here's evindence of it working:
 
 Gaussian:
 
-<video src="videos/single_cycle_gaussian.mp4" controls title="Title"></video>
+
+
+https://github.com/zoezheng04/Team-8/assets/147711636/fa21a9e7-d59f-41e3-b83e-477cc65ddcc9
+
+
 
 Sine:
 
-<video src="videos/single_cycle_sine.mp4" controls title="Title"></video>
+
+
+https://github.com/zoezheng04/Team-8/assets/147711636/7aaab7ee-ca89-4b1b-afef-e08114283808
+
+
+Noisy:
+
+
+
+https://github.com/zoezheng04/Team-8/assets/147711636/80f24e6c-7d9b-461e-859d-8e686d60ed11
+
+
 
 Triangle:
 
-<video src="videos/single_cycle_triangle.mp4" controls title="Title"></video>
+
+
+https://github.com/zoezheng04/Team-8/assets/147711636/eda1a01e-ea48-4e45-9594-88f505ae7ad8
+
+
 
 ## Debugging Pipelining
 
